@@ -3,10 +3,12 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.MinecraftForge;
+import portablejim.bbw.core.BlockEvents;
 import portablejim.bbw.core.items.UnbreakableWand;
 
 /**
- * Created by james on 3/10/15.
+ * Author: Portablejim
  */
 @Mod(modid = BetterBuildersWandsMod.MODID, version = BetterBuildersWandsMod.VERSION)
 public class BetterBuildersWandsMod {
@@ -20,5 +22,10 @@ public class BetterBuildersWandsMod {
         unbreakableWand = new UnbreakableWand();
 
         GameRegistry.registerItem(unbreakableWand, "unbreakableWand");
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(new BlockEvents());
     }
 }
