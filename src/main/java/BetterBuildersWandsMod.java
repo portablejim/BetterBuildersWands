@@ -5,7 +5,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import portablejim.bbw.core.BlockEvents;
-import portablejim.bbw.core.items.UnbreakableWand;
+import portablejim.bbw.core.items.ItemUnbreakableWand;
 
 /**
  * Author: Portablejim
@@ -15,13 +15,13 @@ public class BetterBuildersWandsMod {
     public static final String MODID = "BetterBuildersWands";
     public static final String VERSION = "0.1";
 
-    public static UnbreakableWand unbreakableWand;
+    public static ItemUnbreakableWand itemUnbreakableWand;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        unbreakableWand = new UnbreakableWand();
+        itemUnbreakableWand = new ItemUnbreakableWand();
 
-        GameRegistry.registerItem(unbreakableWand, "unbreakableWand");
+        GameRegistry.registerItem(itemUnbreakableWand, "unbreakableWand");
     }
 
     @EventHandler

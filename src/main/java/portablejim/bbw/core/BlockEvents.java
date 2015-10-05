@@ -10,6 +10,6 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 public class BlockEvents {
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
-        FMLLog.info("Happened!" + event.target.toString());
+        //FMLLog.info("Happened!" + event.target.toString());
     }
 }

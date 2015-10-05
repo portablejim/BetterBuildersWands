@@ -1,7 +1,11 @@
 package portablejim.bbw.shims;
 
+import net.minecraft.item.ItemStack;
+
 /**
- * Created by james on 3/10/15.
+ * Wrap player functions.
  */
 public interface IPlayerShim {
+    int countItems(ItemStack itemStack);
+    boolean useItem(ItemStack itemStack);
 }
