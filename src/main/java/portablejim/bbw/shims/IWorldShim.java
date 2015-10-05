@@ -16,4 +16,6 @@ public interface IWorldShim {
     boolean copyBlock(Point3d originalBlock, Point3d blockPos);
 
     void setBlockToAir(Point3d blockPos);
+
+    int getMetadata(Point3d blockPos);
 }

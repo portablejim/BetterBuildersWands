@@ -46,4 +46,12 @@ public class BasicWorldShim implements IWorldShim {
     public void setBlockToAir(Point3d blockPos) {
         world.setBlock(blockPos.x, blockPos.y, blockPos.z, Blocks.air);
     }
+
+    @Override
+    public int getMetadata(Point3d point) {
+        if(world != null) {
+            return world.getBlockMetadata(point.x, point.y, point.z);
+        }
+        return 0;
+    }
 }

@@ -40,6 +40,7 @@ public class WandWorker {
         LinkedList<Point3d> toPlace = new LinkedList<Point3d>();
 
         Block targetBlock = world.getBlock(blockLookedAt);
+        int targetMetadata = world.getMetadata(blockLookedAt);
         Point3d startingPoint = blockLookedAt.move(placeDirection);
 
         candidates.add(startingPoint);
@@ -48,8 +49,10 @@ public class WandWorker {
 
             Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
+            int candidateSupportingMeta = world.getMetadata(supportingPoint);
             if(world.blockIsAir(currentCandidate)
                     && targetBlock.equals(candidateSupportingBlock)
+                    && targetMetadata == candidateSupportingMeta
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
                 switch (placeDirection) {
