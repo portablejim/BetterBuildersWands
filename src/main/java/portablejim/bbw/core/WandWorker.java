@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import portablejim.bbw.IWand;
+import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
@@ -36,7 +37,7 @@ public class WandWorker {
         return block == null ? null : new ItemStack(block.getItem(world.getWorld(), blockPos.x, blockPos.y, blockPos.z), 1, block.getDamageValue(world.getWorld(), blockPos.x, blockPos.y, blockPos.z));
     }
 
-    public LinkedList<Point3d> getBlockPositionList(Point3d blockLookedAt, ForgeDirection placeDirection, int maxBlocks) {
+    public LinkedList<Point3d> getBlockPositionList(Point3d blockLookedAt, ForgeDirection placeDirection, int maxBlocks, EnumLock directionLock) {
         LinkedList<Point3d> candidates = new LinkedList<Point3d>();
         LinkedList<Point3d> toPlace = new LinkedList<Point3d>();
 
@@ -58,39 +59,48 @@ public class WandWorker {
                     && !world.entitiesInBox(blockBB)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
+
+                int directionMaskInt = placeDirection.flag;
+
                 switch (placeDirection) {
                     case DOWN:
                     case UP:
-                        candidates.add(currentCandidate.move(ForgeDirection.NORTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.EAST));
-                        candidates.add(currentCandidate.move(ForgeDirection.SOUTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.WEST));
-                        candidates.add(currentCandidate.move(ForgeDirection.NORTH).move(ForgeDirection.EAST));
-                        candidates.add(currentCandidate.move(ForgeDirection.NORTH).move(ForgeDirection.WEST));
-                        candidates.add(currentCandidate.move(ForgeDirection.SOUTH).move(ForgeDirection.EAST));
-                        candidates.add(currentCandidate.move(ForgeDirection.SOUTH).move(ForgeDirection.WEST));
+                        if((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.NORTH));
+                        if((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.EAST));
+                        if((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.SOUTH));
+                        if((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.WEST));
+                        if((directionMaskInt & (EnumLock.NORTH_SOUTH_MASK + EnumLock.NORTH_SOUTH_MASK)) > 0 ) {
+                            candidates.add(currentCandidate.move(ForgeDirection.NORTH).move(ForgeDirection.EAST));
+                            candidates.add(currentCandidate.move(ForgeDirection.NORTH).move(ForgeDirection.WEST));
+                            candidates.add(currentCandidate.move(ForgeDirection.SOUTH).move(ForgeDirection.EAST));
+                            candidates.add(currentCandidate.move(ForgeDirection.SOUTH).move(ForgeDirection.WEST));
+                        }
                         break;
                     case NORTH:
                     case SOUTH:
-                        candidates.add(currentCandidate.move(ForgeDirection.UP));
-                        candidates.add(currentCandidate.move(ForgeDirection.EAST));
-                        candidates.add(currentCandidate.move(ForgeDirection.DOWN));
-                        candidates.add(currentCandidate.move(ForgeDirection.WEST));
-                        candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.EAST));
-                        candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.WEST));
-                        candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.EAST));
-                        candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.WEST));
+                        if((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.UP));
+                        if((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.EAST));
+                        if((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.DOWN));
+                        if((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.WEST));
+                        if((directionMaskInt & (EnumLock.UP_DOWN_MASK + EnumLock.EAST_WEST_MASK)) > 0 ) {
+                            candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.EAST));
+                            candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.WEST));
+                            candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.EAST));
+                            candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.WEST));
+                        }
                         break;
                     case WEST:
                     case EAST:
-                        candidates.add(currentCandidate.move(ForgeDirection.UP));
-                        candidates.add(currentCandidate.move(ForgeDirection.NORTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.DOWN));
-                        candidates.add(currentCandidate.move(ForgeDirection.SOUTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.NORTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.SOUTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.NORTH));
-                        candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.SOUTH));
+                        if((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.UP));
+                        if((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.NORTH));
+                        if((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.DOWN));
+                        if((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.SOUTH));
+                        if((directionMaskInt & (EnumLock.UP_DOWN_MASK + EnumLock.NORTH_SOUTH_MASK)) > 0 ) {
+                            candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.NORTH));
+                            candidates.add(currentCandidate.move(ForgeDirection.UP).move(ForgeDirection.SOUTH));
+                            candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.NORTH));
+                            candidates.add(currentCandidate.move(ForgeDirection.DOWN).move(ForgeDirection.SOUTH));
+                        }
                 }
             }
         }

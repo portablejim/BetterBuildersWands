@@ -11,6 +11,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
+import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.items.IWandItem;
 import portablejim.bbw.core.wands.UnbreakingWand;
@@ -44,7 +45,7 @@ public class BlockEvents {
             ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
             int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
-            LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks);
+            LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, EnumLock.NOLOCK);
             if(blocks.size() > 0) {
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDepthMask(false);

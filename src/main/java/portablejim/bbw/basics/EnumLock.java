@@ -14,6 +14,10 @@ public enum EnumLock {
 
     public final int mask;
 
+    public final static int NORTH_SOUTH_MASK = 1;
+    public final static int UP_DOWN_MASK = 2;
+    public final static int EAST_WEST_MASK = 4;
+
     EnumLock(int mask) {
         this.mask = mask;
     }
