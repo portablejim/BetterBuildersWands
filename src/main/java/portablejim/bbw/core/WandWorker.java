@@ -112,6 +112,7 @@ public class WandWorker {
             boolean blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
 
             if(blockPlaceSuccess) {
+                world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
                 boolean takeFromInventory = player.useItem(getEquivalentItemStack(originalBlock));
                 if(!takeFromInventory) {
                     world.setBlockToAir(blockPos);

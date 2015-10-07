@@ -1,7 +1,10 @@
 package portablejim.bbw.shims;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import portablejim.bbw.basics.Point3d;
 
 /**
  * Wrap a player to provide basic functions.
@@ -48,5 +51,10 @@ public class BasicPlayerShim implements IPlayerShim {
             }
         }
         return false;
+    }
+
+    @Override
+    public Point3d getPlayerPosition() {
+        return new Point3d((int)player.posX, (int)player.posY, (int)player.posZ);
     }
 }

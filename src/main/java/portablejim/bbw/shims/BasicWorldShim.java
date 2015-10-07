@@ -64,4 +64,11 @@ public class BasicWorldShim implements IWorldShim {
         List entitiesWithinAABB = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
         return entitiesWithinAABB.size() > 0;
     }
+
+    @Override
+    public void playPlaceAtBlock(Point3d position, Block blockType) {
+        if(position != null && blockType != null) {
+            world.playSoundEffect(position.x + 0.5D, position.y + 0.5D, position.z + 0.5D, blockType.stepSound.func_150496_b(), (blockType.stepSound.getVolume() + 1.0F) / 2.0F, blockType.stepSound.getPitch() * 0.8F);
+        }
+    }
 }

@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.WandWorker;
 import portablejim.bbw.core.wands.UnbreakingWand;
@@ -37,7 +38,7 @@ public class ItemUnbreakableWand extends Item implements IWandItem{
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         IPlayerShim playerShim = new BasicPlayerShim(player);
         if(player.capabilities.isCreativeMode) {
-            playerShim = new CreativePlayerShim();
+            playerShim = new CreativePlayerShim(player);
         }
         IWorldShim worldShim = new BasicWorldShim(world);
         UnbreakingWand unbreakingWand = new UnbreakingWand(itemstack);
@@ -50,7 +51,7 @@ public class ItemUnbreakableWand extends Item implements IWandItem{
         int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
         FMLLog.info("Max blocks: %d (%d|%d", numBlocks, unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
-        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks);
+        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, EnumLock.NOLOCK);
 
         worker.placeBlocks(blocks, clickedPos);
 

@@ -33,7 +33,7 @@ public class BlockEvents {
                 && event.target != null && event.target.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
             IPlayerShim playerShim = new BasicPlayerShim(event.player);
             if(event.player.capabilities.isCreativeMode) {
-                playerShim = new CreativePlayerShim();
+                playerShim = new CreativePlayerShim(event.player);
             }
             IWorldShim worldShim = new BasicWorldShim(event.player.getEntityWorld());
             UnbreakingWand unbreakingWand = new UnbreakingWand(event.currentItem);

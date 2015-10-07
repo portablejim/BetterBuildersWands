@@ -21,4 +21,6 @@ public interface IWorldShim {
     int getMetadata(Point3d blockPos);
 
     boolean entitiesInBox(AxisAlignedBB box);
+
+    void playPlaceAtBlock(Point3d position, Block blockType);
 }
