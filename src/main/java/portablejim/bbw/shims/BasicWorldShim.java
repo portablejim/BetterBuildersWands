@@ -1,9 +1,13 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import portablejim.bbw.basics.Point3d;
+
+import java.util.List;
 
 /**
  * Wrap a world to provide basic functions.
@@ -53,5 +57,11 @@ public class BasicWorldShim implements IWorldShim {
             return world.getBlockMetadata(point.x, point.y, point.z);
         }
         return 0;
+    }
+
+    @Override
+    public boolean entitiesInBox(AxisAlignedBB box) {
+        List entitiesWithinAABB = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
+        return entitiesWithinAABB.size() > 0;
     }
 }

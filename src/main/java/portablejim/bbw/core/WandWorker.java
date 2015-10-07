@@ -3,6 +3,7 @@ package portablejim.bbw.core;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import portablejim.bbw.IWand;
 import portablejim.bbw.basics.Point3d;
@@ -50,9 +51,11 @@ public class WandWorker {
             Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
+            AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox((double)currentCandidate.x, (double)currentCandidate.y, currentCandidate.z, currentCandidate.x + 1, currentCandidate.y + 1, currentCandidate.z + 1);
             if(world.blockIsAir(currentCandidate)
                     && targetBlock.equals(candidateSupportingBlock)
                     && targetMetadata == candidateSupportingMeta
+                    && !world.entitiesInBox(blockBB)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
                 switch (placeDirection) {
