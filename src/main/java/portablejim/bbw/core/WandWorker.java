@@ -60,7 +60,7 @@ public class WandWorker {
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
 
-                int directionMaskInt = placeDirection.flag;
+                int directionMaskInt = directionLock.mask;
 
                 switch (placeDirection) {
                     case DOWN:
@@ -69,7 +69,7 @@ public class WandWorker {
                         if((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.EAST));
                         if((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.SOUTH));
                         if((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 ) candidates.add(currentCandidate.move(ForgeDirection.WEST));
-                        if((directionMaskInt & (EnumLock.NORTH_SOUTH_MASK + EnumLock.NORTH_SOUTH_MASK)) > 0 ) {
+                        if((directionMaskInt & (EnumLock.NORTH_SOUTH_MASK + EnumLock.EAST_WEST_MASK)) > 0 ) {
                             candidates.add(currentCandidate.move(ForgeDirection.NORTH).move(ForgeDirection.EAST));
                             candidates.add(currentCandidate.move(ForgeDirection.NORTH).move(ForgeDirection.WEST));
                             candidates.add(currentCandidate.move(ForgeDirection.SOUTH).move(ForgeDirection.EAST));
