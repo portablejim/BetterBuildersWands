@@ -25,8 +25,8 @@ import java.util.LinkedList;
 public class ItemUnbreakableWand extends Item implements IWandItem{
     public ItemUnbreakableWand() {
         super();
-        this.setUnlocalizedName("BetterBuildersWands:unbreakableWand");
-        this.setTextureName("minecraft:stick");
+        this.setUnlocalizedName("betterbuilderswands:unbreakableWand");
+        this.setTextureName("betterbuilderswands:wandUnbreakable");
         this.setCreativeTab(CreativeTabs.tabTools);
     }
 
