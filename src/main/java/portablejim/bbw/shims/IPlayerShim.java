@@ -10,4 +10,6 @@ public interface IPlayerShim {
     int countItems(ItemStack itemStack);
     boolean useItem(ItemStack itemStack);
     Point3d getPlayerPosition();
+
+    boolean isCreative();
 }

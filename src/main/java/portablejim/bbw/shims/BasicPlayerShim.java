@@ -57,4 +57,9 @@ public class BasicPlayerShim implements IPlayerShim {
     public Point3d getPlayerPosition() {
         return new Point3d((int)player.posX, (int)player.posY, (int)player.posZ);
     }
+
+    @Override
+    public boolean isCreative() {
+        return player.capabilities.isCreativeMode;
+    }
 }

@@ -1,11 +1,8 @@
 package portablejim.bbw.core.items;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
 import cpw.mods.fml.common.FMLLog;
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -20,9 +17,7 @@ import portablejim.bbw.shims.CreativePlayerShim;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * The actual item: Simple wand with no durability. Similar to current Builder's Wand.
