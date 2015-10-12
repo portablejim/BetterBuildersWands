@@ -44,7 +44,7 @@ public class ItemBasicWand extends Item implements IWandItem{
         int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
         FMLLog.info("Max blocks: %d (%d|%d", numBlocks, unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
-        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getLock(), getLock());
+        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getLock(), getFaceLock());
 
         worker.placeBlocks(blocks, clickedPos);
 
@@ -53,5 +53,9 @@ public class ItemBasicWand extends Item implements IWandItem{
 
     protected EnumLock getLock() {
         return EnumLock.HORIZONTAL;
+    }
+
+    protected EnumLock getFaceLock() {
+        return EnumLock.NOLOCK;
     }
 }
