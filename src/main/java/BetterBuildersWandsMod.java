@@ -1,7 +1,10 @@
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import portablejim.bbw.core.BlockEvents;
@@ -27,5 +30,10 @@ public class BetterBuildersWandsMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new BlockEvents());
+    }
+
+    @EventHandler
+    public void keypress(InputEvent event) {
+        //FMLClientHandler.instance().
     }
 }

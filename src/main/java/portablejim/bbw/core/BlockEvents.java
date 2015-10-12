@@ -45,7 +45,7 @@ public class BlockEvents {
             ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
             int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
-            LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, EnumLock.NOLOCK);
+            LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, EnumLock.HORIZONTAL, EnumLock.HORIZONTAL);
             if(blocks.size() > 0) {
                 GL11.glDisable(GL11.GL_TEXTURE_2D);
                 GL11.glDepthMask(false);
