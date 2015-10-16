@@ -24,6 +24,9 @@ public class ItemUnbreakableWand extends ItemBasicWand{
     }
 
     public EnumLock getFaceLock(ItemStack itemStack) {
+        if(WandUtility.getMode(itemStack) == EnumLock.HORIZONTAL) {
+            return EnumLock.HORIZONTAL;
+        }
         return EnumLock.NOLOCK;
     }
 
@@ -33,13 +36,15 @@ public class ItemUnbreakableWand extends ItemBasicWand{
         switch(wand.getMode()) {
 
             case NORTHSOUTH:
+                WandUtility.setMode(itemStack, EnumLock.EASTWEST);
                 break;
             case VERTICAL:
-                WandUtility.setMode(itemStack, EnumLock.NOLOCK);
+                WandUtility.setMode(itemStack, EnumLock.NORTHSOUTH);
                 break;
             case VERTICALEASTWEST:
                 break;
             case EASTWEST:
+                WandUtility.setMode(itemStack, EnumLock.NOLOCK);
                 break;
             case HORIZONTAL:
                 WandUtility.setMode(itemStack, EnumLock.VERTICAL);
