@@ -53,7 +53,7 @@ public class WandWorker {
             Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
-            AxisAlignedBB blockBB = AxisAlignedBB.getBoundingBox((double)currentCandidate.x, (double)currentCandidate.y, currentCandidate.z, currentCandidate.x + 1, currentCandidate.y + 1, currentCandidate.z + 1);
+            AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBoxFromPool(world.getWorld(), currentCandidate.x, currentCandidate.y, currentCandidate.z);
             if(world.blockIsAir(currentCandidate)
                     && targetBlock.equals(candidateSupportingBlock)
                     && targetMetadata == candidateSupportingMeta
