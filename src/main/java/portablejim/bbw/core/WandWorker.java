@@ -8,6 +8,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import portablejim.bbw.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
+import portablejim.bbw.core.items.IWandItem;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 

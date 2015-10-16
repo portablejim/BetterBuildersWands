@@ -26,6 +26,6 @@ public enum EnumLock {
         EnumLock locks[] = { NORTHSOUTH, VERTICAL, VERTICALEASTWEST, EASTWEST, HORIZONTAL, VERTICALNORTHSOUTH, NOLOCK };
 
         int safeMask = inputMask & 7;
-        return locks[safeMask];
+        return locks[safeMask - 1];
     }
 }

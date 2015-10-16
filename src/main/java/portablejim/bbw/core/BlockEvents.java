@@ -11,6 +11,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
+import portablejim.bbw.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.items.IWandItem;
@@ -36,26 +37,29 @@ public class BlockEvents {
                 playerShim = new CreativePlayerShim(event.player);
             }
             IWorldShim worldShim = new BasicWorldShim(event.player.getEntityWorld());
-            UnbreakingWand unbreakingWand = new UnbreakingWand(event.currentItem);
+            if(event.currentItem.getItem() instanceof IWandItem) {
+                IWandItem wandItem = (IWandItem) event.currentItem.getItem();
+                IWand wand = wandItem.getWand(event.currentItem);
 
-            WandWorker worker = new WandWorker(unbreakingWand, playerShim, worldShim);
+                WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
-            Point3d clickedPos = new Point3d(event.target.blockX, event.target.blockY, event.target.blockZ);
+                Point3d clickedPos = new Point3d(event.target.blockX, event.target.blockY, event.target.blockZ);
 
-            ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-            int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
+                ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
+                int numBlocks = Math.min(wand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
-            LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, EnumLock.HORIZONTAL, EnumLock.HORIZONTAL);
-            if(blocks.size() > 0) {
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
-                GL11.glDepthMask(false);
-                GL11.glLineWidth(2.5F);
-                for(Point3d block : blocks) {
-                    AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1).contract(0.005, 0.005, 0.005);
-                    RenderGlobal.drawOutlinedBoundingBox(boundingBox.getOffsetBoundingBox(-event.player.posX, -event.player.posY, -event.player.posZ), 0xC0C0C0);
+                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wand.getMode(), wandItem.getFaceLock(event.currentItem));
+                if (blocks.size() > 0) {
+                    GL11.glDisable(GL11.GL_TEXTURE_2D);
+                    GL11.glDepthMask(false);
+                    GL11.glLineWidth(2.5F);
+                    for (Point3d block : blocks) {
+                        AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1).contract(0.005, 0.005, 0.005);
+                        RenderGlobal.drawOutlinedBoundingBox(boundingBox.getOffsetBoundingBox(-event.player.posX, -event.player.posY, -event.player.posZ), 0xC0C0C0);
+                    }
+                    GL11.glEnable(GL11.GL_TEXTURE_2D);
+                    GL11.glDisable(GL11.GL_BLEND);
                 }
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
-                GL11.glDisable(GL11.GL_BLEND);
             }
         }
         //FMLLog.info("Happened!" + event.target.toString());

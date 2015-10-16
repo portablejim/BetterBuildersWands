@@ -22,7 +22,7 @@ import java.util.LinkedList;
 /**
  * Class to cover common functions between wands.
  */
-public class ItemBasicWand extends Item implements IWandItem{
+public abstract class ItemBasicWand extends Item implements IWandItem{
     public ItemBasicWand() {
         super();
         this.setCreativeTab(CreativeTabs.tabTools);
@@ -44,18 +44,10 @@ public class ItemBasicWand extends Item implements IWandItem{
         int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
         FMLLog.info("Max blocks: %d (%d|%d", numBlocks, unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
-        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getLock(), getFaceLock());
+        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getLock(itemstack), getFaceLock(itemstack));
 
         worker.placeBlocks(blocks, clickedPos);
 
         return true;
-    }
-
-    protected EnumLock getLock() {
-        return EnumLock.HORIZONTAL;
-    }
-
-    protected EnumLock getFaceLock() {
-        return EnumLock.NOLOCK;
     }
 }

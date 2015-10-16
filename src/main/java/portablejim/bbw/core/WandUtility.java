@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import portablejim.bbw.IWand;
 import portablejim.bbw.basics.EnumLock;
+import portablejim.bbw.core.items.IWandItem;
 
 /**
  * Common functions across wands.
@@ -22,10 +23,12 @@ public class WandUtility {
         }
         short shortMask = (short) (mode.mask & 7);
         bbwCompond.setShort("mask", shortMask);
+        tagCompound.setTag("bbw", bbwCompond);
+        item.setTagCompound(tagCompound);
     }
 
     public static EnumLock getMode(ItemStack item) {
-        if(item != null && item.getItem() != null && item.getItem() instanceof IWand) {
+        if(item != null && item.getItem() != null && item.getItem() instanceof IWandItem) {
             NBTTagCompound itemBaseNBT = item.getTagCompound();
             if(itemBaseNBT != null && itemBaseNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
                 NBTTagCompound itemNBT = itemBaseNBT.getCompoundTag("bbw");
