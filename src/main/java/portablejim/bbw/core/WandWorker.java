@@ -48,13 +48,6 @@ public class WandWorker {
         int targetMetadata = world.getMetadata(blockLookedAt);
         Point3d startingPoint = blockLookedAt.move(placeDirection);
 
-        try {
-            FMLLog.info("BBW Pos List: lookedat %s | dir %s | target %s | meta %d | startpoint %s", blockLookedAt.toString(), placeDirection.toString(), targetBlock.getUnlocalizedName(), targetMetadata, startingPoint.toString());
-        }
-        catch(Exception e) {
-            //ignore
-        }
-
         int directionMaskInt = directionLock.mask;
         int faceMaskInt = faceLock.mask;
 
@@ -149,13 +142,6 @@ public class WandWorker {
             }*/
 
             boolean blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
-
-            try {
-                FMLLog.info("BBW Placing: %s | %s | %s | %s", blockPos.toString(), originalBlock.toString());
-            }
-            catch(Exception e) {
-                // Ignore
-            }
 
             if(blockPlaceSuccess) {
                 world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
