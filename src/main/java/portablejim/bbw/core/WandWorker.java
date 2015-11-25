@@ -1,5 +1,7 @@
 package portablejim.bbw.core;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -46,7 +48,23 @@ public class WandWorker {
         int targetMetadata = world.getMetadata(blockLookedAt);
         Point3d startingPoint = blockLookedAt.move(placeDirection);
 
-        candidates.add(startingPoint);
+        try {
+            FMLLog.info("BBW Pos List: lookedat %s | dir %s | target %s | meta %d | startpoint %s", blockLookedAt.toString(), placeDirection.toString(), targetBlock.getUnlocalizedName(), targetMetadata, startingPoint.toString());
+        }
+        catch(Exception e) {
+            //ignore
+        }
+
+        int directionMaskInt = directionLock.mask;
+        int faceMaskInt = faceLock.mask;
+
+        if(
+                ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 && (placeDirection == ForgeDirection.NORTH || placeDirection == ForgeDirection.SOUTH))
+                || ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 && (placeDirection == ForgeDirection.EAST || placeDirection == ForgeDirection.WEST))
+                || ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 && (placeDirection == ForgeDirection.UP || placeDirection == ForgeDirection.DOWN))
+                ) {
+            candidates.add(startingPoint);
+        }
         while(candidates.size() > 0 && toPlace.size() < maxBlocks) {
             Point3d currentCandidate = candidates.removeFirst();
 
@@ -60,9 +78,6 @@ public class WandWorker {
                     && !world.entitiesInBox(blockBB)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
-
-                int directionMaskInt = directionLock.mask;
-                int faceMaskInt = faceLock.mask;
 
                 switch (placeDirection) {
                     case DOWN:
@@ -129,7 +144,18 @@ public class WandWorker {
 
     public void placeBlocks(LinkedList<Point3d> blockPosList, Point3d originalBlock) {
         for(Point3d blockPos : blockPosList) {
+            /*if(player.countItems(getEquivalentItemStack(originalBlock)) < 1) {
+                break;
+            }*/
+
             boolean blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
+
+            try {
+                FMLLog.info("BBW Placing: %s | %s | %s | %s", blockPos.toString(), originalBlock.toString());
+            }
+            catch(Exception e) {
+                // Ignore
+            }
 
             if(blockPlaceSuccess) {
                 world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
@@ -138,6 +164,7 @@ public class WandWorker {
                 }
                 boolean takeFromInventory = player.useItem(getEquivalentItemStack(originalBlock));
                 if(!takeFromInventory) {
+                    FMLLog.info("BBW takeback: %s", blockPos.toString());
                     world.setBlockToAir(blockPos);
                 }
             }

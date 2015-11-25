@@ -61,6 +61,8 @@ public class BasicWorldShim implements IWorldShim {
 
     @Override
     public boolean entitiesInBox(AxisAlignedBB box) {
+        if(box == null) return false;
+
         List entitiesWithinAABB = world.getEntitiesWithinAABB(EntityLivingBase.class, box);
         return entitiesWithinAABB.size() > 0;
     }

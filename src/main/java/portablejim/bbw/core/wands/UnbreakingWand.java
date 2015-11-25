@@ -22,7 +22,7 @@ public class UnbreakingWand implements IWand {
 
     @Override
     public int getMaxBlocks() {
-        return 32;
+        return 4096;
     }
 
     @Override
