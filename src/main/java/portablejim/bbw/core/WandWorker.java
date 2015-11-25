@@ -51,11 +51,9 @@ public class WandWorker {
         int directionMaskInt = directionLock.mask;
         int faceMaskInt = faceLock.mask;
 
-        if(
-                ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 && (placeDirection == ForgeDirection.NORTH || placeDirection == ForgeDirection.SOUTH))
-                || ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0 && (placeDirection == ForgeDirection.EAST || placeDirection == ForgeDirection.WEST))
-                || ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 && (placeDirection == ForgeDirection.UP || placeDirection == ForgeDirection.DOWN))
-                ) {
+        if (((directionLock != EnumLock.HORIZONTAL && directionLock != EnumLock.VERTICAL) || (placeDirection != ForgeDirection.UP && placeDirection != ForgeDirection.DOWN))
+                && (directionLock != EnumLock.NORTHSOUTH || (placeDirection != ForgeDirection.NORTH && placeDirection != ForgeDirection.SOUTH))
+                && (directionLock != EnumLock.EASTWEST || (placeDirection != ForgeDirection.EAST && placeDirection != ForgeDirection.WEST))) {
             candidates.add(startingPoint);
         }
         while(candidates.size() > 0 && toPlace.size() < maxBlocks) {
