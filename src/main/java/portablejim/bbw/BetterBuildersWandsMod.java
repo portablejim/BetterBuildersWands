@@ -10,8 +10,10 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
@@ -62,6 +64,11 @@ public class BetterBuildersWandsMod {
         GameRegistry.registerItem(itemIronWand, "wandIron");
         GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
         GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'M', "cobblestone"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'M', "ingotIron"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'M', "gemDiamond"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemUnbreakableWand, "  H", " S ", "S  ", 'S', "stickWood", 'M', Items.nether_star));
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
