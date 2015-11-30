@@ -51,7 +51,8 @@ public class BlockEvents {
                 LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wand.getMode(), wandItem.getFaceLock(event.currentItem));
                 if (blocks.size() > 0) {
                     GL11.glDisable(GL11.GL_TEXTURE_2D);
-                    GL11.glDepthMask(false);
+                    GL11.glEnable(GL11.GL_BLEND);
+                    GL11.glDepthMask(true);
                     GL11.glLineWidth(2.5F);
                     for (Point3d block : blocks) {
                         AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1).contract(0.005, 0.005, 0.005);
