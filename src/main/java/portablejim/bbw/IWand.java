@@ -1,5 +1,6 @@
 package portablejim.bbw;
 
+import net.minecraft.entity.EntityLivingBase;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 
@@ -13,5 +14,5 @@ public interface IWand {
 
     int getMaxBlocks();
 
-    boolean placeBlock();
+    boolean placeBlock(EntityLivingBase entityLivingBase);
 }

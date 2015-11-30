@@ -9,11 +9,10 @@ import portablejim.bbw.core.WandUtility;
 /**
  * Simple wand that doesn't break / have durability.
  */
-public class UnbreakingWand implements IWand {
+public class RestrictedWand implements IWand {
     private ItemStack wandItem;
 
-    public UnbreakingWand(ItemStack wandItem) {
-
+    public RestrictedWand(ItemStack wandItem) {
         this.wandItem = wandItem;
     }
     @Override
@@ -23,11 +22,12 @@ public class UnbreakingWand implements IWand {
 
     @Override
     public int getMaxBlocks() {
-        return 4096;
+        return wandItem.getMaxDamage() - wandItem.getItemDamage();
     }
 
     @Override
-    public boolean placeBlock(EntityLivingBase unused) {
+    public boolean placeBlock(EntityLivingBase entityLivingBase) {
+        wandItem.damageItem(1, entityLivingBase);
         return true;
     }
 }

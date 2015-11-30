@@ -1,12 +1,15 @@
 package portablejim.bbw.core.items;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import portablejim.bbw.IWand;
 import portablejim.bbw.basics.EnumLock;
+import portablejim.bbw.core.WandUtility;
+import portablejim.bbw.core.wands.RestrictedWand;
 
 /**
  * Item for wand that takes damage.
@@ -14,27 +17,50 @@ import portablejim.bbw.basics.EnumLock;
 public class ItemRestrictedWandBasic extends ItemBasicWand {
     public ItemRestrictedWandBasic(int damage) {
         super();
-        setMaxDamage(damage);
+        setMaxDamage(ToolMaterial.STONE.getMaxUses());
+        this.setUnlocalizedName("betterbuilderswands:basicWand");
+        setTextureName("betterbuilderswands:wandStone");
     }
 
     @Override
     public void nextMode(ItemStack itemStack, EntityPlayer player) {
+        IWand wand = new RestrictedWand(itemStack);
+        switch(wand.getMode()) {
 
+            case NORTHSOUTH:
+                break;
+            case VERTICAL:
+                break;
+            case VERTICALEASTWEST:
+                break;
+            case EASTWEST:
+                break;
+            case HORIZONTAL:
+                WandUtility.setMode(itemStack, EnumLock.HORIZONTAL);
+                break;
+            case VERTICALNORTHSOUTH:
+                break;
+            case NOLOCK:
+                WandUtility.setMode(itemStack, EnumLock.HORIZONTAL);
+                break;
+        }
     }
 
     @Override
     public IWand getWand(ItemStack itemStack) {
-        return null;
+        return new RestrictedWand(itemStack);
     }
 
-    @Override
     public EnumLock getLock(ItemStack itemStack) {
-        return null;
+        IWand wand = new RestrictedWand(itemStack);
+        return  wand.getMode();
     }
 
-    @Override
     public EnumLock getFaceLock(ItemStack itemStack) {
-        return null;
+        if(WandUtility.getMode(itemStack) == EnumLock.HORIZONTAL) {
+            return EnumLock.HORIZONTAL;
+        }
+        return EnumLock.NOLOCK;
     }
 
     @Override

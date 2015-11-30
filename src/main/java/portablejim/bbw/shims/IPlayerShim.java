@@ -1,5 +1,6 @@
 package portablejim.bbw.shims;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import portablejim.bbw.basics.Point3d;
 
@@ -10,6 +11,7 @@ public interface IPlayerShim {
     int countItems(ItemStack itemStack);
     boolean useItem(ItemStack itemStack);
     Point3d getPlayerPosition();
+    EntityPlayer getPlayer();
 
     boolean isCreative();
 }

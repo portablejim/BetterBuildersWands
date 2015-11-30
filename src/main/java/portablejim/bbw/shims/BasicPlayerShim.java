@@ -59,6 +59,11 @@ public class BasicPlayerShim implements IPlayerShim {
     }
 
     @Override
+    public EntityPlayer getPlayer() {
+        return player;
+    }
+
+    @Override
     public boolean isCreative() {
         return player.capabilities.isCreativeMode;
     }

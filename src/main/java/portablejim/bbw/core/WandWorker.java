@@ -145,7 +145,7 @@ public class WandWorker {
             if(blockPlaceSuccess) {
                 world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
                 if (!player.isCreative()) {
-                    wand.placeBlock();
+                    wand.placeBlock(player.getPlayer());
                 }
                 boolean takeFromInventory = player.useItem(getEquivalentItemStack(originalBlock));
                 if(!takeFromInventory) {

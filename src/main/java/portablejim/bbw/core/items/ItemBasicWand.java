@@ -9,6 +9,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import portablejim.bbw.BetterBuildersWandsMod;
+import portablejim.bbw.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.WandUtility;
@@ -30,6 +31,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
     public ItemBasicWand() {
         super();
         this.setCreativeTab(CreativeTabs.tabTools);
+        this.setMaxStackSize(1);
     }
 
     public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
@@ -38,15 +40,15 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
             playerShim = new CreativePlayerShim(player);
         }
         IWorldShim worldShim = new BasicWorldShim(world);
-        UnbreakingWand unbreakingWand = new UnbreakingWand(itemstack);
+        IWand wand = this.getWand(itemstack);
 
-        WandWorker worker = new WandWorker(unbreakingWand, playerShim, worldShim);
+        WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
         Point3d clickedPos = new Point3d(x, y, z);
 
         ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-        int numBlocks = Math.min(unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
-        FMLLog.info("Max blocks: %d (%d|%d", numBlocks, unbreakingWand.getMaxBlocks(), playerShim.countItems(targetItemstack));
+        int numBlocks = Math.min(wand.getMaxBlocks(), playerShim.countItems(targetItemstack));
+        FMLLog.info("Max blocks: %d (%d|%d", numBlocks, wand.getMaxBlocks(), playerShim.countItems(targetItemstack));
 
         LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getLock(itemstack), getFaceLock(itemstack));
 

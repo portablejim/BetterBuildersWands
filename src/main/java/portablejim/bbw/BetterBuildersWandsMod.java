@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import portablejim.bbw.core.BlockEvents;
+import portablejim.bbw.core.items.ItemRestrictedWandBasic;
 import portablejim.bbw.core.items.ItemUnbreakableWand;
 import portablejim.bbw.network.PacketWandActivate;
 import portablejim.bbw.proxy.IProxy;
@@ -38,6 +39,7 @@ public class BetterBuildersWandsMod {
     public static Logger logger = new SimpleLogger("BetterBuildersWand", Level.ALL, true, false, true, false, "YYYY-MM-DD", null, PropertiesUtil.getProperties(), null);
 
     public static ItemUnbreakableWand itemUnbreakableWand;
+    public static ItemRestrictedWandBasic itemDiamondWand;
 
     public SimpleNetworkWrapper networkWrapper;
 
@@ -46,7 +48,9 @@ public class BetterBuildersWandsMod {
         logger = event.getModLog();
 
         itemUnbreakableWand = new ItemUnbreakableWand();
+        itemDiamondWand = new ItemRestrictedWandBasic(200);
         GameRegistry.registerItem(itemUnbreakableWand, "unbreakableWand");
+        GameRegistry.registerItem(itemDiamondWand, "diamondWand");
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
