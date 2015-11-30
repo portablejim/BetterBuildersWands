@@ -7,6 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
 import portablejim.bbw.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
@@ -63,7 +64,7 @@ public class WandWorker {
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
             AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBoxFromPool(world.getWorld(), currentCandidate.x, currentCandidate.y, currentCandidate.z);
-            if(world.blockIsAir(currentCandidate)
+            if((world.blockIsAir(currentCandidate) || (FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate)) || FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate))) && world.getMetadata(currentCandidate) != 0)
                     && targetBlock.equals(candidateSupportingBlock)
                     && targetMetadata == candidateSupportingMeta
                     && !world.entitiesInBox(blockBB)
