@@ -42,14 +42,16 @@ public class ItemUnbreakableWand extends ItemBasicWand{
                 WandUtility.setMode(itemStack, EnumLock.NORTHSOUTH);
                 break;
             case VERTICALEASTWEST:
+                WandUtility.setMode(itemStack, EnumLock.NOLOCK);
                 break;
             case EASTWEST:
-                WandUtility.setMode(itemStack, EnumLock.NOLOCK);
+                WandUtility.setMode(itemStack, EnumLock.VERTICALNORTHSOUTH);
                 break;
             case HORIZONTAL:
                 WandUtility.setMode(itemStack, EnumLock.VERTICAL);
                 break;
             case VERTICALNORTHSOUTH:
+                WandUtility.setMode(itemStack, EnumLock.VERTICALEASTWEST);
                 break;
             case NOLOCK:
                 WandUtility.setMode(itemStack, EnumLock.HORIZONTAL);
