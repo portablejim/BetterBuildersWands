@@ -27,6 +27,7 @@ import portablejim.bbw.proxy.IProxy;
 public class BetterBuildersWandsMod {
     public static final String MODID = "betterbuilderswands";
     public static final String VERSION = "0.1";
+    public static final String LANGID = "bbw";
 
     @Mod.Instance
     public static BetterBuildersWandsMod instance;

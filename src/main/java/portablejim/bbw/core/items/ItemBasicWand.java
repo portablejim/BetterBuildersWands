@@ -61,25 +61,25 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         EnumLock mode = WandUtility.getMode(itemstack);
         switch (mode) {
             case NORTHSOUTH:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.northsouth"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.northsouth"));
                 break;
             case VERTICAL:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.vertical"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.vertical"));
                 break;
             case VERTICALEASTWEST:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.vertialeastwest"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticaleastwest"));
                 break;
             case EASTWEST:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.eastwest"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.eastwest"));
                 break;
             case HORIZONTAL:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.horizontal"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.horizontal"));
                 break;
             case VERTICALNORTHSOUTH:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.vertialnorthsouth"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticalnorthsouth"));
                 break;
             case NOLOCK:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.MODID + ".hover.mode.nolock"));
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
                 break;
         }
     }
