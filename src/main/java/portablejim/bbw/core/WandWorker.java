@@ -1,21 +1,17 @@
 package portablejim.bbw.core;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
-import portablejim.bbw.IWand;
+import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
-import portablejim.bbw.core.items.IWandItem;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -134,7 +130,7 @@ public class WandWorker {
         return toPlace;
     }
 
-    public void placeBlocks(LinkedList<Point3d> blockPosList, Point3d originalBlock) {
+    public void placeBlocks(ItemStack itemStack, LinkedList<Point3d> blockPosList, Point3d originalBlock) {
         for(Point3d blockPos : blockPosList) {
             /*if(player.countItems(getEquivalentItemStack(originalBlock)) < 1) {
                 break;
@@ -145,7 +141,7 @@ public class WandWorker {
             if(blockPlaceSuccess) {
                 world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
                 if (!player.isCreative()) {
-                    wand.placeBlock(player.getPlayer());
+                    wand.placeBlock(itemStack, player.getPlayer());
                 }
                 boolean takeFromInventory = player.useItem(getEquivalentItemStack(originalBlock));
                 if(!takeFromInventory) {

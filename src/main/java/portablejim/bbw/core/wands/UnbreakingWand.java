@@ -2,32 +2,18 @@ package portablejim.bbw.core.wands;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import portablejim.bbw.IWand;
-import portablejim.bbw.basics.EnumLock;
-import portablejim.bbw.core.WandUtility;
 
 /**
  * Simple wand that doesn't break / have durability.
  */
 public class UnbreakingWand implements IWand {
-    private ItemStack wandItem;
-
-    public UnbreakingWand(ItemStack wandItem) {
-
-        this.wandItem = wandItem;
-    }
     @Override
-    public EnumLock getMode() {
-        return WandUtility.getMode(wandItem);
-    }
-
-    @Override
-    public int getMaxBlocks() {
+    public int getMaxBlocks(ItemStack itemStack) {
         return 4096;
     }
 
     @Override
-    public boolean placeBlock(EntityLivingBase unused) {
+    public boolean placeBlock(ItemStack itemStack, EntityLivingBase entityLivingBase) {
         return true;
     }
 }

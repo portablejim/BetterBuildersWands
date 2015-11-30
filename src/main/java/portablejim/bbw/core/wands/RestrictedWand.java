@@ -2,32 +2,24 @@ package portablejim.bbw.core.wands;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import portablejim.bbw.IWand;
-import portablejim.bbw.basics.EnumLock;
-import portablejim.bbw.core.WandUtility;
 
 /**
  * Simple wand that doesn't break / have durability.
  */
 public class RestrictedWand implements IWand {
-    private ItemStack wandItem;
+    protected int blocklimit = 0;
 
-    public RestrictedWand(ItemStack wandItem) {
-        this.wandItem = wandItem;
+    public RestrictedWand(int limit) {
+        this.blocklimit = limit;
     }
     @Override
-    public EnumLock getMode() {
-        return WandUtility.getMode(wandItem);
-    }
-
-    @Override
-    public int getMaxBlocks() {
-        return wandItem.getMaxDamage() - wandItem.getItemDamage();
+    public int getMaxBlocks(ItemStack itemStack) {
+        return Math.min(itemStack.getMaxDamage() - itemStack.getItemDamage(), this.blocklimit);
     }
 
     @Override
-    public boolean placeBlock(EntityLivingBase entityLivingBase) {
-        wandItem.damageItem(1, entityLivingBase);
+    public boolean placeBlock(ItemStack itemStack, EntityLivingBase entityLivingBase) {
+        itemStack.damageItem(1, entityLivingBase);
         return true;
     }
 }

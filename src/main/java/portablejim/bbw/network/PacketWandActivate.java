@@ -18,16 +18,12 @@
 package portablejim.bbw.network;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import portablejim.bbw.BetterBuildersWandsMod;
-import portablejim.bbw.core.WandUtility;
 import portablejim.bbw.core.items.IWandItem;
 
 import java.util.UUID;
@@ -69,7 +65,7 @@ public class PacketWandActivate implements IMessage {
                 ItemStack wandItemstack = player.getCurrentEquippedItem();
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 wandItem.nextMode(wandItemstack, player);
-                player.addChatMessage(new ChatComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + WandUtility.getMode(wandItemstack).toString().toLowerCase()));
+                player.addChatMessage(new ChatComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wandItemstack).toString().toLowerCase()));
             }
         }
     }

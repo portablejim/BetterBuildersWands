@@ -1,7 +1,10 @@
 bbw.keys.category=Better Builders Wands
 bbw.keys.mode=Change Mode
 
-item.betterbuilderswands:unbreakableWand.name=Unbreakable Wand
+item.betterbuilderswands:wandBasic.name=Stone Wand
+item.betterbuilderswands:wandAdvanced.name=Iron Wand
+item.betterbuilderswands:wandUnrestricted.name=Diamond Wand
+item.betterbuilderswands:wandUnbreakable.name=Unbreakable Wand
 
 bbw.hover.mode.northsouth=Mode: Mode: North-South
 bbw.hover.mode.verticalnorthsouth=Mode: North-South (+ Vertical)
