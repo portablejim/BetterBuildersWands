@@ -2,6 +2,7 @@ package portablejim.bbw.core;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -41,20 +42,22 @@ public class BlockEvents {
                 Point3d clickedPos = new Point3d(event.target.blockX, event.target.blockY, event.target.blockZ);
 
                 ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-                int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(targetItemstack));
+                if (targetItemstack != null && targetItemstack.isItemEqual(new ItemStack(worldShim.getBlock(clickedPos), 1, worldShim.getMetadata(clickedPos)))) {
+                    int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(targetItemstack));
 
-                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
-                if (blocks.size() > 0) {
-                    GL11.glDisable(GL11.GL_TEXTURE_2D);
-                    GL11.glEnable(GL11.GL_BLEND);
-                    GL11.glDepthMask(true);
-                    GL11.glLineWidth(2.5F);
-                    for (Point3d block : blocks) {
-                        AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1).contract(0.005, 0.005, 0.005);
-                        RenderGlobal.drawOutlinedBoundingBox(boundingBox.getOffsetBoundingBox(-event.player.posX, -event.player.posY, -event.player.posZ), 0xC0C0C0);
+                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
+                    if (blocks.size() > 0) {
+                        GL11.glDisable(GL11.GL_TEXTURE_2D);
+                        GL11.glEnable(GL11.GL_BLEND);
+                        GL11.glDepthMask(true);
+                        GL11.glLineWidth(2.5F);
+                        for (Point3d block : blocks) {
+                            AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1).contract(0.005, 0.005, 0.005);
+                            RenderGlobal.drawOutlinedBoundingBox(boundingBox.getOffsetBoundingBox(-event.player.posX, -event.player.posY, -event.player.posZ), 0xC0C0C0);
+                        }
+                        GL11.glEnable(GL11.GL_TEXTURE_2D);
+                        GL11.glDisable(GL11.GL_BLEND);
                     }
-                    GL11.glEnable(GL11.GL_TEXTURE_2D);
-                    GL11.glDisable(GL11.GL_BLEND);
                 }
             }
         }

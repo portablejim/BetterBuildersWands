@@ -6,6 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
@@ -43,24 +44,28 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
             return false;
         }
 
-        IPlayerShim playerShim = new BasicPlayerShim(player);
-        if(player.capabilities.isCreativeMode) {
-            playerShim = new CreativePlayerShim(player);
+        if(!world.isRemote) {
+            IPlayerShim playerShim = new BasicPlayerShim(player);
+            if (player.capabilities.isCreativeMode) {
+                playerShim = new CreativePlayerShim(player);
+            }
+            IWorldShim worldShim = new BasicWorldShim(world);
+
+            WandWorker worker = new WandWorker(this.wand, playerShim, worldShim);
+
+            Point3d clickedPos = new Point3d(x, y, z);
+
+            ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
+            int numBlocks = Math.min(this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
+            FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
+
+            if (targetItemstack != null && targetItemstack.isItemEqual(new ItemStack(worldShim.getBlock(clickedPos), 1, worldShim.getMetadata(clickedPos)))) {
+                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getMode(itemstack), getFaceLock(itemstack));
+
+                worker.placeBlocks(itemstack, blocks, clickedPos);
+            }
+
         }
-        IWorldShim worldShim = new BasicWorldShim(world);
-
-        WandWorker worker = new WandWorker(this.wand, playerShim, worldShim);
-
-        Point3d clickedPos = new Point3d(x, y, z);
-
-        ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-        int numBlocks = Math.min(this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
-        FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
-
-        LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getMode(itemstack), getFaceLock(itemstack));
-
-        worker.placeBlocks(itemstack, blocks, clickedPos);
-
         return true;
     }
 

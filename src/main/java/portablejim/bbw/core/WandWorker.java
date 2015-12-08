@@ -2,6 +2,8 @@ package portablejim.bbw.core;
 
 import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,7 +36,22 @@ public class WandWorker {
 
     public ItemStack getEquivalentItemStack(Point3d blockPos) {
         Block block = world.getBlock(blockPos);
-        return block == null ? null : new ItemStack(block.getItem(world.getWorld(), blockPos.x, blockPos.y, blockPos.z), 1, block.getDamageValue(world.getWorld(), blockPos.x, blockPos.y, blockPos.z));
+        return block == null ? null : new ItemStack(Item.getItemFromBlock(block), 1, block.getDamageValue(world.getWorld(), blockPos.x, blockPos.y, blockPos.z));
+    }
+
+    private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, int targetMetadata, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB) {
+        if(!world.blockIsAir(currentCandidate)) return false;
+        /*if((FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate)) || FluidRegistry.getFluid("lava").getBlock().equals(world.getBlock(currentCandidate)))
+                && world.getMetadata(currentCandidate) == 0){
+            return false;
+        }*/
+        if(!targetBlock.equals(candidateSupportingBlock)) return false;
+        if(targetMetadata != candidateSupportingMeta) return false;
+        //if(targetBlock instanceof BlockCrops) return false;
+        if(!targetBlock.canBlockStay(world.getWorld(), currentCandidate.x, currentCandidate.y, currentCandidate.z)) return false;
+
+        return !world.entitiesInBox(blockBB);
+
     }
 
     public LinkedList<Point3d> getBlockPositionList(Point3d blockLookedAt, ForgeDirection placeDirection, int maxBlocks, EnumLock directionLock, EnumLock faceLock) {
@@ -60,10 +77,7 @@ public class WandWorker {
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
             AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBoxFromPool(world.getWorld(), currentCandidate.x, currentCandidate.y, currentCandidate.z);
-            if((world.blockIsAir(currentCandidate) || (FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate)) || FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate))) && world.getMetadata(currentCandidate) != 0)
-                    && targetBlock.equals(candidateSupportingBlock)
-                    && targetMetadata == candidateSupportingMeta
-                    && !world.entitiesInBox(blockBB)
+            if(shouldContinue(currentCandidate, targetBlock, targetMetadata, candidateSupportingBlock, candidateSupportingMeta, blockBB)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
 

@@ -44,9 +44,11 @@ public class BasicPlayerShim implements IPlayerShim {
             ItemStack inventoryStack = player.inventory.mainInventory[i];
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
                 inventoryStack.stackSize -= 1;
+                player.inventory.setInventorySlotContents(i, inventoryStack);
                 if(inventoryStack.stackSize == 0) {
                     player.inventory.setInventorySlotContents(i, null);
                 }
+                player.inventoryContainer.detectAndSendChanges();
                 return true;
             }
         }
