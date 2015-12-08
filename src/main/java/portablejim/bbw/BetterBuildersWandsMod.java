@@ -64,6 +64,19 @@ public class BetterBuildersWandsMod {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
 
+        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
+        networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
+
+    }
+
+    private ItemStack newWand(int damage) {
+        return new ItemStack(BetterBuildersWandsMod.itemUnbreakableWand, 1, damage);
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.RegisterEvents();
+
         itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
         itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
         itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.EMERALD.getMaxUses()), "Unrestricted", "Diamond");
@@ -91,19 +104,6 @@ public class BetterBuildersWandsMod {
         }
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(13), Arrays.asList(newWand(12), newWand(12))));
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(14), Arrays.asList(newWand(13), newWand(13))));
-
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
-        networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
-
-    }
-
-    private ItemStack newWand(int damage) {
-        return new ItemStack(BetterBuildersWandsMod.itemUnbreakableWand, 1, damage);
-    }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        proxy.RegisterEvents();
     }
 
     @EventHandler
