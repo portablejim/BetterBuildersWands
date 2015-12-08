@@ -96,6 +96,10 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                 lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
                 break;
         }
+
+        if(!itemstack.isItemStackDamageable() || !itemstack.isItemDamaged()) {
+            lines.add(StatCollector.translateToLocalFormatted(BetterBuildersWandsMod.LANGID + ".hover.maxblocks", wand.getMaxBlocks(itemstack)));
+        }
     }
 
     @Override

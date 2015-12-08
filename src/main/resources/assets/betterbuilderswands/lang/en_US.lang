@@ -13,6 +13,7 @@ bbw.hover.mode.verticaleastwest=Mode: East-West (+ Vertical)
 bbw.hover.mode.horizontal=Mode: Horizontal
 bbw.hover.mode.vertical= Mode: Vertical
 bbw.hover.mode.nolock=Mode: No Lock
+bbw.hover.maxblocks=Max %d blocks
 bbw.chat.mode.northsouth=Mode: Mode: North-South - Extend north and south from initial block. No building on north/south face
 bbw.chat.mode.verticalnorthsouth=Mode: North-South (+ Vertical) - Extend north, south, up and down from initial block. No building on north/south face
 bbw.chat.mode.eastwest=Mode: East-West - Extend east and west from the initial block. No building on east/west face
