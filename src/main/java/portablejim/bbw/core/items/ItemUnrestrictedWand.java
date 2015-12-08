@@ -1,15 +1,25 @@
 package portablejim.bbw.core.items;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
-import portablejim.bbw.core.wands.UnbreakingWand;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The actual item: Simple wand with no durability. Similar to current Builder's Wand.
  */
 public class ItemUnrestrictedWand extends ItemBasicWand{
+
+    protected Set<Integer> subItemMetas = new HashSet<Integer>();
+
     public ItemUnrestrictedWand(IWand wand, String name, String texture) {
         super();
         this.setUnlocalizedName("betterbuilderswands:wand" + name);
@@ -51,4 +61,25 @@ public class ItemUnrestrictedWand extends ItemBasicWand{
                 break;
         }
     }
+
+    public ItemUnrestrictedWand addSubMeta(int meta) {
+        this.subItemMetas.add(meta);
+        return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
+        if(subItemMetas.isEmpty()) {
+            list.add(new ItemStack(item, 1, 0));
+        }
+        else {
+            ArrayList<Integer> metas = new ArrayList<Integer>(this.subItemMetas);
+            Collections.sort(metas);
+            for (Integer meta : metas) {
+                list.add(new ItemStack(item, 1, meta));
+
+            }
+        }
+    }
+
 }

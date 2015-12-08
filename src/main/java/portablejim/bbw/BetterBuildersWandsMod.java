@@ -98,10 +98,16 @@ public class BetterBuildersWandsMod {
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', creativebuildersWand));
             GameRegistry.addRecipe(new ShapelessRecipes(newWand(5), Arrays.asList(newWand(4), newWand(4))));
             GameRegistry.addRecipe(new ShapelessRecipes(newWand(6), Arrays.asList(newWand(5), newWand(5))));
+            itemUnbreakableWand.addSubMeta(4);
+            itemUnbreakableWand.addSubMeta(5);
+            itemUnbreakableWand.addSubMeta(6);
         }
         else {
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', Items.nether_star));
         }
+        itemUnbreakableWand.addSubMeta(12);
+        itemUnbreakableWand.addSubMeta(13);
+        itemUnbreakableWand.addSubMeta(14);
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(13), Arrays.asList(newWand(12), newWand(12))));
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(14), Arrays.asList(newWand(13), newWand(13))));
     }
