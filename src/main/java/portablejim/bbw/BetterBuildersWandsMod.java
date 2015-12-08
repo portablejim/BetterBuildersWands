@@ -1,5 +1,7 @@
 package portablejim.bbw;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -12,6 +14,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
@@ -26,6 +30,11 @@ import portablejim.bbw.core.wands.RestrictedWand;
 import portablejim.bbw.core.wands.UnbreakingWand;
 import portablejim.bbw.network.PacketWandActivate;
 import portablejim.bbw.proxy.IProxy;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Author: Portablejim
@@ -68,11 +77,28 @@ public class BetterBuildersWandsMod {
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone"));
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron"));
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemUnbreakableWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', Items.nether_star));
+
+        if(Loader.isModLoaded("ExtraUtilities")) {
+            Item buildersWand = GameRegistry.findItem("ExtraUtilities", "builderswand");
+            Item creativebuildersWand = GameRegistry.findItem("ExtraUtilities", "creativebuilderswand");
+            GameRegistry.addRecipe(new ShapedOreRecipe(newWand(4), "  H", " S ", "S  ", 'S', "stickWood", 'H', buildersWand));
+            GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', creativebuildersWand));
+            GameRegistry.addRecipe(new ShapelessRecipes(newWand(5), Arrays.asList(newWand(4), newWand(4))));
+            GameRegistry.addRecipe(new ShapelessRecipes(newWand(6), Arrays.asList(newWand(5), newWand(5))));
+        }
+        else {
+            GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', Items.nether_star));
+        }
+        GameRegistry.addRecipe(new ShapelessRecipes(newWand(13), Arrays.asList(newWand(12), newWand(12))));
+        GameRegistry.addRecipe(new ShapelessRecipes(newWand(14), Arrays.asList(newWand(13), newWand(13))));
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
 
+    }
+
+    private ItemStack newWand(int damage) {
+        return new ItemStack(BetterBuildersWandsMod.itemUnbreakableWand, 1, damage);
     }
 
     @EventHandler
