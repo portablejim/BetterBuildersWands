@@ -36,7 +36,7 @@ public class WandWorker {
 
     public ItemStack getEquivalentItemStack(Point3d blockPos) {
         Block block = world.getBlock(blockPos);
-        return block == null ? null : new ItemStack(Item.getItemFromBlock(block), 1, block.getDamageValue(world.getWorld(), blockPos.x, blockPos.y, blockPos.z));
+        return block == null ? null : new ItemStack(Item.getItemFromBlock(block), 1, world.getMetadata(blockPos));
     }
 
     private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, int targetMetadata, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB) {

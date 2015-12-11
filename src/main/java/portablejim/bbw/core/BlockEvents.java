@@ -42,7 +42,7 @@ public class BlockEvents {
                 Point3d clickedPos = new Point3d(event.target.blockX, event.target.blockY, event.target.blockZ);
 
                 ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-                if (targetItemstack != null && targetItemstack.isItemEqual(new ItemStack(worldShim.getBlock(clickedPos), 1, worldShim.getMetadata(clickedPos)))) {
+                if (targetItemstack != null) {
                     int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(targetItemstack));
 
                     LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));

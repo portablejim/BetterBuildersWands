@@ -59,7 +59,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
             int numBlocks = Math.min(this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
             FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
 
-            if (targetItemstack != null && targetItemstack.isItemEqual(new ItemStack(worldShim.getBlock(clickedPos), 1, worldShim.getMetadata(clickedPos)))) {
+            if (targetItemstack != null) {
                 LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getMode(itemstack), getFaceLock(itemstack));
 
                 worker.placeBlocks(itemstack, blocks, clickedPos);
