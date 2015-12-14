@@ -21,3 +21,7 @@ bbw.chat.mode.verticaleastwest=Mode: East-West (+ Vertical) - Extend east, west,
 bbw.chat.mode.horizontal=Mode: Horizontal - Extend left and right from the original block. No building on top/bottom face.
 bbw.chat.mode.vertical= Mode: Vertical - Extend up and down from the original block. No building on top/bottom face
 bbw.chat.mode.nolock=Mode: No Lock - Extend left, right, up and down from the original block.
+
+bbw.chat.error.noundo=I can't remember what this wand last built.
+bbw.chat.error.nowand=You need to run this with a wand from Better Builders Wands in your hand.
+bbw.chat.error.bot=AI can detect Non-players. Please don't do that again.

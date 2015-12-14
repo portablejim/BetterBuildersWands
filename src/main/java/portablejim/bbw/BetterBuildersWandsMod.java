@@ -7,6 +7,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -23,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import portablejim.bbw.core.BlockEvents;
+import portablejim.bbw.core.OopsCommand;
 import portablejim.bbw.core.items.ItemRestrictedWandAdvanced;
 import portablejim.bbw.core.items.ItemRestrictedWandBasic;
 import portablejim.bbw.core.items.ItemUnrestrictedWand;
@@ -110,6 +112,11 @@ public class BetterBuildersWandsMod {
         itemUnbreakableWand.addSubMeta(14);
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(13), Arrays.asList(newWand(12), newWand(12))));
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(14), Arrays.asList(newWand(13), newWand(13))));
+    }
+
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new OopsCommand());
     }
 
     @EventHandler

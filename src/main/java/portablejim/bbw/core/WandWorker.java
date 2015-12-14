@@ -2,18 +2,17 @@ package portablejim.bbw.core;
 
 import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.fluids.FluidRegistry;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -146,7 +145,8 @@ public class WandWorker {
         return toPlace;
     }
 
-    public void placeBlocks(ItemStack itemStack, LinkedList<Point3d> blockPosList, Point3d originalBlock) {
+    public ArrayList<Point3d> placeBlocks(ItemStack itemStack, LinkedList<Point3d> blockPosList, Point3d originalBlock) {
+        ArrayList<Point3d> placedBlocks = new ArrayList<Point3d>();
         for(Point3d blockPos : blockPosList) {
             /*if(player.countItems(getEquivalentItemStack(originalBlock)) < 1) {
                 break;
@@ -156,6 +156,7 @@ public class WandWorker {
 
             if(blockPlaceSuccess) {
                 world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
+                placedBlocks.add(blockPos);
                 if (!player.isCreative()) {
                     wand.placeBlock(itemStack, player.getPlayer());
                 }
@@ -163,8 +164,11 @@ public class WandWorker {
                 if(!takeFromInventory) {
                     FMLLog.info("BBW takeback: %s", blockPos.toString());
                     world.setBlockToAir(blockPos);
+                    placedBlocks.remove(placedBlocks.size() - 1);
                 }
             }
         }
+
+        return placedBlocks;
     }
 }

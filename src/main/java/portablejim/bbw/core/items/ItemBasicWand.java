@@ -1,6 +1,7 @@
 package portablejim.bbw.core.items;
 
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,6 +25,7 @@ import portablejim.bbw.shims.CreativePlayerShim;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,7 +64,21 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
             if (targetItemstack != null) {
                 LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getMode(itemstack), getFaceLock(itemstack));
 
-                worker.placeBlocks(itemstack, blocks, clickedPos);
+                ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, clickedPos);
+                if(placedBlocks.size() > 0) {
+                    int[] placedIntArray = new int[placedBlocks.size() * 3];
+                    for (int i = 0; i < placedBlocks.size(); i++) {
+                        Point3d currentPoint = placedBlocks.get(i);
+                        placedIntArray[i * 3] = currentPoint.x;
+                        placedIntArray[i * 3 + 1] = currentPoint.y;
+                        placedIntArray[i * 3 + 2] = currentPoint.z;
+                    }
+                    NBTTagCompound placedNBT = new NBTTagCompound();
+                    placedNBT.setIntArray("lastPlaced", placedIntArray);
+                    placedNBT.setString("lastBlock", GameRegistry.findUniqueIdentifierFor(targetItemstack.getItem()).toString());
+                    placedNBT.setInteger("lastPerBlock", 1);
+                    itemstack.setTagInfo("bbw", placedNBT);
+                }
             }
 
         }
