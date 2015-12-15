@@ -75,11 +75,16 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         placedIntArray[i * 3 + 1] = currentPoint.y;
                         placedIntArray[i * 3 + 2] = currentPoint.z;
                     }
-                    NBTTagCompound placedNBT = new NBTTagCompound();
-                    placedNBT.setIntArray("lastPlaced", placedIntArray);
-                    placedNBT.setString("lastBlock", Item.itemRegistry.getNameForObject(targetItemstack.getItem()).toString());
-                    placedNBT.setInteger("lastPerBlock", 1);
-                    itemstack.setTagInfo("bbw", placedNBT);
+                    NBTTagCompound itemNBT = itemstack.getTagCompound();
+                    NBTTagCompound bbwCompond = new NBTTagCompound();
+                    if(itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
+                        bbwCompond = itemNBT.getCompoundTag("bbw");
+                    }
+                    bbwCompond.setIntArray("lastPlaced", placedIntArray);
+                    bbwCompond.setString("lastBlock", GameRegistry.findUniqueIdentifierFor(targetItemstack.getItem()).toString());
+                    bbwCompond.setInteger("lastPerBlock", 1);
+                    itemstack.setTagInfo("bbw", bbwCompond);
+
                 }
             }
 
@@ -126,12 +131,11 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn) {
-        stack.damageItem(2, playerIn);
+    public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase) {
+        itemStack.damageItem(2, entityLivingBase);
         return true;
     }
 
-    @Override
     public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_)
     {
         p_77644_1_.damageItem(2, p_77644_3_);
