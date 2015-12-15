@@ -5,4 +5,5 @@ package portablejim.bbw.proxy;
  */
 public interface IProxy {
     void RegisterEvents();
+    void RegisterModels();
 }

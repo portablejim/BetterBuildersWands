@@ -1,6 +1,6 @@
 package portablejim.bbw.basics;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Point to represent 3D space. Functions to move in that space.
@@ -21,7 +21,7 @@ public class Point3d {
         this.z = z;
     }
 
-    public Point3d move(ForgeDirection direction) {
+    public Point3d move(EnumFacing direction) {
         int newX = x, newY = y, newZ = z;
         switch(direction) {
             case UP:

@@ -1,13 +1,18 @@
 package portablejim.bbw.core;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.Point3d;
@@ -39,24 +44,33 @@ public class BlockEvents {
 
                 WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
-                Point3d clickedPos = new Point3d(event.target.blockX, event.target.blockY, event.target.blockZ);
+                Point3d clickedPos = new Point3d(event.target.getBlockPos().getX(), event.target.getBlockPos().getY(), event.target.getBlockPos().getZ());
 
                 ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
                 if (targetItemstack != null) {
                     int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(targetItemstack));
 
-                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
+                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.target.sideHit, numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
                     if (blocks.size() > 0) {
-                        GL11.glDisable(GL11.GL_TEXTURE_2D);
-                        GL11.glEnable(GL11.GL_BLEND);
-                        GL11.glDepthMask(true);
+                        GlStateManager.disableTexture2D();
+                        GlStateManager.disableBlend();
+                        GlStateManager.depthMask(true);
                         GL11.glLineWidth(2.5F);
                         for (Point3d block : blocks) {
-                            AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(block.x, block.y, block.z, block.x + 1, block.y + 1, block.z + 1).contract(0.005, 0.005, 0.005);
-                            RenderGlobal.drawOutlinedBoundingBox(boundingBox.getOffsetBoundingBox(-event.player.posX, -event.player.posY, -event.player.posZ), 0xC0C0C0);
+                            Block blockb = Blocks.bedrock;
+                            EntityPlayer player = event.player;
+                            double partialTicks = event.partialTicks;
+                            double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
+                            double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
+                            double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+                            RenderGlobal.func_181561_a(blockb.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).contract(0.005, 0.005, 0.005).offset(-d0, -d1, -d2));
+
                         }
                         GL11.glEnable(GL11.GL_TEXTURE_2D);
                         GL11.glDisable(GL11.GL_BLEND);
+                        GlStateManager.enableTexture2D();
+                        GlStateManager.enableBlend();
+                        GlStateManager.depthMask(false);
                     }
                 }
             }

@@ -1,18 +1,18 @@
 package portablejim.bbw;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -69,6 +69,16 @@ public class BetterBuildersWandsMod {
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
 
+        itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
+        itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
+        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.EMERALD.getMaxUses()), "Unrestricted", "Diamond");
+        itemDiamondWand.setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses());
+        itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
+        GameRegistry.registerItem(itemStoneWand, "wandStone");
+        GameRegistry.registerItem(itemIronWand, "wandIron");
+        GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
+        GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
+        proxy.RegisterModels();
     }
 
     private ItemStack newWand(int damage) {
@@ -79,15 +89,6 @@ public class BetterBuildersWandsMod {
     public void init(FMLInitializationEvent event) {
         proxy.RegisterEvents();
 
-        itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
-        itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
-        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.EMERALD.getMaxUses()), "Unrestricted", "Diamond");
-        itemDiamondWand.setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses());
-        itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
-        GameRegistry.registerItem(itemStoneWand, "wandStone");
-        GameRegistry.registerItem(itemIronWand, "wandIron");
-        GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
-        GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone"));
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron"));

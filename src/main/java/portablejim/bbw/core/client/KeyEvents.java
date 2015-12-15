@@ -1,9 +1,9 @@
 package portablejim.bbw.core.client;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import portablejim.bbw.BetterBuildersWandsMod;
@@ -25,7 +25,7 @@ public class KeyEvents {
 
     @SubscribeEvent
     public void KeyEvent(InputEvent event) {
-        boolean currentIsPressed = keyBinding.getIsKeyPressed();
+        boolean currentIsPressed = keyBinding.isPressed();
         if(currentIsPressed != isPressed) {
             isPressed = currentIsPressed;
             PacketWandActivate packet = new PacketWandActivate(currentIsPressed);

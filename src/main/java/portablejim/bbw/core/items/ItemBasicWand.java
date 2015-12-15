@@ -1,7 +1,10 @@
 package portablejim.bbw.core.items;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.registry.GameData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
@@ -41,7 +43,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         this.setMaxStackSize(1);
     }
 
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(wand == null) {
             return false;
         }
@@ -55,14 +57,14 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
             WandWorker worker = new WandWorker(this.wand, playerShim, worldShim);
 
-            Point3d clickedPos = new Point3d(x, y, z);
+            Point3d clickedPos = new Point3d(pos.getX(), pos.getY(), pos.getZ());
 
             ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
             int numBlocks = Math.min(this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
             FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
 
             if (targetItemstack != null) {
-                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(side), numBlocks, getMode(itemstack), getFaceLock(itemstack));
+                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, side, numBlocks, getMode(itemstack), getFaceLock(itemstack));
 
                 ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, clickedPos);
                 if(placedBlocks.size() > 0) {
@@ -75,7 +77,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                     }
                     NBTTagCompound placedNBT = new NBTTagCompound();
                     placedNBT.setIntArray("lastPlaced", placedIntArray);
-                    placedNBT.setString("lastBlock", GameRegistry.findUniqueIdentifierFor(targetItemstack.getItem()).toString());
+                    placedNBT.setString("lastBlock", Item.itemRegistry.getNameForObject(targetItemstack.getItem()).toString());
                     placedNBT.setInteger("lastPerBlock", 1);
                     itemstack.setTagInfo("bbw", placedNBT);
                 }
@@ -124,11 +126,12 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase) {
-        itemStack.damageItem(2, entityLivingBase);
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn) {
+        stack.damageItem(2, playerIn);
         return true;
     }
 
+    @Override
     public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_)
     {
         p_77644_1_.damageItem(2, p_77644_3_);

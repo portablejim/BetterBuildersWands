@@ -1,6 +1,7 @@
+
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
@@ -11,53 +12,166 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 
-apply plugin: 'forge'
+plugins {
+    id 'com.matthewprenger.cursegradle' version '1.0.4'
+}
 
-version = "0.3.0"
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
+
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    //noinspection GrUnresolvedAccess
+    ext.config = new ConfigSlurper().parse prop
+}
+
 group= "portablejim.bbw.betterbuilderswands" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = config.mod_version
 archivesBaseName = "BetterBuildersWands"
 
+
 minecraft {
-    version = "1.7.10-10.13.4.1448-1.7.10"
-    runDir = "eclipse"
+    version = config.minecraft_version + "-" + config.forge_version
+    mappings = "snapshot_20151213"
+    runDir = "run"
 }
 
-dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+String buildNumber = "unknown"
+if(System.getenv("BUILD_NUMBER") != null) {
+    buildNumber = System.getenv("BUILD_NUMBER")
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+version = "${config.minecraft_version}_${config.mod_version}.${buildNumber}"
 
-    // replace stuff in mcmod.info, nothing else
+processResources {
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+        include 'version.properties'
+
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':project.config.mod_version, 'mcversion':project.config.minecraft_version, 'buildnumber': buildNumber
     }
-        
-    // copy everything else, thats not the mcmod.info
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+        exclude 'version.properties'
+    }
+}
+
+ext.sharedmanifest = manifest {
+        //attributes 'FMLCorePlugin': 'portablejim.veinminer.asm.VeinMinerCorePlugin'
+        //attributes 'FMLCorePluginContainsFMLMod': 'true'
+}
+
+jar {
+    manifest = project.manifest {
+        from sharedmanifest
+    }
+}
+
+sourceCompatibility = 6
+targetCompatibility = 6
+
+task apiJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'api'
+    include "portablejim/veinminer/api/**"
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    manifest = project.manifest {
+        from sharedmanifest
+    }
+    classifier = 'dev'
+}
+
+//noinspection GrUnresolvedAccess
+task release(type: Copy) {
+    dependsOn "build"
+
+    from project.tasks.jar.archivePath
+    into "release/"
+}
+
+runClient {
+    jvmArgs "-Dfml.coreMods.load=portablejim.veinminer.asm.VeinMinerCorePlugin"
+}
+
+build.dependsOn apiJar, deobfJar
+
+artifacts {
+    archives deobfJar
+}
+
+configurations {
+    deployerJars
+}
+
+uploadArchives {
+    dependsOn 'reobf'
+
+    repositories {
+        if(project.hasProperty("pushMaven")) {
+            logger.info("Pushing to maven repo")
+
+            mavenDeployer {
+                configuration = configurations.deployerJars
+
+                repository(url: "file://localhost/home/public_html/maven.jamesmckay.id.au/htdocs/")
+
+                pom {
+                    groupId = project.group
+                    version = project.version
+                    artifactId = project.archivesBaseName
+                    packaging = 'jar'
+                    description 'VeinMiner Mod'
+                }
+            }
+        }
+    }
+}
+
+curseforge {
+    if (project.hasProperty('curseForgeApiKey')) apiKey = project.curseForgeApiKey
+    else apiKey = 0
+    project {
+        id = '67133'
+        changelog = new File('Changelog.md').getText('utf-8').split('\n-{3,8}|\n\n')[2]
+        changelogType = 'markdown'
+        releaseType = 'alpha' // Just a default
+        mainArtifact (jar) {
+            displayName = "VeinMiner $config.mod_version [MC$config.compatible_versions; build $buildNumber]"
+        }
+
+        addArtifact deobfJar
+        addArtifact apiJar
+
+        for (String newVersion : config.compatible_versions.split(",")) {
+            addGameVersion newVersion
+        }
+    }
+}
+
+task curseAlpha(dependsOn: tasks.curseforge) {}
+task curseRelease(dependsOn: tasks.curseforge) {}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(curseAlpha)) {
+        curseforge.curseProjects.each { it.additionalArtifacts.each { it.releaseType = 'alpha' } }
+        curseforge.curseProjects.each { it.releaseType = 'alpha' }
+        curseforge.curseProjects.each { it.mainArtifact.releaseType = 'alpha' }
+
+    } else if (taskGraph.hasTask(curseRelease)) {
+        curseforge.curseProjects.each { it.releaseType = 'release' }
+        curseforge.curseProjects.each { it.mainArtifact.releaseType = 'release' }
+        curseforge.curseProjects.each { it.additionalArtifacts.each { it.releaseType = 'release' } }
     }
 }

@@ -1,6 +1,7 @@
 package portablejim.bbw.core;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -31,7 +32,7 @@ public class OopsCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) {
+    public void processCommand(ICommandSender sender, String[] arguments) throws WrongUsageException {
         if(sender instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) sender;
             ItemStack currentItemstack = player.getCurrentEquippedItem();
@@ -44,11 +45,12 @@ public class OopsCommand extends CommandBase {
                     bbwCompound = tagComponent.getCompoundTag("bbw");
                     ArrayList<Point3d> pointList = unpackNbt(bbwCompound.getIntArray("lastPlaced"));
                     for (Point3d point : pointList) {
-                        player.getEntityWorld().setBlockToAir(point.x, point.y, point.z);
+                        player.getEntityWorld().setBlockToAir(new BlockPos(point.x, point.y, point.z));
                     }
-                    if(bbwCompound.hasKey("lastBlock", Constants.NBT.TAG_STRING) && bbwCompound.hasKey("lastPerBlock", Constants.NBT.TAG_INT)) {
-                        GameRegistry.UniqueIdentifier lastBlock = new GameRegistry.UniqueIdentifier(bbwCompound.getString("lastBlock"));
-                        ItemStack itemStack = GameRegistry.findItemStack(lastBlock.modId, lastBlock.name, 1);
+                    if(bbwCompound.hasKey("lastBlock", Constants.NBT.TAG_STRING) && bbwCompound.hasKey("lastPerBlock", Constants.NBT.TAG_INT) && bbwCompound.hasKey("lastBlockMeta")) {
+                        String blockName= bbwCompound.getString("lastBlock");
+                        int meta = bbwCompound.getInteger("lastBlockMeta");
+                        ItemStack itemStack = GameRegistry.makeItemStack(blockName, meta, 1, "");
                         int count = bbwCompound.getInteger("lastPerBlock") * pointList.size();
                         int stackSize = itemStack.getMaxStackSize();
                         int fullStacks = count / stackSize;
