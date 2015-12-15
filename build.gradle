@@ -147,9 +147,9 @@ gradle.taskGraph.whenReady { taskGraph ->
         curseforge.curseProjects.each { it.releaseType = 'alpha' }
         curseforge.curseProjects.each { it.mainArtifact.releaseType = 'alpha' }
     } else if (taskGraph.hasTask(curseBeta)) {
-        curseforge.curseProjects.each { it.betaType = 'beta' }
-        curseforge.curseProjects.each { it.mainArtifact.betaType = 'beta' }
-        curseforge.curseProjects.each { it.additionalArtifacts.each { it.betaType = 'beta' } }
+        curseforge.curseProjects.each { it.releaseType = 'beta' }
+        curseforge.curseProjects.each { it.mainArtifact.releaseType = 'beta' }
+        curseforge.curseProjects.each { it.additionalArtifacts.each { it.releaseType = 'beta' } }
     } else if (taskGraph.hasTask(curseRelease)) {
         curseforge.curseProjects.each { it.releaseType = 'release' }
         curseforge.curseProjects.each { it.mainArtifact.releaseType = 'release' }
