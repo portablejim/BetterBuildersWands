@@ -73,11 +73,16 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         placedIntArray[i * 3 + 1] = currentPoint.y;
                         placedIntArray[i * 3 + 2] = currentPoint.z;
                     }
-                    NBTTagCompound placedNBT = new NBTTagCompound();
-                    placedNBT.setIntArray("lastPlaced", placedIntArray);
-                    placedNBT.setString("lastBlock", GameRegistry.findUniqueIdentifierFor(targetItemstack.getItem()).toString());
-                    placedNBT.setInteger("lastPerBlock", 1);
-                    itemstack.setTagInfo("bbw", placedNBT);
+                    NBTTagCompound itemNBT = itemstack.getTagCompound();
+                    NBTTagCompound bbwCompond = new NBTTagCompound();
+                    if(itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
+                        bbwCompond = itemNBT.getCompoundTag("bbw");
+                    }
+                    bbwCompond.setIntArray("lastPlaced", placedIntArray);
+                    bbwCompond.setString("lastBlock", GameRegistry.findUniqueIdentifierFor(targetItemstack.getItem()).toString());
+                    bbwCompond.setInteger("lastPerBlock", 1);
+                    itemstack.setTagInfo("bbw", bbwCompond);
+
                 }
             }
 
