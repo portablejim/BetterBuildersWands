@@ -142,7 +142,7 @@ task curseRelease(dependsOn: tasks.curseforge) {}
 
 gradle.taskGraph.whenReady { taskGraph ->
     curseforge.curseProjects.each { it.mainArtifact.displayName = "Better Builder's Wands $config.mod_version [MC$config.compatible_versions; rev $ext.depth]" }
-    if (taskGraph.hasTask(curseBeta)) {
+    if (taskGraph.hasTask(curseAlpha)) {
         curseforge.curseProjects.each { it.additionalArtifacts.each { it.releaseType = 'alpha' } }
         curseforge.curseProjects.each { it.releaseType = 'alpha' }
         curseforge.curseProjects.each { it.mainArtifact.releaseType = 'alpha' }
