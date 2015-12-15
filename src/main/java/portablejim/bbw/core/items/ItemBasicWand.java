@@ -81,10 +81,9 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         bbwCompond = itemNBT.getCompoundTag("bbw");
                     }
                     bbwCompond.setIntArray("lastPlaced", placedIntArray);
-                    bbwCompond.setString("lastBlock", GameRegistry.findUniqueIdentifierFor(targetItemstack.getItem()).toString());
+                    bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(targetItemstack.getItem()).toString());
                     bbwCompond.setInteger("lastPerBlock", 1);
                     itemstack.setTagInfo("bbw", bbwCompond);
-
                 }
             }
 
@@ -131,8 +130,8 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack itemStack, World world, Block block, int x, int y, int z, EntityLivingBase entityLivingBase) {
-        itemStack.damageItem(2, entityLivingBase);
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn) {
+        stack.damageItem(2, playerIn);
         return true;
     }
 
