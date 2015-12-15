@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.3.2
+-----
+Changes:
+* New config option for disabling the extra utilities mod integration.
+
 0.3.1
 ------
 Fixes:
