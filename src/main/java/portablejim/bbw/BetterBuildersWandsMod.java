@@ -24,6 +24,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import portablejim.bbw.core.BlockEvents;
+import portablejim.bbw.core.ConfigValues;
 import portablejim.bbw.core.OopsCommand;
 import portablejim.bbw.core.items.ItemRestrictedWandAdvanced;
 import portablejim.bbw.core.items.ItemRestrictedWandBasic;
@@ -53,6 +54,8 @@ public class BetterBuildersWandsMod {
     @SidedProxy(modId = MODID, clientSide = "portablejim.bbw.proxy.ClientProxy", serverSide = "portablejim.bbw.proxy.ServerProxy")
     public static IProxy proxy;
 
+    public ConfigValues configValues;
+
     public static Logger logger = new SimpleLogger("BetterBuildersWand", Level.ALL, true, false, true, false, "YYYY-MM-DD", null, PropertiesUtil.getProperties(), null);
 
     public static ItemRestrictedWandBasic itemStoneWand;
@@ -65,6 +68,9 @@ public class BetterBuildersWandsMod {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
+
+        configValues = new ConfigValues(event.getSuggestedConfigurationFile());
+        configValues.loadConfigFile();
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
@@ -93,7 +99,8 @@ public class BetterBuildersWandsMod {
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron"));
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond"));
 
-        if(Loader.isModLoaded("ExtraUtilities")) {
+        boolean EXTRA_UTILS_RECIPES = !configValues.NO_EXTRA_UTILS_RECIPES;
+        if(Loader.isModLoaded("ExtraUtilities") && EXTRA_UTILS_RECIPES) {
             Item buildersWand = GameRegistry.findItem("ExtraUtilities", "builderswand");
             Item creativebuildersWand = GameRegistry.findItem("ExtraUtilities", "creativebuilderswand");
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(4), "  H", " S ", "S  ", 'S', "stickWood", 'H', buildersWand));
