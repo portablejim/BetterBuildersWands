@@ -1,5 +1,6 @@
 package portablejim.bbw.shims;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import portablejim.bbw.basics.Point3d;
@@ -21,5 +22,10 @@ public class CreativePlayerShim extends BasicPlayerShim implements IPlayerShim {
     @Override
     public boolean useItem(ItemStack itemStack) {
         return true;
+    }
+
+    @Override
+    public ItemStack getNextItem(Block block, int meta) {
+        return new ItemStack(block, 1, meta);
     }
 }

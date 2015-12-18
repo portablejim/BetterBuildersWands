@@ -1,6 +1,5 @@
 package portablejim.bbw;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -17,15 +16,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
-import portablejim.bbw.core.BlockEvents;
 import portablejim.bbw.core.ConfigValues;
 import portablejim.bbw.core.OopsCommand;
+import portablejim.bbw.core.conversion.StackedBlockManager;
 import portablejim.bbw.core.items.ItemRestrictedWandAdvanced;
 import portablejim.bbw.core.items.ItemRestrictedWandBasic;
 import portablejim.bbw.core.items.ItemUnrestrictedWand;
@@ -34,10 +32,7 @@ import portablejim.bbw.core.wands.UnbreakingWand;
 import portablejim.bbw.network.PacketWandActivate;
 import portablejim.bbw.proxy.IProxy;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Author: Portablejim
@@ -65,6 +60,9 @@ public class BetterBuildersWandsMod {
 
     public SimpleNetworkWrapper networkWrapper;
 
+    // Caches calls to Block.getStackedBlock(int)
+    public StackedBlockManager blockCache;
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
@@ -75,6 +73,7 @@ public class BetterBuildersWandsMod {
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
 
+        blockCache = new StackedBlockManager();
     }
 
     private ItemStack newWand(int damage) {

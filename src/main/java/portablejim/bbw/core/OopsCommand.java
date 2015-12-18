@@ -6,6 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
@@ -48,7 +49,9 @@ public class OopsCommand extends CommandBase {
                     }
                     if(bbwCompound.hasKey("lastBlock", Constants.NBT.TAG_STRING) && bbwCompound.hasKey("lastPerBlock", Constants.NBT.TAG_INT)) {
                         GameRegistry.UniqueIdentifier lastBlock = new GameRegistry.UniqueIdentifier(bbwCompound.getString("lastBlock"));
+                        int damageValue = bbwCompound.getInteger("lastDamage");
                         ItemStack itemStack = GameRegistry.findItemStack(lastBlock.modId, lastBlock.name, 1);
+                        itemStack.setItemDamage(damageValue);
                         int count = bbwCompound.getInteger("lastPerBlock") * pointList.size();
                         int stackSize = itemStack.getMaxStackSize();
                         int fullStacks = count / stackSize;
@@ -63,6 +66,7 @@ public class OopsCommand extends CommandBase {
 
                         bbwCompound.removeTag("lastPlaced");
                         bbwCompound.removeTag("lastBlock");
+                        bbwCompound.removeTag("lastDamage");
                         bbwCompound.removeTag("lastPerBlock");
                     }
                 }
