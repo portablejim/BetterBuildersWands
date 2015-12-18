@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.apache.logging.log4j.Logger;
 import portablejim.bbw.BetterBuildersWandsMod;
+import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
@@ -54,7 +55,11 @@ public class WandWorker {
         int meta = world.getMetadata(blockPos);
         //ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack stack = null;
-        if(block.canSilkHarvest(world.getWorld(), player.getPlayer(), blockPos.x, blockPos.y, blockPos.z, meta)) {
+        CustomMapping customMapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(block, meta);
+        if(customMapping != null) {
+            stack = customMapping.getItems();
+        }
+        else if(block.canSilkHarvest(world.getWorld(), player.getPlayer(), blockPos.x, blockPos.y, blockPos.z, meta)) {
             stack = BetterBuildersWandsMod.instance.blockCache.getStackedBlock(world, blockPos);
         }
         else {
@@ -177,7 +182,14 @@ public class WandWorker {
     public ArrayList<Point3d> placeBlocks(ItemStack wandItem, LinkedList<Point3d> blockPosList, Point3d originalBlock, ItemStack sourceItems, int side, float hitX, float hitY, float hitZ) {
         ArrayList<Point3d> placedBlocks = new ArrayList<Point3d>();
         for(Point3d blockPos : blockPosList) {
-            boolean blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
+            boolean blockPlaceSuccess;
+            CustomMapping mapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(world.getBlock(originalBlock), world.getMetadata(originalBlock));
+            if(mapping != null) {
+                blockPlaceSuccess = world.setBlock(blockPos, mapping.getPlaceBlock(), mapping.getPlaceMeta());
+            }
+            else {
+                blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
+            }
 
             if(blockPlaceSuccess) {
                 Item itemFromBlock = Item.getItemFromBlock(world.getBlock(originalBlock));

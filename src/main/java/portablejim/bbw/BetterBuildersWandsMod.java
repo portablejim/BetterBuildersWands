@@ -12,6 +12,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +24,8 @@ import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import portablejim.bbw.core.ConfigValues;
 import portablejim.bbw.core.OopsCommand;
+import portablejim.bbw.core.conversion.CustomMapping;
+import portablejim.bbw.core.conversion.CustomMappingManager;
 import portablejim.bbw.core.conversion.StackedBlockManager;
 import portablejim.bbw.core.items.ItemRestrictedWandAdvanced;
 import portablejim.bbw.core.items.ItemRestrictedWandBasic;
@@ -62,6 +65,7 @@ public class BetterBuildersWandsMod {
 
     // Caches calls to Block.getStackedBlock(int)
     public StackedBlockManager blockCache;
+    public CustomMappingManager mappingManager;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -74,6 +78,10 @@ public class BetterBuildersWandsMod {
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
 
         blockCache = new StackedBlockManager();
+        mappingManager = new CustomMappingManager();
+
+        mappingManager.setMapping(new CustomMapping(Blocks.lapis_ore, 0, new ItemStack(Blocks.lapis_ore, 1, 4), Blocks.lapis_ore, 0));
+        mappingManager.setMapping(new CustomMapping(Blocks.lit_redstone_ore, 0, new ItemStack(Blocks.redstone_ore, 1, 0), Blocks.lit_redstone_ore, 0));
     }
 
     private ItemStack newWand(int damage) {
