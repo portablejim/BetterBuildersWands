@@ -1,5 +1,6 @@
 package portablejim.bbw.core;
 
+import net.minecraft.block.state.BlockState;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.FMLLog;
@@ -73,13 +74,14 @@ public class WandWorker {
         return stack;
     }
 
-    private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, EnumFacing facing, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB) {
+    private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, int targetMetadata, EnumFacing facing, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB) {
         if(!world.blockIsAir(currentCandidate)) return false;
         /*if((FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate)) || FluidRegistry.getFluid("lava").getBlock().equals(world.getBlock(currentCandidate)))
                 && world.getMetadata(currentCandidate) == 0){
             return false;
         }*/
         if(!targetBlock.equals(candidateSupportingBlock)) return false;
+        if(targetMetadata != candidateSupportingMeta) return false;
         //if(targetBlock instanceof BlockCrops) return false;
         if(!targetBlock.canPlaceBlockAt(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z))) return false;
         if(!targetBlock.canReplace(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z), facing, new ItemStack(candidateSupportingBlock, 1, candidateSupportingMeta))) return false;
@@ -110,8 +112,8 @@ public class WandWorker {
             Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
-            AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z), targetBlock.getDefaultState());
-            if(shouldContinue(currentCandidate, targetBlock, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB)
+            AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z), targetBlock.getStateFromMeta(targetMetadata));
+            if(shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
 
