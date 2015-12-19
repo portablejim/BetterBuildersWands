@@ -71,6 +71,16 @@ public class BetterBuildersWandsMod {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
 
+        itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
+        itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
+        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.EMERALD.getMaxUses()), "Unrestricted", "Diamond");
+        itemDiamondWand.setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses());
+        itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
+        GameRegistry.registerItem(itemStoneWand, "wandStone");
+        GameRegistry.registerItem(itemIronWand, "wandIron");
+        GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
+        GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
+
         configValues = new ConfigValues(event.getSuggestedConfigurationFile());
         configValues.loadConfigFile();
 
@@ -93,16 +103,6 @@ public class BetterBuildersWandsMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.RegisterEvents();
-
-        itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
-        itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
-        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.EMERALD.getMaxUses()), "Unrestricted", "Diamond");
-        itemDiamondWand.setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses());
-        itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
-        GameRegistry.registerItem(itemStoneWand, "wandStone");
-        GameRegistry.registerItem(itemIronWand, "wandIron");
-        GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
-        GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone"));
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron"));
