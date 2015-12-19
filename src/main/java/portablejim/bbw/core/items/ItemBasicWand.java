@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -59,14 +60,17 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
             Point3d clickedPos = new Point3d(pos.getX(), pos.getY(), pos.getZ());
 
-            ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-            int numBlocks = Math.min(this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
-            FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(targetItemstack));
+            //ItemStack pickBlock = worldShim.getBlock(clickedPos).getPickBlock(this.getMovingObjectPositionFromPlayer(world, player, false), world, x, y, z, player);
 
-            if (targetItemstack != null) {
+            ItemStack  sourceItems = worker.getProperItemStack(worldShim, playerShim, clickedPos);
+
+            if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
+                int numBlocks = Math.min(wand.getMaxBlocks(itemstack), playerShim.countItems(sourceItems));
+
+                FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(sourceItems));
                 LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, side, numBlocks, getMode(itemstack), getFaceLock(itemstack));
 
-                ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, clickedPos);
+                ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, clickedPos, sourceItems, side, hitX, hitY, hitZ);
                 if(placedBlocks.size() > 0) {
                     int[] placedIntArray = new int[placedBlocks.size() * 3];
                     for (int i = 0; i < placedBlocks.size(); i++) {
@@ -81,8 +85,9 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         bbwCompond = itemNBT.getCompoundTag("bbw");
                     }
                     bbwCompond.setIntArray("lastPlaced", placedIntArray);
-                    bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(targetItemstack.getItem()).toString());
-                    bbwCompond.setInteger("lastPerBlock", 1);
+                    bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(sourceItems.getItem()).toString());
+                    bbwCompond.setInteger("lastBlockMeta", sourceItems.getItemDamage());
+                    bbwCompond.setInteger("lastPerBlock", sourceItems.stackSize);
                     itemstack.setTagInfo("bbw", bbwCompond);
                 }
             }

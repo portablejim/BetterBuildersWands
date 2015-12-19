@@ -23,4 +23,6 @@ public interface IWorldShim {
     boolean entitiesInBox(AxisAlignedBB box);
 
     void playPlaceAtBlock(Point3d position, Block blockType);
+
+    boolean setBlock(Point3d position, Block placeBlock, int placeMeta);
 }

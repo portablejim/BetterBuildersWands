@@ -1,9 +1,8 @@
 package portablejim.bbw.shims;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import portablejim.bbw.basics.Point3d;
 
 /**
@@ -30,7 +29,7 @@ public class BasicPlayerShim implements IPlayerShim {
             }
         }
 
-        return total;
+        return itemStack.stackSize > 0 ? total / itemStack.stackSize : 0;
     }
 
     @Override
@@ -40,19 +39,38 @@ public class BasicPlayerShim implements IPlayerShim {
         }
 
         // Reverse direction to leave hotbar to last.
+        int toUse = itemStack.stackSize;
         for(int i = player.inventory.mainInventory.length - 1; i >= 0; i--) {
             ItemStack inventoryStack = player.inventory.mainInventory[i];
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
-                inventoryStack.stackSize -= 1;
-                player.inventory.setInventorySlotContents(i, inventoryStack);
+                if(inventoryStack.stackSize < toUse) {
+                    inventoryStack.stackSize = 0;
+                    toUse -= inventoryStack.stackSize;
+                }
+                else {
+                    inventoryStack.stackSize = inventoryStack.stackSize - toUse;
+                    toUse = 0;
+                }
                 if(inventoryStack.stackSize == 0) {
                     player.inventory.setInventorySlotContents(i, null);
                 }
                 player.inventoryContainer.detectAndSendChanges();
-                return true;
+                if(toUse <= 0) {
+                    return true;
+                }
             }
         }
         return false;
+    }
+
+    @Override
+    public ItemStack getNextItem(Block block, int meta) {
+        for(int i = player.inventory.mainInventory.length - 1; i >= 0; i--) {
+            ItemStack inventoryStack = player.inventory.mainInventory[i];
+
+        }
+
+        return null;
     }
 
     @Override

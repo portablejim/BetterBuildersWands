@@ -7,6 +7,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
@@ -65,6 +66,7 @@ public class OopsCommand extends CommandBase {
 
                         bbwCompound.removeTag("lastPlaced");
                         bbwCompound.removeTag("lastBlock");
+                        bbwCompound.removeTag("lastBlockMeta");
                         bbwCompound.removeTag("lastPerBlock");
                     }
                 }

@@ -1,5 +1,6 @@
 package portablejim.bbw.basics;
 
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -71,6 +72,10 @@ public class Point3d {
         int hashY = (y << 22) >> 10;
         int hashZ = (z << 22) >> 20;
         return hashX + hashY + hashZ;
+    }
+
+    public BlockPos toBlockPos() {
+        return new BlockPos(x, y, z);
     }
 
     @Override

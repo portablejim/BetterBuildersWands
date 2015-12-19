@@ -75,4 +75,9 @@ public class BasicWorldShim implements IWorldShim {
             world.playSoundEffect(position.x + 0.5D, position.y + 0.5D, position.z + 0.5D, blockType.stepSound.getPlaceSound(), (blockType.stepSound.getVolume() + 1.0F) / 2.0F, blockType.stepSound.getFrequency() * 0.8F);
         }
     }
+
+    @Override
+    public boolean setBlock(Point3d position, Block block, int meta) {
+        return world.setBlockState(position.toBlockPos(), block.getStateFromMeta(meta), 3);
+    }
 }

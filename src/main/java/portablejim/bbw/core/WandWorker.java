@@ -5,8 +5,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.event.ForgeEventFactory;
+import org.apache.logging.log4j.Logger;
+import portablejim.bbw.BetterBuildersWandsMod;
+import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
@@ -16,6 +22,7 @@ import portablejim.bbw.shims.IWorldShim;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  * Does the heavy work of working out the blocks to place and places them.
@@ -34,9 +41,36 @@ public class WandWorker {
         this.world = world;
     }
 
+    public ItemStack getProperItemStack(IWorldShim world, IPlayerShim player, Point3d blockPos) {
+        Block block = world.getBlock(blockPos);
+        int meta = world.getMetadata(blockPos);
+        ItemStack exactItemstack = new ItemStack(block, 1, meta);
+         if(player.countItems(exactItemstack) > 0) {
+             return exactItemstack;
+         }
+        return getEquivalentItemStack(blockPos);
+    }
+
     public ItemStack getEquivalentItemStack(Point3d blockPos) {
         Block block = world.getBlock(blockPos);
-        return block == null ? null : new ItemStack(Item.getItemFromBlock(block), 1, world.getMetadata(blockPos));
+        int meta = world.getMetadata(blockPos);
+        //ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ItemStack stack = null;
+        CustomMapping customMapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(block, meta);
+        if(customMapping != null) {
+            stack = customMapping.getItems();
+        }
+        else if(block.canSilkHarvest(world.getWorld(), blockPos.toBlockPos(), block.getStateFromMeta(meta), player.getPlayer())) {
+            stack = BetterBuildersWandsMod.instance.blockCache.getStackedBlock(world, blockPos);
+        }
+        else {
+            Item dropped = block.getItemDropped(block.getStateFromMeta(meta), new Random(), 0);
+            if (dropped != null) {
+                stack = new ItemStack(dropped, block.quantityDropped(block.getStateFromMeta(meta), 0, new Random()), block.damageDropped(block.getStateFromMeta(meta)));
+            }
+        }
+        //ForgeEventFactory.fireBlockHarvesting(items,this.world.getWorld(), block, blockPos.x, blockPos.y, blockPos.z, world.getMetadata(blockPos), 0, 1.0F, true, this.player.getPlayer());
+        return stack;
     }
 
     private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, EnumFacing facing, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB) {
@@ -144,22 +178,33 @@ public class WandWorker {
         return toPlace;
     }
 
-    public ArrayList<Point3d> placeBlocks(ItemStack itemStack, LinkedList<Point3d> blockPosList, Point3d originalBlock) {
+    public ArrayList<Point3d> placeBlocks(ItemStack wandItem, LinkedList<Point3d> blockPosList, Point3d originalBlock, ItemStack sourceItems, EnumFacing side, float hitX, float hitY, float hitZ) {
         ArrayList<Point3d> placedBlocks = new ArrayList<Point3d>();
         for(Point3d blockPos : blockPosList) {
-            /*if(player.countItems(getEquivalentItemStack(originalBlock)) < 1) {
-                break;
-            }*/
-
-            boolean blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
+            boolean blockPlaceSuccess;
+            CustomMapping mapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(world.getBlock(originalBlock), world.getMetadata(originalBlock));
+            if(mapping != null) {
+                blockPlaceSuccess = world.setBlock(blockPos, mapping.getPlaceBlock(), mapping.getPlaceMeta());
+            }
+            else {
+                blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
+            }
 
             if(blockPlaceSuccess) {
+                Item itemFromBlock = Item.getItemFromBlock(world.getBlock(originalBlock));
                 world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
+                /*if(sourceItems.getItem() instanceof ItemBlock) {
+                    ItemBlock itemBlock = (ItemBlock) sourceItems.getItem();
+                    itemBlock.placeBlockAt(sourceItems, player.getPlayer(), world.getWorld(), blockPos.x, blockPos.y, blockPos.z, side, hitX, hitY, hitZ, sourceItems.getItemDamage());
+                }
+                else {
+                    world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
+                }*/
                 placedBlocks.add(blockPos);
                 if (!player.isCreative()) {
-                    wand.placeBlock(itemStack, player.getPlayer());
+                    wand.placeBlock(wandItem, player.getPlayer());
                 }
-                boolean takeFromInventory = player.useItem(getEquivalentItemStack(originalBlock));
+                boolean takeFromInventory = player.useItem(sourceItems);
                 if(!takeFromInventory) {
                     FMLLog.info("BBW takeback: %s", blockPos.toString());
                     world.setBlockToAir(blockPos);

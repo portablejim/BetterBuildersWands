@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4.0
+-----
+Changes:
+* New config option to specify custom block replacements.
+* (Hopefully) improved building algorithms.
+
 0.3.2
 -----
 Changes:

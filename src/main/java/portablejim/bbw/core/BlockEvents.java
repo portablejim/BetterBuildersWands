@@ -45,10 +45,10 @@ public class BlockEvents {
                 WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
                 Point3d clickedPos = new Point3d(event.target.getBlockPos().getX(), event.target.getBlockPos().getY(), event.target.getBlockPos().getZ());
+                ItemStack  sourceItems = worker.getProperItemStack(worldShim, playerShim, clickedPos);
 
-                ItemStack targetItemstack = worker.getEquivalentItemStack(clickedPos);
-                if (targetItemstack != null) {
-                    int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(targetItemstack));
+                if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
+                    int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(sourceItems));
 
                     LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.target.sideHit, numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
                     if (blocks.size() > 0) {

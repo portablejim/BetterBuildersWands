@@ -17,15 +17,16 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
-import portablejim.bbw.core.BlockEvents;
 import portablejim.bbw.core.ConfigValues;
 import portablejim.bbw.core.OopsCommand;
+import portablejim.bbw.core.conversion.CustomMapping;
+import portablejim.bbw.core.conversion.CustomMappingManager;
+import portablejim.bbw.core.conversion.StackedBlockManager;
 import portablejim.bbw.core.items.ItemRestrictedWandAdvanced;
 import portablejim.bbw.core.items.ItemRestrictedWandBasic;
 import portablejim.bbw.core.items.ItemUnrestrictedWand;
@@ -34,10 +35,7 @@ import portablejim.bbw.core.wands.UnbreakingWand;
 import portablejim.bbw.network.PacketWandActivate;
 import portablejim.bbw.proxy.IProxy;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Author: Portablejim
@@ -65,15 +63,13 @@ public class BetterBuildersWandsMod {
 
     public SimpleNetworkWrapper networkWrapper;
 
+    // Caches calls to Block.getStackedBlock(int)
+    public StackedBlockManager blockCache;
+    public CustomMappingManager mappingManager;
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
-
-        configValues = new ConfigValues(event.getSuggestedConfigurationFile());
-        configValues.loadConfigFile();
-
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
-        networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
 
         itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
         itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
@@ -84,7 +80,22 @@ public class BetterBuildersWandsMod {
         GameRegistry.registerItem(itemIronWand, "wandIron");
         GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
         GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
+
+        configValues = new ConfigValues(event.getSuggestedConfigurationFile());
+        configValues.loadConfigFile();
+
+        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
+        networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
+
         proxy.RegisterModels();
+
+        blockCache = new StackedBlockManager();
+        mappingManager = new CustomMappingManager();
+
+        mappingManager.loadConfig(configValues.OVERRIDES_RECIPES);
+
+        /*mappingManager.setMapping(new CustomMapping(Blocks.lapis_ore, 0, new ItemStack(Blocks.lapis_ore, 1, 4), Blocks.lapis_ore, 0));
+        mappingManager.setMapping(new CustomMapping(Blocks.lit_redstone_ore, 0, new ItemStack(Blocks.redstone_ore, 1, 0), Blocks.lit_redstone_ore, 0));*/
     }
 
     private ItemStack newWand(int damage) {
@@ -94,7 +105,6 @@ public class BetterBuildersWandsMod {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.RegisterEvents();
-
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone"));
         GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron"));
