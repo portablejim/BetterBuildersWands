@@ -11,17 +11,24 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
- * Created by james on 17/12/15.
+ * Manage calling getStackedBlock(int) using reflection.
  */
 public class StackedBlockManager {
     private HashMap<String, ItemStack> cache;
     Method getStackedBlockMethod;
+    String getStackedBlockMethodName;
 
     public StackedBlockManager() {
         cache = new HashMap<String, ItemStack>();
         try {
-            getStackedBlockMethod = Block.class.getDeclaredMethod("createStackedBlock", int.class);
+            getStackedBlockMethodName = "func_149644_j";
+            getStackedBlockMethod = Block.class.getDeclaredMethod(getStackedBlockMethodName, int.class);
+            if(getStackedBlockMethod == null) {
+                getStackedBlockMethodName = "createStackedBlock";
+                getStackedBlockMethod = Block.class.getDeclaredMethod(getStackedBlockMethodName, int.class);
+            }
             getStackedBlockMethod.setAccessible(true);
+            BetterBuildersWandsMod.logger.info("Access transform success createStackedBlock (" + getStackedBlockMethodName + ").");
         }
         catch (NoSuchMethodException e) {
             BetterBuildersWandsMod.logger.error("No Method Block.getStackedBlock(int)!");
@@ -46,7 +53,7 @@ public class StackedBlockManager {
             while(clazz != null) {
                 Method[] methods = clazz.getDeclaredMethods();
                 for(Method method : methods) {
-                    if(method.getName().equals("createStackedBlock")) {
+                    if(method.getName().equals(getStackedBlockMethodName) || method.getName().equals("createStackedBlock")) {
                         getStackedBlockMethod = method;
                         break;
                     }
