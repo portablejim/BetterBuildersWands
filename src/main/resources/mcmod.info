@@ -1,14 +1,13 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "betterbuilderswands",
+  "name": "Better Builder's Wands",
+  "description": "Wands that allow placing of multiple blocks at a time",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["Portablejim"],
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
