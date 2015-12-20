@@ -46,6 +46,10 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         if(wand == null) {
             return false;
         }
+        if(itemstack == null) {
+            BetterBuildersWandsMod.logger.error("BasicWand onItemUse itemstack empty");
+            return false;
+        }
 
         if(!world.isRemote) {
             IPlayerShim playerShim = new BasicPlayerShim(player);
@@ -77,7 +81,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         placedIntArray[i * 3 + 1] = currentPoint.y;
                         placedIntArray[i * 3 + 2] = currentPoint.z;
                     }
-                    NBTTagCompound itemNBT = itemstack.getTagCompound();
+                    NBTTagCompound itemNBT = itemstack.hasTagCompound() ? itemstack.getTagCompound() : new NBTTagCompound();
                     NBTTagCompound bbwCompond = new NBTTagCompound();
                     if(itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
                         bbwCompond = itemNBT.getCompoundTag("bbw");
