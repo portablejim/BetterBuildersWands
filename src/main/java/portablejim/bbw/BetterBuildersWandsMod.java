@@ -133,9 +133,4 @@ public class BetterBuildersWandsMod {
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new OopsCommand());
     }
-
-    @EventHandler
-    public void keypress(InputEvent event) {
-        //FMLClientHandler.instance().
-    }
 }
