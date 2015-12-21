@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.4.1
+-----
+Fixes:
+* Fixed crash bug on placing blocks.
+* Fixed some startup error messages.
+* Fix version number in game.
+
 0.4.0
 -----
 Changes:
