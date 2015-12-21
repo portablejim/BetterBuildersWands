@@ -23,7 +23,7 @@ public class StackedBlockManager {
     public StackedBlockManager() {
         cache = new HashMap<String, ItemStack>();
         try {
-            getStackedBlockMethodName = "func_149644_j";
+            getStackedBlockMethodName = "func_180643_i";
             getStackedBlockMethod = Block.class.getDeclaredMethod(getStackedBlockMethodName, IBlockState.class);
             if(getStackedBlockMethod == null) {
                 getStackedBlockMethodName = "createStackedBlock";
