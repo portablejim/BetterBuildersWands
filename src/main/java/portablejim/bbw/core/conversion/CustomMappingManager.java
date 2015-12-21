@@ -54,11 +54,11 @@ public class CustomMappingManager {
             if(sourceBlock != null && itemItem != null && targetBlock != null) {
                 ItemStack itemItemstack = new ItemStack(itemItem, itemCount, itemMeta);
                 CustomMapping newMapping = new CustomMapping(sourceBlock, sourceMeta, itemItemstack, targetBlock, targetMeta);
-                BetterBuildersWandsMod.logger.info("Added '%s' to mapping", mappingString);
+                BetterBuildersWandsMod.logger.info(String.format("Added '%s' to mapping", mappingString));
                 return newMapping;
             }
         }
-        BetterBuildersWandsMod.logger.error("Error adding '%s' to mapping", mappingString);
+        BetterBuildersWandsMod.logger.error(String.format("Error adding '%s' to mapping", mappingString));
         return null;
     }
 
