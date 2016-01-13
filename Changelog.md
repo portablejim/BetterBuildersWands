@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.2
+-----
+Change:
+* Allow the one version to run on both 1.8.8 and 1.8.9.
+
 0.4.1
 -----
 Fixes:
