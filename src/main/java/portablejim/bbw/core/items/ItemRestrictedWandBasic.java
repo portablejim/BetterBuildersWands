@@ -23,9 +23,7 @@ public class ItemRestrictedWandBasic extends ItemBasicWand {
 
     @Override
     public void nextMode(ItemStack itemStack, EntityPlayer player) {
-        if(getMode(itemStack) != EnumLock.HORIZONTAL) {
-            setMode(itemStack, EnumLock.HORIZONTAL);
-        }
+        setMode(itemStack, EnumLock.HORIZONTAL);
     }
 
     public EnumLock getFaceLock(ItemStack itemStack) {
