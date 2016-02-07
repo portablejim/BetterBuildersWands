@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.4.3
+-----
+Fixes:
+* Ensure stone wand stays in horizontal mode.
+
 0.4.2
 -----
 Change:
