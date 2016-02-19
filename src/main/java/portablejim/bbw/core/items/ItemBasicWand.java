@@ -88,6 +88,9 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                     if(itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
                         bbwCompond = itemNBT.getCompoundTag("bbw");
                     }
+                    if(!bbwCompond.hasKey("mask", Constants.NBT.TAG_SHORT)) {
+                        bbwCompond.setShort("mask", (short) this.getDefaultMode().mask);
+                    }
                     bbwCompond.setIntArray("lastPlaced", placedIntArray);
                     bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(sourceItems.getItem()).toString());
                     bbwCompond.setInteger("lastBlockMeta", sourceItems.getItemDamage());
