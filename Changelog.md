@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.5.0
+-----
+Changes:
+* Configs to disable recipes for stone, iron and diamond wands.
+Fixes:
+* Fix stone and iron wands being unlocked.
+
 0.4.3
 -----
 Fixes:
