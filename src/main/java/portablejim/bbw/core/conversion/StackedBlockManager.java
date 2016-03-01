@@ -71,6 +71,9 @@ public class StackedBlockManager {
         catch (InvocationTargetException e) {
             BetterBuildersWandsMod.logger.error("getStackedBlockMethod Invoker error");
         }
+        catch (NoClassDefFoundError e) {
+            BetterBuildersWandsMod.logger.error("No such method: " + e.getLocalizedMessage());
+        }
         return null;
     }
 }
