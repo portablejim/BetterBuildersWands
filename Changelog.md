@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.1
+------
+Fixes:
+* Possibly fix a crash on dedicated servers.
+
 0.5.0
 -----
 Changes:
