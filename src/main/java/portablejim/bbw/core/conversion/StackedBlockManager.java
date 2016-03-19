@@ -1,7 +1,6 @@
 package portablejim.bbw.core.conversion;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import portablejim.bbw.BetterBuildersWandsMod;

@@ -1,16 +1,16 @@
 package portablejim.bbw.core;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.command.CommandException;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.util.Constants;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.Point3d;
@@ -33,10 +33,10 @@ public class OopsCommand extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws WrongUsageException {
+    public void execute(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
         if(sender instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) sender;
-            ItemStack currentItemstack = player.getCurrentEquippedItem();
+            ItemStack currentItemstack = player.getActiveItemStack();
             if(currentItemstack != null && currentItemstack.getItem() != null
                     && currentItemstack.getItem() instanceof IWandItem) {
                 NBTTagCompound tagComponent = currentItemstack.getTagCompound();

@@ -1,17 +1,12 @@
 package portablejim.bbw.core;
 
-import net.minecraft.block.state.BlockState;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.event.ForgeEventFactory;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.util.math.AxisAlignedBB;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.wands.IWand;
@@ -112,7 +107,7 @@ public class WandWorker {
             Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
-            AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z), targetBlock.getStateFromMeta(targetMetadata));
+            AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBox(targetBlock.getStateFromMeta(targetMetadata), world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z));
             if(shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);

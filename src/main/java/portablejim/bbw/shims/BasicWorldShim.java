@@ -1,13 +1,14 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import portablejim.bbw.basics.Point3d;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class BasicWorldShim implements IWorldShim {
     @Override
     public void playPlaceAtBlock(Point3d position, Block blockType) {
         if(position != null && blockType != null) {
-            world.playSoundEffect(position.x + 0.5D, position.y + 0.5D, position.z + 0.5D, blockType.stepSound.getPlaceSound(), (blockType.stepSound.getVolume() + 1.0F) / 2.0F, blockType.stepSound.getFrequency() * 0.8F);
+            world.playSound(position.x + 0.5D, position.y + 0.5D, position.z + 0.5D, blockType.getStepSound().getPlaceSound(), SoundCategory.BLOCKS, (blockType.getStepSound().getVolume() + 1.0F) / 2.0F, blockType.getStepSound().getPitch() * 0.8F, false);
         }
     }
 

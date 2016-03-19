@@ -40,7 +40,7 @@ import java.util.Arrays;
 /**
  * Author: Portablejim
  */
-@Mod(modid = BetterBuildersWandsMod.MODID, acceptedMinecraftVersions = "[1.8.8,1.9)")
+@Mod(modid = BetterBuildersWandsMod.MODID, acceptedMinecraftVersions = "[1.9,1.10)")
 public class BetterBuildersWandsMod {
     public static final String MODID = "betterbuilderswands";
     public static final String LANGID = "bbw";
@@ -72,8 +72,8 @@ public class BetterBuildersWandsMod {
 
         itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
         itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
-        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.EMERALD.getMaxUses()), "Unrestricted", "Diamond");
-        itemDiamondWand.setMaxDamage(Item.ToolMaterial.EMERALD.getMaxUses());
+        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.DIAMOND.getMaxUses()), "Unrestricted", "Diamond");
+        itemDiamondWand.setMaxDamage(Item.ToolMaterial.DIAMOND.getMaxUses());
         itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
         GameRegistry.registerItem(itemStoneWand, "wandStone");
         GameRegistry.registerItem(itemIronWand, "wandIron");

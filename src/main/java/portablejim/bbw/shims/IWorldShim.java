@@ -1,7 +1,7 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import portablejim.bbw.basics.Point3d;
 

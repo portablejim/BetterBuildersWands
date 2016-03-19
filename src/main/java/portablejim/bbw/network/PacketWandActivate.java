@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.core.items.IWandItem;
 
@@ -60,12 +60,12 @@ public class PacketWandActivate implements IMessage {
             UUID playerName = player.getUniqueID();
 
 
-            if(packetWandActivate.keyActive && player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() != null
-                    && player.getCurrentEquippedItem().getItem() instanceof IWandItem) {
-                ItemStack wandItemstack = player.getCurrentEquippedItem();
+            if(packetWandActivate.keyActive && player.getActiveItemStack() != null && player.getActiveItemStack().getItem() != null
+                    && player.getActiveItemStack().getItem() instanceof IWandItem) {
+                ItemStack wandItemstack = player.getActiveItemStack();
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 wandItem.nextMode(wandItemstack, player);
-                player.addChatMessage(new ChatComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wandItemstack).toString().toLowerCase()));
+                player.addChatMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wandItemstack).toString().toLowerCase()));
             }
         }
     }

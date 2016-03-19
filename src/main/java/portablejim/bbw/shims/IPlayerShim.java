@@ -2,7 +2,6 @@ package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import portablejim.bbw.basics.Point3d;
 
@@ -15,6 +14,7 @@ public interface IPlayerShim {
     ItemStack getNextItem(Block block, int meta);
     Point3d getPlayerPosition();
     EntityPlayer getPlayer();
+    ItemStack getHeldWandIfAny();
 
     boolean isCreative();
 }

@@ -1,10 +1,12 @@
 package portablejim.bbw.core.items;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.registry.GameData;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,8 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import portablejim.bbw.BetterBuildersWandsMod;
@@ -44,13 +44,14 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         this.setMaxStackSize(1);
     }
 
-    public boolean onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
+    @Override
+    public EnumActionResult onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(wand == null) {
-            return false;
+            return EnumActionResult.FAIL;
         }
         if(itemstack == null) {
             BetterBuildersWandsMod.logger.error("BasicWand onItemUse itemstack empty");
-            return false;
+            return EnumActionResult.FAIL;
         }
 
         if(!world.isRemote) {
@@ -100,7 +101,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
             }
 
         }
-        return true;
+        return EnumActionResult.SUCCESS;
     }
 
     @SuppressWarnings("unchecked")
@@ -109,40 +110,40 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         EnumLock mode = getMode(itemstack);
         switch (mode) {
             case NORTHSOUTH:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.northsouth"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.northsouth"));
                 break;
             case VERTICAL:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.vertical"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.vertical"));
                 break;
             case VERTICALEASTWEST:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticaleastwest"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticaleastwest"));
                 break;
             case EASTWEST:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.eastwest"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.eastwest"));
                 break;
             case HORIZONTAL:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.horizontal"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.horizontal"));
                 break;
             case VERTICALNORTHSOUTH:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticalnorthsouth"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticalnorthsouth"));
                 break;
             case NOLOCK:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
                 break;
         }
 
         if(!itemstack.isItemStackDamageable() || !itemstack.isItemDamaged()) {
-            lines.add(StatCollector.translateToLocalFormatted(BetterBuildersWandsMod.LANGID + ".hover.maxblocks", wand.getMaxBlocks(itemstack)));
+            lines.add(I18n.translateToLocalFormatted(BetterBuildersWandsMod.LANGID + ".hover.maxblocks", wand.getMaxBlocks(itemstack)));
         }
     }
 
     @Override
-    public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
+    public boolean canHarvestBlock(IBlockState blockIn) {
         return false;
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World worldIn, Block blockIn, BlockPos pos, EntityLivingBase playerIn) {
+    public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState blockIn, BlockPos pos, EntityLivingBase playerIn) {
         stack.damageItem(2, playerIn);
         return true;
     }

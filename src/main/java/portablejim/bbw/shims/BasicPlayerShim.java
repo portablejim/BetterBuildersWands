@@ -3,7 +3,9 @@ package portablejim.bbw.shims;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import portablejim.bbw.basics.Point3d;
+import portablejim.bbw.core.items.IWandItem;
 
 /**
  * Wrap a player to provide basic functions.
@@ -81,6 +83,18 @@ public class BasicPlayerShim implements IPlayerShim {
     @Override
     public EntityPlayer getPlayer() {
         return player;
+    }
+
+    @Override
+    public ItemStack getHeldWandIfAny() {
+        ItemStack wandItem = null;
+        if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IWandItem) {
+            wandItem = player.getHeldItem(EnumHand.MAIN_HAND);
+        }
+        else if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IWandItem) {
+            wandItem = player.getHeldItem(EnumHand.OFF_HAND);
+        }
+        return wandItem;
     }
 
     @Override
