@@ -3,6 +3,7 @@ Changelog
 
 0.5.1
 ------
+Port to 1.9
 Fixes:
 * Possibly fix a crash on dedicated servers.
 
