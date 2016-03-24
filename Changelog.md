@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.2
+-----
+Fixes:
+* Fix modes not changing when keybind pressed.
+
 0.5.1
 ------
 Port to 1.9
