@@ -87,6 +87,10 @@ public class BasicPlayerShim implements IPlayerShim {
 
     @Override
     public ItemStack getHeldWandIfAny() {
+        return getHeldWandIfAny(player);
+    }
+
+    public static ItemStack getHeldWandIfAny(EntityPlayer player) {
         ItemStack wandItem = null;
         if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IWandItem) {
             wandItem = player.getHeldItem(EnumHand.MAIN_HAND);
