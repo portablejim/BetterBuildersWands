@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.core.items.IWandItem;
+import portablejim.bbw.shims.BasicPlayerShim;
 
 import java.util.UUID;
 
@@ -59,13 +60,11 @@ public class PacketWandActivate implements IMessage {
             EntityPlayerMP player = context.getServerHandler().playerEntity;
             UUID playerName = player.getUniqueID();
 
-
-            if(packetWandActivate.keyActive && player.getActiveItemStack() != null && player.getActiveItemStack().getItem() != null
-                    && player.getActiveItemStack().getItem() instanceof IWandItem) {
-                ItemStack wandItemstack = player.getActiveItemStack();
-                IWandItem wandItem = (IWandItem) wandItemstack.getItem();
-                wandItem.nextMode(wandItemstack, player);
-                player.addChatMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wandItemstack).toString().toLowerCase()));
+           ItemStack wand = BasicPlayerShim.getHeldWandIfAny(player);
+            if(packetWandActivate.keyActive && wand != null && wand.getItem() instanceof IWandItem) {
+                IWandItem wandItem = (IWandItem) wand.getItem();
+                wandItem.nextMode(wand, player);
+                player.addChatMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wand).toString().toLowerCase()));
             }
         }
     }
