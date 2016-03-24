@@ -1,5 +1,6 @@
 package portablejim.bbw.core.client;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -19,7 +20,7 @@ public class KeyEvents {
 
     public KeyEvents() {
         ClientRegistry.registerKeyBinding(keyBinding);
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
         isPressed = false;
     }
 
