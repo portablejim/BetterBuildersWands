@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5.2
+------
+Fixes:
+ * Wands should not put as much output into the log.
+ * /wandOops should work for more people in more places.
+
 0.5.1
 ------
 Fixes:
