@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5.2
+0.5.3
 ------
 Fixes:
  * Wands should not put as much output into the log.
