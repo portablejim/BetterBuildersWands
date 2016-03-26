@@ -32,29 +32,29 @@ import java.util.LinkedList;
 public class BlockEvents {
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
-        if(event.target != null && event.target.typeOfHit == RayTraceResult.Type.BLOCK) {
-            IPlayerShim playerShim = new BasicPlayerShim(event.player);
-            if(event.player.capabilities.isCreativeMode) {
-                playerShim = new CreativePlayerShim(event.player);
+        if(event.getTarget() != null && event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
+            IPlayerShim playerShim = new BasicPlayerShim(event.getPlayer());
+            if(event.getPlayer().capabilities.isCreativeMode) {
+                playerShim = new CreativePlayerShim(event.getPlayer());
             }
 
             ItemStack wandItemstack = playerShim.getHeldWandIfAny();
-            IBlockState state = event.player.getEntityWorld().getBlockState(event.target.getBlockPos());
+            IBlockState state = event.getPlayer().getEntityWorld().getBlockState(event.getTarget().getBlockPos());
 
-            IWorldShim worldShim = new BasicWorldShim(event.player.getEntityWorld());
+            IWorldShim worldShim = new BasicWorldShim(event.getPlayer().getEntityWorld());
             if(wandItemstack != null && wandItemstack.getItem() instanceof IWandItem) {
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 IWand wand = wandItem.getWand();
 
                 WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
-                Point3d clickedPos = new Point3d(event.target.getBlockPos().getX(), event.target.getBlockPos().getY(), event.target.getBlockPos().getZ());
+                Point3d clickedPos = new Point3d(event.getTarget().getBlockPos().getX(), event.getTarget().getBlockPos().getY(), event.getTarget().getBlockPos().getZ());
                 ItemStack  sourceItems = worker.getProperItemStack(worldShim, playerShim, clickedPos);
 
                 if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
                     int numBlocks = Math.min(wand.getMaxBlocks(wandItemstack), playerShim.countItems(sourceItems));
 
-                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.target.sideHit, numBlocks, wandItem.getMode(event.player.getActiveItemStack()), wandItem.getFaceLock(event.player.getActiveItemStack()));
+                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.getTarget().sideHit, numBlocks, wandItem.getMode(event.getPlayer().getActiveItemStack()), wandItem.getFaceLock(event.getPlayer().getActiveItemStack()));
                     if (blocks.size() > 0) {
                         GlStateManager.disableTexture2D();
                         GlStateManager.disableBlend();
@@ -62,8 +62,8 @@ public class BlockEvents {
                         GL11.glLineWidth(2.5F);
                         for (Point3d block : blocks) {
                             Block blockb = Blocks.bedrock;
-                            EntityPlayer player = event.player;
-                            double partialTicks = event.partialTicks;
+                            EntityPlayer player = event.getPlayer();
+                            double partialTicks = event.getPartialTicks();
                             double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
                             double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
                             double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
