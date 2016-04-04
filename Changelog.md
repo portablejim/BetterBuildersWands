@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.4
+------
+Fixes:
+* Overlay should be more accurate.
+
 0.5.3
 ------
 Fixes:
