@@ -62,9 +62,9 @@ public class BlockEvents {
                             Block blockb = Blocks.bedrock;
                             EntityPlayer player = event.getPlayer();
                             double partialTicks = event.getPartialTicks();
-                            double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
-                            double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
-                            double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+                            double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+                            double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+                            double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
                             RenderGlobal.drawOutlinedBoundingBox(blockb.getSelectedBoundingBox(state, worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(block.x-d0, block.y-d1, block.z-d2), 255, 255, 255, 100);
 
                         }
