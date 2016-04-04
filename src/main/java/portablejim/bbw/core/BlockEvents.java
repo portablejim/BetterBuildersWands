@@ -5,8 +5,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -54,7 +52,7 @@ public class BlockEvents {
                 if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
                     int numBlocks = Math.min(wand.getMaxBlocks(wandItemstack), playerShim.countItems(sourceItems));
 
-                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.getTarget().sideHit, numBlocks, wandItem.getMode(event.getPlayer().getActiveItemStack()), wandItem.getFaceLock(event.getPlayer().getActiveItemStack()));
+                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.getTarget().sideHit, numBlocks, wandItem.getMode(wandItemstack), wandItem.getFaceLock(wandItemstack));
                     if (blocks.size() > 0) {
                         GlStateManager.disableTexture2D();
                         GlStateManager.disableBlend();
