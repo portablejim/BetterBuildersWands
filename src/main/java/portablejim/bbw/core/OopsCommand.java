@@ -15,6 +15,7 @@ import net.minecraftforge.common.util.Constants;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.items.IWandItem;
+import portablejim.bbw.shims.BasicPlayerShim;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,7 @@ public class OopsCommand extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] arguments) throws CommandException {
         if(sender instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) sender;
-            ItemStack currentItemstack = player.getActiveItemStack();
+            ItemStack currentItemstack = BasicPlayerShim.getHeldWandIfAny(player);
             if(currentItemstack != null && currentItemstack.getItem() != null
                     && currentItemstack.getItem() instanceof IWandItem) {
                 NBTTagCompound tagComponent = currentItemstack.getTagCompound();
