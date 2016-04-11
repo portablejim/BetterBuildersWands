@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.5.5
+------
+Fixes:
+* Fix /wandOops to actually work.
+
 0.5.4
 ------
 Fixes:
