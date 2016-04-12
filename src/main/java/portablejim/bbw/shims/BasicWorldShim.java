@@ -44,7 +44,10 @@ public class BasicWorldShim implements IWorldShim {
     @Override
     public boolean copyBlock(Point3d originalBlock, Point3d blockPos) {
         IBlockState blockState = world.getBlockState(new BlockPos(originalBlock.x, originalBlock.y, originalBlock.z));
-        return world.setBlockState(new BlockPos(blockPos.x, blockPos.y, blockPos.z), blockState, 3);
+        return world.setBlockState(new BlockPos(blockPos.x, blockPos.y, blockPos.z), blockState, 3)
+                   // setBlockState includes 'smart' rotations blocks have which messes with the wand.
+                   // Doing it a second time ensures the block is set.
+                && world.setBlockState(new BlockPos(blockPos.x, blockPos.y, blockPos.z), blockState, 3);
     }
 
     @Override
