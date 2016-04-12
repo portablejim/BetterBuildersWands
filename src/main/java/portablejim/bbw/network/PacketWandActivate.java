@@ -35,22 +35,26 @@ import java.util.UUID;
 
 public class PacketWandActivate implements IMessage {
     public boolean keyActive;
+    public boolean keyFluidActive;
 
     @SuppressWarnings("UnusedDeclaration")
     public PacketWandActivate() {}
 
-    public PacketWandActivate(boolean keyActive) {
+    public PacketWandActivate(boolean keyActive, boolean keyFluidActive) {
         this.keyActive = keyActive;
+        this.keyFluidActive = keyFluidActive;
     }
 
     @Override
     public void toBytes(ByteBuf buffer) {
         buffer.writeBoolean(keyActive);
+        buffer.writeBoolean(keyFluidActive);
     }
 
     @Override
     public void fromBytes(ByteBuf buffer) {
         keyActive = buffer.readBoolean();
+        keyFluidActive = buffer.readBoolean();
     }
 
     public static class Handler extends GenericHandler<PacketWandActivate> {
@@ -66,6 +70,13 @@ public class PacketWandActivate implements IMessage {
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 wandItem.nextMode(wandItemstack, player);
                 player.addChatMessage(new ChatComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wandItemstack).toString().toLowerCase()));
+            }
+            if(packetWandActivate.keyFluidActive && player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() != null
+                    && player.getCurrentEquippedItem().getItem() instanceof IWandItem) {
+                ItemStack wandItemstack = player.getCurrentEquippedItem();
+                IWandItem wandItem = (IWandItem) wandItemstack.getItem();
+                wandItem.nextFluidMode(wandItemstack, player);
+                player.addChatMessage(new ChatComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.fluidmode." + wandItem.getFluidMode(wandItemstack).toString().toLowerCase()));
             }
         }
     }

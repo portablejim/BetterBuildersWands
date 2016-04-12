@@ -50,7 +50,7 @@ public class BlockEvents {
                 if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
                     int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(sourceItems));
 
-                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.target.sideHit, numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
+                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.target.sideHit, numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem), wandItem.getFluidMode(event.currentItem));
                     if (blocks.size() > 0) {
                         GlStateManager.disableTexture2D();
                         GlStateManager.disableBlend();
