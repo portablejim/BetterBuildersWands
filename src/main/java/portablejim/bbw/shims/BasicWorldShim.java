@@ -43,9 +43,10 @@ public class BasicWorldShim implements IWorldShim {
     public boolean copyBlock(Point3d originalBlock, Point3d blockPos) {
         Block block = world.getBlock(originalBlock.x, originalBlock.y, originalBlock.z);
         int meta = world.getBlockMetadata(originalBlock.x, originalBlock.y, originalBlock.z);
-        return world.setBlock(blockPos.x, blockPos.y, blockPos.z, block, meta, 3)
-                // setBlock includes 'smart' rotations blocks have which messes with the wand.
-                && world.setBlockMetadataWithNotify(blockPos.x, blockPos.y, blockPos.z, meta, 3);
+        boolean retval = world.setBlock(blockPos.x, blockPos.y, blockPos.z, block, meta, 3);
+        // setBlock includes 'smart' rotations blocks have which messes with the wand.
+        world.setBlockMetadataWithNotify(blockPos.x, blockPos.y, blockPos.z, meta, 3);
+        return retval;
     }
 
     @Override
