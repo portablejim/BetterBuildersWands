@@ -22,6 +22,11 @@ bbw.chat.mode.horizontal=Mode: Horizontal - Extend left and right from the origi
 bbw.chat.mode.vertical= Mode: Vertical - Extend up and down from the original block. No building on top/bottom face
 bbw.chat.mode.nolock=Mode: No Lock - Extend left, right, up and down from the original block.
 
+bbw.hover.fluidmode.stopat=Fluid: Stop
+bbw.chat.fluidmode.stopat=Fluid: Stop - Stopped by fluid. Does not build through fluid of any kind.
+bbw.hover.fluidmode.ignore=Fluid: Ignore
+bbw.chat.fluidmode.ignore=Fluid: Ignore - Builds through fluid (both source blocks and flowing blocks).
+
 bbw.chat.error.noundo=I can't remember what this wand last built.
 bbw.chat.error.nowand=You need to run this with a wand from Better Builders Wands in your hand.
 bbw.chat.error.bot=AI can detect Non-players. Please don't do that again.

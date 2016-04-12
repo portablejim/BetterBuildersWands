@@ -4,6 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 
@@ -58,6 +59,18 @@ public class ItemUnrestrictedWand extends ItemBasicWand{
                 break;
             case NOLOCK:
                 setMode(itemStack, EnumLock.HORIZONTAL);
+                break;
+        }
+    }
+
+    @Override
+    public void nextFluidMode(ItemStack itemStack, EntityPlayer player) {
+        switch(getFluidMode(itemStack)) {
+            case STOPAT:
+                setFluidMode(itemStack, EnumFluidLock.IGNORE);
+                break;
+            case IGNORE:
+                setFluidMode(itemStack, EnumFluidLock.STOPAT);
                 break;
         }
     }

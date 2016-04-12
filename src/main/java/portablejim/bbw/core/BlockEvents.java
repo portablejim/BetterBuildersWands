@@ -46,7 +46,7 @@ public class BlockEvents {
                 if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
                     int numBlocks = Math.min(wand.getMaxBlocks(event.currentItem), playerShim.countItems(sourceItems));
 
-                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem));
+                    LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, ForgeDirection.getOrientation(event.target.sideHit), numBlocks, wandItem.getMode(event.currentItem), wandItem.getFaceLock(event.currentItem), wandItem.getFluidMode(event.currentItem));
                     if (blocks.size() > 0) {
                         GL11.glDisable(GL11.GL_TEXTURE_2D);
                         GL11.glEnable(GL11.GL_BLEND);

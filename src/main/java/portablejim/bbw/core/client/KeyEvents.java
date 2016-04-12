@@ -14,21 +14,26 @@ import portablejim.bbw.network.PacketWandActivate;
  */
 public class KeyEvents {
     public KeyBinding keyBinding = new KeyBinding("bbw.key.mode", Keyboard.KEY_M, "bbw.key.category");
+    public KeyBinding keyBindingFluid = new KeyBinding("bbw.key.fluidmode", Keyboard.KEY_F, "bbw.key.category");
 
     private boolean isPressed;
+    private boolean isPressedFluid;
 
     public KeyEvents() {
         ClientRegistry.registerKeyBinding(keyBinding);
+        ClientRegistry.registerKeyBinding(keyBindingFluid);
         FMLCommonHandler.instance().bus().register(this);
         isPressed = false;
+        isPressedFluid = false;
     }
 
     @SubscribeEvent
     public void KeyEvent(InputEvent event) {
         boolean currentIsPressed = keyBinding.getIsKeyPressed();
-        if(currentIsPressed != isPressed) {
+        boolean currentFluidIsPressed = keyBindingFluid.isPressed();
+        if(currentIsPressed != isPressed || currentFluidIsPressed != isPressedFluid) {
             isPressed = currentIsPressed;
-            PacketWandActivate packet = new PacketWandActivate(currentIsPressed);
+            PacketWandActivate packet = new PacketWandActivate(currentIsPressed, currentFluidIsPressed);
             BetterBuildersWandsMod.instance.networkWrapper.sendToServer(packet);
         }
 
