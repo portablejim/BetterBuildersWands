@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.core.wands.RestrictedWand;
@@ -24,6 +25,11 @@ public class ItemRestrictedWandBasic extends ItemBasicWand {
     @Override
     public void nextMode(ItemStack itemStack, EntityPlayer player) {
         setMode(itemStack, EnumLock.HORIZONTAL);
+    }
+
+    @Override
+    public void nextFluidMode(ItemStack itemStack, EntityPlayer player) {
+        setFluidMode(itemStack, EnumFluidLock.STOPAT);
     }
 
     public EnumLock getFaceLock(ItemStack itemStack) {

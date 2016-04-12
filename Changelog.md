@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.6.0
+------
+Changes:
+ * New: Fluid modes, to build through fluids or not.
+Fixes:
+ * Blocks should not 'randomly' rotate when building.
+ 
 0.5.5
 ------
 Fixes:

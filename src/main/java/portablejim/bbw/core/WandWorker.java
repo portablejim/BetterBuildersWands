@@ -1,13 +1,16 @@
 package portablejim.bbw.core;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import portablejim.bbw.BetterBuildersWandsMod;
+import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
@@ -69,8 +72,11 @@ public class WandWorker {
         return stack;
     }
 
-    private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, int targetMetadata, EnumFacing facing, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB) {
-        if(!world.blockIsAir(currentCandidate)) return false;
+    private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, int targetMetadata, EnumFacing facing, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB, EnumFluidLock fluidLock) {
+        if(!world.blockIsAir(currentCandidate)){
+            Block currrentCandidateBlock = world.getBlock(currentCandidate);
+            if(!(fluidLock == EnumFluidLock.IGNORE && currrentCandidateBlock != null && (currrentCandidateBlock instanceof IFluidBlock || currrentCandidateBlock instanceof BlockLiquid))) return false;
+        };
         /*if((FluidRegistry.getFluid("water").getBlock().equals(world.getBlock(currentCandidate)) || FluidRegistry.getFluid("lava").getBlock().equals(world.getBlock(currentCandidate)))
                 && world.getMetadata(currentCandidate) == 0){
             return false;
@@ -85,7 +91,7 @@ public class WandWorker {
 
     }
 
-    public LinkedList<Point3d> getBlockPositionList(Point3d blockLookedAt, EnumFacing placeDirection, int maxBlocks, EnumLock directionLock, EnumLock faceLock) {
+    public LinkedList<Point3d> getBlockPositionList(Point3d blockLookedAt, EnumFacing placeDirection, int maxBlocks, EnumLock directionLock, EnumLock faceLock, EnumFluidLock fluidLock) {
         LinkedList<Point3d> candidates = new LinkedList<Point3d>();
         LinkedList<Point3d> toPlace = new LinkedList<Point3d>();
 
@@ -108,7 +114,7 @@ public class WandWorker {
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
             AxisAlignedBB blockBB =targetBlock.getCollisionBoundingBox(targetBlock.getStateFromMeta(targetMetadata), world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z));
-            if(shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB)
+            if(shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB, fluidLock)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
 

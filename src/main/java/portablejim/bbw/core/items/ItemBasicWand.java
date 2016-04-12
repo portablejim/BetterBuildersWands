@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import portablejim.bbw.BetterBuildersWandsMod;
+import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
@@ -73,7 +74,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                 int numBlocks = Math.min(wand.getMaxBlocks(itemstack), playerShim.countItems(sourceItems));
 
                 //FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(sourceItems));
-                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, side, numBlocks, getMode(itemstack), getFaceLock(itemstack));
+                LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, side, numBlocks, getMode(itemstack), getFaceLock(itemstack), getFluidMode(itemstack));
 
                 ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, clickedPos, sourceItems, side, hitX, hitY, hitZ);
                 if(placedBlocks.size() > 0) {
@@ -91,6 +92,9 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                     }
                     if(!bbwCompond.hasKey("mask", Constants.NBT.TAG_SHORT)) {
                         bbwCompond.setShort("mask", (short) this.getDefaultMode().mask);
+                    }
+                    if(!bbwCompond.hasKey("fluidmask", Constants.NBT.TAG_SHORT)) {
+                        bbwCompond.setShort("fluidmask", (short) this.getDefaultFluidMode().mask);
                     }
                     bbwCompond.setIntArray("lastPlaced", placedIntArray);
                     bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(sourceItems.getItem()).toString());
@@ -129,6 +133,15 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                 break;
             case NOLOCK:
                 lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
+                break;
+        }
+        EnumFluidLock fluidMode = getFluidMode(itemstack);
+        switch (fluidMode) {
+            case STOPAT:
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.stopat"));
+                break;
+            case IGNORE:
+                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.ignore"));
                 break;
         }
 
@@ -181,11 +194,42 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         return getDefaultMode();
     }
 
+    public void setFluidMode(ItemStack item, EnumFluidLock mode) {
+        NBTTagCompound tagCompound = new NBTTagCompound();
+        if(item.hasTagCompound()) {
+            tagCompound = item.getTagCompound();
+        }
+        NBTTagCompound bbwCompond = new NBTTagCompound();
+        if(tagCompound.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
+            bbwCompond = tagCompound.getCompoundTag("bbw");
+        }
+        short shortMask = (short) (mode.mask & 7);
+        bbwCompond.setShort("fluidmask", shortMask);
+        tagCompound.setTag("bbw", bbwCompond);
+        item.setTagCompound(tagCompound);
+    }
+
+    public EnumFluidLock getFluidMode(ItemStack item) {
+        if(item != null && item.getItem() != null && item.getItem() instanceof IWandItem) {
+            NBTTagCompound itemBaseNBT = item.getTagCompound();
+            if(itemBaseNBT != null && itemBaseNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
+                NBTTagCompound itemNBT = itemBaseNBT.getCompoundTag("bbw");
+                int mask = itemNBT.hasKey("fluidmask", Constants.NBT.TAG_SHORT) ? itemNBT.getShort("fluidmask") : EnumFluidLock.STOPAT.mask;
+                return EnumFluidLock.fromMask(mask);
+            }
+        }
+        return getDefaultFluidMode();
+    }
+
     public IWand getWand() {
         return this.wand;
     }
 
     public EnumLock getDefaultMode() {
         return EnumLock.NOLOCK;
+    }
+
+    public EnumFluidLock getDefaultFluidMode() {
+        return EnumFluidLock.STOPAT;
     }
 }
