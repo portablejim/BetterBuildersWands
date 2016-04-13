@@ -138,10 +138,10 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         EnumFluidLock fluidMode = getFluidMode(itemstack);
         switch (fluidMode) {
             case STOPAT:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.stopat"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.stopat"));
                 break;
             case IGNORE:
-                lines.add(StatCollector.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.ignore"));
+                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.ignore"));
                 break;
         }
 

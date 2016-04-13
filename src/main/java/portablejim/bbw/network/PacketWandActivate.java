@@ -70,12 +70,12 @@ public class PacketWandActivate implements IMessage {
                 wandItem.nextMode(wand, player);
                 player.addChatMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.mode." + wandItem.getMode(wand).toString().toLowerCase()));
             }
-            if(packetWandActivate.keyFluidActive && player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() != null
-                    && player.getCurrentEquippedItem().getItem() instanceof IWandItem) {
-                ItemStack wandItemstack = player.getCurrentEquippedItem();
+            if(packetWandActivate.keyFluidActive && wand != null && wand.getItem() != null
+                    && wand.getItem() instanceof IWandItem) {
+                ItemStack wandItemstack = wand;
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 wandItem.nextFluidMode(wandItemstack, player);
-                player.addChatMessage(new ChatComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.fluidmode." + wandItem.getFluidMode(wandItemstack).toString().toLowerCase()));
+                player.addChatMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.fluidmode." + wandItem.getMode(wand).toString().toLowerCase()));
             }
         }
     }
