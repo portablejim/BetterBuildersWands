@@ -7,6 +7,7 @@ Changes:
  * New: Fluid modes, to build through fluids or not.
 Fixes:
  * Blocks should not 'randomly' rotate when building.
+ * /wandOops should work a bit better.
  
 0.5.5
 ------
