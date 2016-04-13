@@ -53,6 +53,10 @@ public class OopsCommand extends CommandBase {
                         String blockName= bbwCompound.getString("lastBlock");
                         int meta = bbwCompound.getInteger("lastBlockMeta");
                         ItemStack itemStack = GameRegistry.makeItemStack(blockName, meta, 1, "");
+                        if(!itemStack.getHasSubtypes()) {
+                            // If no subtypes, diffirent meta will mean an invalid block, so remove custom meta.
+                            itemStack = GameRegistry.makeItemStack(blockName, 0, 1, "");
+                        }
                         int count = bbwCompound.getInteger("lastPerBlock") * pointList.size();
                         int stackSize = itemStack.getMaxStackSize();
                         int fullStacks = count / stackSize;
