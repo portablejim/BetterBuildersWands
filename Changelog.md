@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.1
+-----
+Fixes:
+* Text in controls is fixed
+
 0.6.0
 ------
 Changes:
