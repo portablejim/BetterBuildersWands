@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.2
+------
+Fixes:
+* Make wands great again. (Wands should work on servers now).
+
 0.6.1
 -----
 Fixes:
