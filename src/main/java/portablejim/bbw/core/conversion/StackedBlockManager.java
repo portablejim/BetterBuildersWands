@@ -39,7 +39,7 @@ public class StackedBlockManager {
     public ItemStack getStackedBlock(IWorldShim world, Point3d blockPos) {
         Block block = world.getBlock(blockPos);
         IBlockState state = world.getWorld().getBlockState(blockPos.toBlockPos());
-        String blockName = Block.blockRegistry.getNameForObject(block).toString();
+        String blockName = Block.REGISTRY.getNameForObject(block).toString();
         String blockIdentifier = String.format("%s|%s", blockName, state.toString());
 
         if(!cache.containsKey(blockIdentifier)) {

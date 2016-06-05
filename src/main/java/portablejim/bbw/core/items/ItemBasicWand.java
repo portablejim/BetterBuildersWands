@@ -1,11 +1,13 @@
 package portablejim.bbw.core.items;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.Language;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.translation.LanguageMap;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.wands.IWand;
@@ -41,7 +44,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
     public ItemBasicWand() {
         super();
-        this.setCreativeTab(CreativeTabs.tabTools);
+        this.setCreativeTab(CreativeTabs.TOOLS);
         this.setMaxStackSize(1);
     }
 
@@ -97,7 +100,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         bbwCompond.setShort("fluidmask", (short) this.getDefaultFluidMode().mask);
                     }
                     bbwCompond.setIntArray("lastPlaced", placedIntArray);
-                    bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(sourceItems.getItem()).toString());
+                    bbwCompond.setString("lastBlock", Item.REGISTRY.getNameForObject(sourceItems.getItem()).toString());
                     bbwCompond.setInteger("lastBlockMeta", sourceItems.getItemDamage());
                     bbwCompond.setInteger("lastPerBlock", sourceItems.stackSize);
                     itemstack.setTagInfo("bbw", bbwCompond);
@@ -110,6 +113,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
     @SuppressWarnings("unchecked")
     public void addInformation(ItemStack itemstack, EntityPlayer player, List lines, boolean extraInfo) {
+
 
         EnumLock mode = getMode(itemstack);
         switch (mode) {

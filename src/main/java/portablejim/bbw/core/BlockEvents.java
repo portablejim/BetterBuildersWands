@@ -59,13 +59,14 @@ public class BlockEvents {
                         GlStateManager.depthMask(true);
                         GL11.glLineWidth(2.5F);
                         for (Point3d block : blocks) {
-                            Block blockb = Blocks.bedrock;
+                            Block blockb = Blocks.BEDROCK;
+                            IBlockState blockState = blockb.getDefaultState();
                             EntityPlayer player = event.getPlayer();
                             double partialTicks = event.getPartialTicks();
                             double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
                             double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
                             double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-                            RenderGlobal.drawOutlinedBoundingBox(blockb.getSelectedBoundingBox(state, worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(block.x-d0, block.y-d1, block.z-d2), 255, 255, 255, 100);
+                            RenderGlobal.drawOutlinedBoundingBox(blockState.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(-d0, -d1, -d2), 255, 255, 255, 100);
 
                         }
                         GL11.glEnable(GL11.GL_TEXTURE_2D);

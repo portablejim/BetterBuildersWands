@@ -77,7 +77,7 @@ public class BasicWorldShim implements IWorldShim {
     @Override
     public void playPlaceAtBlock(Point3d position, Block blockType) {
         if(position != null && blockType != null) {
-            world.playSound(position.x + 0.5D, position.y + 0.5D, position.z + 0.5D, blockType.getStepSound().getPlaceSound(), SoundCategory.BLOCKS, (blockType.getStepSound().getVolume() + 1.0F) / 2.0F, blockType.getStepSound().getPitch() * 0.8F, false);
+            world.playSound(position.x + 0.5D, position.y + 0.5D, position.z + 0.5D, blockType.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (blockType.getSoundType().getVolume() + 1.0F) / 2.0F, blockType.getSoundType().getPitch() * 0.8F, false);
         }
     }
 

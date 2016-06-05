@@ -122,7 +122,7 @@ public class BetterBuildersWandsMod {
             itemUnbreakableWand.addSubMeta(6);
         }
         else {
-            GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', Items.nether_star));
+            GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', "netherStar"));
         }
         itemUnbreakableWand.addSubMeta(12);
         itemUnbreakableWand.addSubMeta(13);
