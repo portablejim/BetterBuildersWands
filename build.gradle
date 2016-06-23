@@ -48,7 +48,7 @@ archivesBaseName = "BetterBuildersWands"
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
-    mappings = "snapshot_20160604"
+    mappings = "snapshot_20160623"
     runDir = "run"
 }
 
