@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.6.4
+-----
+Changes:
+* Actually port to 1.10.
+Fixes:
+* Fix crash on using any wand.
+
+0.6.3
+------
+Changes:
+* Allow loading in Minecraft 1.10 (EDIT: Doesn't actually work)
+
 0.6.2
 ------
 Fixes:
