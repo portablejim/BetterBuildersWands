@@ -66,7 +66,8 @@ public class BlockEvents {
                             double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
                             double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
                             double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-                            RenderGlobal.drawOutlinedBoundingBox(blockState.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(-d0, -d1, -d2), 255, 255, 255, 100);
+                            //RenderGlobal.func_189696_b(blockState.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(-d0, -d1, -d2), (float) (255.0/255.0), (float) (255.0/255.0), (float) (255.0/255.0), 100);
+                            RenderGlobal.func_189697_a(blockState.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(-d0, -d1, -d2), (float) (255.0/255.0), (float) (255.0/255.0), (float) (255.0/255.0), 100);
 
                         }
                         GL11.glEnable(GL11.GL_TEXTURE_2D);
