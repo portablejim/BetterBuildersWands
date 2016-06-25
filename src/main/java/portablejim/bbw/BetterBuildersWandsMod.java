@@ -40,7 +40,7 @@ import java.util.Arrays;
 /**
  * Author: Portablejim
  */
-@Mod(modid = BetterBuildersWandsMod.MODID, acceptedMinecraftVersions = "[1.9.4,1.9.4]")
+@Mod(modid = BetterBuildersWandsMod.MODID, acceptedMinecraftVersions = "[1.9.4,1.9.1337)")
 public class BetterBuildersWandsMod {
     public static final String MODID = "betterbuilderswands";
     public static final String LANGID = "bbw";
