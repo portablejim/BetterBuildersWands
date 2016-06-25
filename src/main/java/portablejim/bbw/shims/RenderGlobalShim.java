@@ -11,6 +11,6 @@ import java.lang.reflect.Method;
 public class RenderGlobalShim {
 
     public static void drawOutlinedBox(AxisAlignedBB box, int r, int g, int b, int a) {
-        RenderGlobal.func_189697_a(box, (float) r/255F, (float) g/255F, (float) b/255F, (float) a/255F);
+        RenderGlobal.drawOutlinedBoundingBox(box, r, g, b, a);
     }
 }
