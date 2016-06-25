@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -21,6 +22,7 @@ import portablejim.bbw.shims.BasicWorldShim;
 import portablejim.bbw.shims.CreativePlayerShim;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
+import portablejim.bbw.shims.RenderGlobalShim;
 
 import java.util.LinkedList;
 
@@ -66,8 +68,12 @@ public class BlockEvents {
                             double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
                             double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
                             double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
-                            RenderGlobal.drawOutlinedBoundingBox(blockState.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z)).expand(-0.005, -0.005, -0.005).offset(-d0, -d1, -d2), 255, 255, 255, 100);
 
+                            AxisAlignedBB slightlyLargeBB = blockState.getSelectedBoundingBox(worldShim.getWorld(), new BlockPos(block.x, block.y, block.z))
+                                    .expand(-0.005, -0.005, -0.005)
+                                    .offset(-d0, -d1, -d2);
+
+                            RenderGlobalShim.drawOutlinedBox(slightlyLargeBB, 255, 255, 255, 100);
                         }
                         GL11.glEnable(GL11.GL_TEXTURE_2D);
                         GL11.glDisable(GL11.GL_BLEND);
