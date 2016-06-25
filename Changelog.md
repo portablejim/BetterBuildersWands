@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.6.5
+------
+Nothing really new, just syncing releases.
+Note: 1.9.4 version works in 1.9.4 not 1.10.
+Note: 1.10 version works in 1.10 not 1.9.4
+
 0.6.4
 -----
 Changes:
