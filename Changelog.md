@@ -1,6 +1,10 @@
 Changelog
 =========
 
+0.6.6
+------
+Blame Forge.
+
 0.6.5
 ------
 Nothing really new, just syncing releases.
