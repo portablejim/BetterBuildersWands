@@ -77,16 +77,18 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         placedIntArray[i * 3 + 1] = currentPoint.y;
                         placedIntArray[i * 3 + 2] = currentPoint.z;
                     }
-                    NBTTagCompound itemNBT = itemstack.getTagCompound();
-                    NBTTagCompound bbwCompond = new NBTTagCompound();
-                    if(itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
-                        bbwCompond = itemNBT.getCompoundTag("bbw");
+                    NBTTagCompound bbwCompound = new NBTTagCompound();
+                    if(itemstack.hasTagCompound()) {
+                        NBTTagCompound itemNBT = itemstack.getTagCompound();
+                        if (itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
+                            bbwCompound = itemNBT.getCompoundTag("bbw");
+                        }
                     }
-                    bbwCompond.setIntArray("lastPlaced", placedIntArray);
-                    bbwCompond.setString("lastBlock", Item.itemRegistry.getNameForObject(sourceItems.getItem()));
-                    bbwCompond.setInteger("lastDamage", sourceItems.getItemDamage());
-                    bbwCompond.setInteger("lastPerBlock", sourceItems.stackSize);
-                    itemstack.setTagInfo("bbw", bbwCompond);
+                    bbwCompound.setIntArray("lastPlaced", placedIntArray);
+                    bbwCompound.setString("lastBlock", Item.itemRegistry.getNameForObject(sourceItems.getItem()));
+                    bbwCompound.setInteger("lastDamage", sourceItems.getItemDamage());
+                    bbwCompound.setInteger("lastPerBlock", sourceItems.stackSize);
+                    itemstack.setTagInfo("bbw", bbwCompound);
 
                 }
             }
