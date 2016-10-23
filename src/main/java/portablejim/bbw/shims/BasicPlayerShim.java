@@ -1,6 +1,7 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import portablejim.bbw.basics.Point3d;
@@ -95,6 +96,7 @@ public class BasicPlayerShim implements IPlayerShim {
             else if(providersEnabled && inventoryStack != null && inventoryStack.getItem() instanceof IBlockProvider) {
                 providers.add(inventoryStack);
             }
+<<<<<<< HEAD
         }
 
         // IBlockProvider does not support removing more than one item in an atomic operation.
@@ -108,6 +110,21 @@ public class BasicPlayerShim implements IPlayerShim {
             }
         }
 
+=======
+        }
+
+        // IBlockProvider does not support removing more than one item in an atomic operation.
+        if (toUse == 1) {
+            Block block = getBlock(itemStack);
+            int meta = getBlockMeta(itemStack);
+            for(ItemStack provStack : providers) {
+                IBlockProvider prov = (IBlockProvider) provStack.getItem();
+                if(prov.provideBlock(player, itemStack, provStack, block, meta, true))
+                    return true;
+            }
+        }
+
+>>>>>>> origin/master
         return false;
     }
 
