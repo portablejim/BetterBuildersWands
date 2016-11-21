@@ -13,4 +13,14 @@ public class CommonProxy implements IProxy {
     public void RegisterModels() {
 
     }
+
+    @Override
+    public String Translate(String key) {
+        return "";
+    }
+
+    @Override
+    public String Translate(String formatString, Object... values) {
+        return "";
+    }
 }

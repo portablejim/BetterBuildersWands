@@ -3,6 +3,7 @@ package portablejim.bbw;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -12,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -114,8 +116,8 @@ public class BetterBuildersWandsMod {
 
         boolean EXTRA_UTILS_RECIPES = !configValues.NO_EXTRA_UTILS_RECIPES;
         if(Loader.isModLoaded("ExtraUtilities") && EXTRA_UTILS_RECIPES) {
-            Item buildersWand = GameRegistry.findItem("ExtraUtilities", "builderswand");
-            Item creativebuildersWand = GameRegistry.findItem("ExtraUtilities", "creativebuilderswand");
+            Item buildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "builderswand"));
+            Item creativebuildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "creativebuilderswand"));
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(4), "  H", " S ", "S  ", 'S', "stickWood", 'H', buildersWand));
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', creativebuildersWand));
             GameRegistry.addRecipe(new ShapelessRecipes(newWand(5), Arrays.asList(newWand(4), newWand(4))));

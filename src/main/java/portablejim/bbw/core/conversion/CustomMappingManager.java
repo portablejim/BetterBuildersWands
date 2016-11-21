@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import portablejim.bbw.BetterBuildersWandsMod;
 
@@ -45,7 +46,7 @@ public class CustomMappingManager {
             int itemCount = Integer.parseInt(m.group(3));
 
             String itemString = m.group(4);
-            Item itemItem = GameRegistry.findItem(itemString.split(":", 2)[0], itemString.split(":", 2)[1]);
+            Item itemItem = Item.REGISTRY.getObject(new ResourceLocation(itemString));
 
             int itemMeta = Integer.parseInt(m.group(5));
             Block targetBlock = Block.getBlockFromName(m.group(6));

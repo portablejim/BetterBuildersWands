@@ -2,6 +2,7 @@ package portablejim.bbw.proxy;
 
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
@@ -48,5 +49,15 @@ public class ClientProxy extends CommonProxy {
                 return new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandUnbreakable", "inventory");
             }
         });
+    }
+
+    @Override
+    public String Translate(String key) {
+        return I18n.format(key);
+    }
+
+    @Override
+    public String Translate(String formatString, Object... values) {
+        return I18n.format(formatString, values);
     }
 }

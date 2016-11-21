@@ -6,4 +6,6 @@ package portablejim.bbw.proxy;
 public interface IProxy {
     void RegisterEvents();
     void RegisterModels();
+    String Translate(String key);
+    String Translate(String formatString, Object... values);
 }
