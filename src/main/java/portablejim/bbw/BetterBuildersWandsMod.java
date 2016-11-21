@@ -83,10 +83,15 @@ public class BetterBuildersWandsMod {
         itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(diamondWandLimit), "Unrestricted", "Diamond");
         itemDiamondWand.setMaxDamage(Item.ToolMaterial.DIAMOND.getMaxUses());
         itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
-        GameRegistry.registerItem(itemStoneWand, "wandStone");
-        GameRegistry.registerItem(itemIronWand, "wandIron");
-        GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
-        GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
+
+        itemStoneWand.setRegistryName("wandStone");
+        itemIronWand.setRegistryName("wandIron");
+        itemDiamondWand.setRegistryName("wandDiamond");
+        itemUnbreakableWand.setRegistryName("wandUnbreakable");
+        GameRegistry.register(itemStoneWand);
+        GameRegistry.register(itemIronWand);
+        GameRegistry.register(itemDiamondWand);
+        GameRegistry.register(itemUnbreakableWand);
 
         proxy.RegisterModels();
 
