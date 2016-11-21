@@ -70,21 +70,23 @@ public class BetterBuildersWandsMod {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
 
+        configValues = new ConfigValues(event.getSuggestedConfigurationFile());
+        configValues.loadConfigFile();
+
+        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
+        networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
+
+        int diamondWandLimit = configValues.DIAMOND_WAND_LIMIT < 0 ? Item.ToolMaterial.DIAMOND.getMaxUses() : configValues.DIAMOND_WAND_LIMIT;
+
         itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
         itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
-        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.DIAMOND.getMaxUses()), "Unrestricted", "Diamond");
+        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(diamondWandLimit), "Unrestricted", "Diamond");
         itemDiamondWand.setMaxDamage(Item.ToolMaterial.DIAMOND.getMaxUses());
         itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
         GameRegistry.registerItem(itemStoneWand, "wandStone");
         GameRegistry.registerItem(itemIronWand, "wandIron");
         GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
         GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
-
-        configValues = new ConfigValues(event.getSuggestedConfigurationFile());
-        configValues.loadConfigFile();
-
-        networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
-        networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
 
         proxy.RegisterModels();
 
