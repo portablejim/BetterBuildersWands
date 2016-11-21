@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.7.0
+-----
+Changes:
+* Improved item models.
+* Config option added to allow the configuration of how many blocks the diamond wand can place at a time.
+
 0.6.5
 ------
 Nothing really new, just syncing releases.
