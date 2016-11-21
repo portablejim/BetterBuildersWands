@@ -12,6 +12,8 @@ public class ConfigValues {
 
     public static final String CONFIG_WHYNOT = "why_not";
     public static final String CONFIG_GENERAL = "general";
+    public static final String CONFIG_BALANCE = "balance";
+    public static final String CONFIG_BALANCE_DESCRIPTION = "For those wanting to change balance.\nNote: The 'blocks-at-a-time' for the unbreakable wand is 2^n where n is the damage value. Recipe modification can be done with another mod.";
 
     public boolean NO_EXTRA_UTILS_RECIPES;
     public static final boolean NO_EXTRA_UTILS_RECIPES_DEFAULT = false;
@@ -33,6 +35,11 @@ public class ConfigValues {
     public static final String ENABLE_DIAMOND_WAND_NAME = "enable_diamond_wand";
     public static final String ENABLE_DIAMOND_WAND_DESCRIPTION = "Enable recipe for diamond builder's wand";
 
+    public int DIAMOND_WAND_LIMIT;
+    public static final int DIAMOND_WAND_LIMIT_DEFAULT = -1;
+    public static final String DIAMOND_WAND_LIMIT_NAME = "diamond_wand_limit";
+    public static final String DIAMOND_WAND_LIMIT_DESCRIPTION = "How many blocks the diamond wand can place at a time. Use -1 for default";
+
     public String OVERRIDES_RECIPES;
     public static final String OVERRIDES_RECIPES_DEFAULT = "minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0,minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0";
     public static final String OVERRIDES_RECIPES_NAME = "forced_blocks";
@@ -48,6 +55,8 @@ public class ConfigValues {
         ENABLE_STONE_WAND = configFile.get(CONFIG_GENERAL, ENABLE_STONE_WAND_NAME, ENABLE_STONE_WAND_DEFAULT, ENABLE_STONE_WAND_DESCRIPTION).getBoolean();
         ENABLE_IRON_WAND = configFile.get(CONFIG_GENERAL, ENABLE_IRON_WAND_NAME, ENABLE_IRON_WAND_DEFAULT, ENABLE_IRON_WAND_DESCRIPTION).getBoolean();
         ENABLE_DIAMOND_WAND = configFile.get(CONFIG_GENERAL, ENABLE_DIAMOND_WAND_NAME, ENABLE_DIAMOND_WAND_DEFAULT, ENABLE_DIAMOND_WAND_DESCRIPTION).getBoolean();
+        DIAMOND_WAND_LIMIT = configFile.get(CONFIG_BALANCE, DIAMOND_WAND_LIMIT_NAME, DIAMOND_WAND_LIMIT_DEFAULT, DIAMOND_WAND_LIMIT_DESCRIPTION).getInt();
+        configFile.setCategoryComment(CONFIG_BALANCE, CONFIG_BALANCE_DESCRIPTION);
 
         configFile.save();
     }

@@ -1,12 +1,8 @@
 package portablejim.bbw.core.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import portablejim.bbw.basics.EnumFluidLock;
-import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.core.wands.RestrictedWand;
 

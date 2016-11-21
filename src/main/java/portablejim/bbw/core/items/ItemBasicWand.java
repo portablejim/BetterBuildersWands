@@ -1,15 +1,6 @@
 package portablejim.bbw.core.items;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.Language;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraft.util.text.translation.LanguageMap;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,15 +8,18 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.EnumFluidLock;
-import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.WandWorker;
+import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.shims.BasicPlayerShim;
 import portablejim.bbw.shims.BasicWorldShim;
 import portablejim.bbw.shims.CreativePlayerShim;
@@ -118,39 +112,39 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         EnumLock mode = getMode(itemstack);
         switch (mode) {
             case NORTHSOUTH:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.northsouth"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.northsouth"));
                 break;
             case VERTICAL:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.vertical"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.vertical"));
                 break;
             case VERTICALEASTWEST:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticaleastwest"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.verticaleastwest"));
                 break;
             case EASTWEST:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.eastwest"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.eastwest"));
                 break;
             case HORIZONTAL:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.horizontal"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.horizontal"));
                 break;
             case VERTICALNORTHSOUTH:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.verticalnorthsouth"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.verticalnorthsouth"));
                 break;
             case NOLOCK:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.mode.nolock"));
                 break;
         }
         EnumFluidLock fluidMode = getFluidMode(itemstack);
         switch (fluidMode) {
             case STOPAT:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.stopat"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.stopat"));
                 break;
             case IGNORE:
-                lines.add(I18n.translateToLocal(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.ignore"));
+                lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.fluidmode.ignore"));
                 break;
         }
 
         if(!itemstack.isItemStackDamageable() || !itemstack.isItemDamaged()) {
-            lines.add(I18n.translateToLocalFormatted(BetterBuildersWandsMod.LANGID + ".hover.maxblocks", wand.getMaxBlocks(itemstack)));
+            lines.add(BetterBuildersWandsMod.proxy.Translate(BetterBuildersWandsMod.LANGID + ".hover.maxblocks", wand.getMaxBlocks(itemstack)));
         }
     }
 

@@ -1,6 +1,9 @@
 package portablejim.bbw;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.ShapelessRecipes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -8,15 +11,11 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +23,6 @@ import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import portablejim.bbw.core.ConfigValues;
 import portablejim.bbw.core.OopsCommand;
-import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.conversion.CustomMappingManager;
 import portablejim.bbw.core.conversion.StackedBlockManager;
 import portablejim.bbw.core.items.ItemRestrictedWandAdvanced;
@@ -70,21 +68,28 @@ public class BetterBuildersWandsMod {
     public void preInit(FMLPreInitializationEvent event) {
         logger = event.getModLog();
 
-        itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
-        itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
-        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(Item.ToolMaterial.DIAMOND.getMaxUses()), "Unrestricted", "Diamond");
-        itemDiamondWand.setMaxDamage(Item.ToolMaterial.DIAMOND.getMaxUses());
-        itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
-        GameRegistry.registerItem(itemStoneWand, "wandStone");
-        GameRegistry.registerItem(itemIronWand, "wandIron");
-        GameRegistry.registerItem(itemDiamondWand, "wandDiamond");
-        GameRegistry.registerItem(itemUnbreakableWand, "wandUnbreakable");
-
         configValues = new ConfigValues(event.getSuggestedConfigurationFile());
         configValues.loadConfigFile();
 
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("bbwands");
         networkWrapper.registerMessage(PacketWandActivate.Handler.class, PacketWandActivate.class, 0, Side.SERVER);
+
+        int diamondWandLimit = configValues.DIAMOND_WAND_LIMIT < 0 ? Item.ToolMaterial.DIAMOND.getMaxUses() : configValues.DIAMOND_WAND_LIMIT;
+
+        itemStoneWand = new ItemRestrictedWandBasic(new RestrictedWand(5));
+        itemIronWand = new ItemRestrictedWandAdvanced(new RestrictedWand(9));
+        itemDiamondWand = new ItemUnrestrictedWand(new RestrictedWand(diamondWandLimit), "Unrestricted", "Diamond");
+        itemDiamondWand.setMaxDamage(Item.ToolMaterial.DIAMOND.getMaxUses());
+        itemUnbreakableWand = new ItemUnrestrictedWand(new UnbreakingWand(), "Unbreakable", "Unbreakable");
+
+        itemStoneWand.setRegistryName("wandStone");
+        itemIronWand.setRegistryName("wandIron");
+        itemDiamondWand.setRegistryName("wandDiamond");
+        itemUnbreakableWand.setRegistryName("wandUnbreakable");
+        GameRegistry.register(itemStoneWand);
+        GameRegistry.register(itemIronWand);
+        GameRegistry.register(itemDiamondWand);
+        GameRegistry.register(itemUnbreakableWand);
 
         proxy.RegisterModels();
 
@@ -111,8 +116,8 @@ public class BetterBuildersWandsMod {
 
         boolean EXTRA_UTILS_RECIPES = !configValues.NO_EXTRA_UTILS_RECIPES;
         if(Loader.isModLoaded("ExtraUtilities") && EXTRA_UTILS_RECIPES) {
-            Item buildersWand = GameRegistry.findItem("ExtraUtilities", "builderswand");
-            Item creativebuildersWand = GameRegistry.findItem("ExtraUtilities", "creativebuilderswand");
+            Item buildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "builderswand"));
+            Item creativebuildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "creativebuilderswand"));
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(4), "  H", " S ", "S  ", 'S', "stickWood", 'H', buildersWand));
             GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', creativebuildersWand));
             GameRegistry.addRecipe(new ShapelessRecipes(newWand(5), Arrays.asList(newWand(4), newWand(4))));
