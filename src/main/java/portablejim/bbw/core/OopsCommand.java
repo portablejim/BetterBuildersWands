@@ -24,12 +24,12 @@ import java.util.ArrayList;
  */
 public class OopsCommand extends CommandBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return "wandOops";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return "/wandOops";
     }
 
@@ -62,12 +62,12 @@ public class OopsCommand extends CommandBase {
                         int fullStacks = count / stackSize;
                         for(int i = 0; i < fullStacks; i++) {
                             ItemStack newStack = itemStack.copy();
-                            newStack.stackSize = stackSize;
-                            player.worldObj.spawnEntityInWorld(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack));
+                            newStack.setCount(stackSize);
+                            player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack));
                         }
                         ItemStack finalStack = itemStack.copy();
-                        finalStack.stackSize = count % stackSize;
-                        player.worldObj.spawnEntityInWorld(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, finalStack));
+                        finalStack.setCount(count % stackSize);
+                        player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, finalStack));
 
                         bbwCompound.removeTag("lastPlaced");
                         bbwCompound.removeTag("lastBlock");

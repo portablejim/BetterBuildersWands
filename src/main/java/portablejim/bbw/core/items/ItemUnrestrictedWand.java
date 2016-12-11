@@ -23,7 +23,7 @@ public class ItemUnrestrictedWand extends ItemBasicWand{
 
     public ItemUnrestrictedWand(IWand wand, String name, String texture) {
         super();
-        this.setUnlocalizedName("betterbuilderswands:wand" + name);
+        this.setUnlocalizedName("betterbuilderswands.wand" + name);
         //this.setTextureName("betterbuilderswands:wand" + texture);
         this.wand = wand;
     }

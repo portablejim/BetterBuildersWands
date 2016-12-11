@@ -27,11 +27,11 @@ public class BasicPlayerShim implements IPlayerShim {
 
         for(ItemStack inventoryStack : player.inventory.mainInventory) {
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
-                total += Math.max(0, inventoryStack.stackSize);
+                total += Math.max(0, inventoryStack.getCount());
             }
         }
 
-        return itemStack.stackSize > 0 ? total / itemStack.stackSize : 0;
+        return itemStack.getCount() > 0 ? total / itemStack.getCount() : 0;
     }
 
     @Override
@@ -41,20 +41,20 @@ public class BasicPlayerShim implements IPlayerShim {
         }
 
         // Reverse direction to leave hotbar to last.
-        int toUse = itemStack.stackSize;
-        for(int i = player.inventory.mainInventory.length - 1; i >= 0; i--) {
-            ItemStack inventoryStack = player.inventory.mainInventory[i];
+        int toUse = itemStack.getCount();
+        for(int i = player.inventory.mainInventory.size()- 1; i >= 0; i--) {
+            ItemStack inventoryStack = player.inventory.mainInventory.get(i);
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
-                if(inventoryStack.stackSize < toUse) {
-                    inventoryStack.stackSize = 0;
-                    toUse -= inventoryStack.stackSize;
+                if(inventoryStack.getCount() < toUse) {
+                    inventoryStack.setCount(0);
+                    toUse -= inventoryStack.getCount();
                 }
                 else {
-                    inventoryStack.stackSize = inventoryStack.stackSize - toUse;
+                    inventoryStack.setCount(inventoryStack.getCount() - toUse);
                     toUse = 0;
                 }
-                if(inventoryStack.stackSize == 0) {
-                    player.inventory.setInventorySlotContents(i, null);
+                if(inventoryStack.getCount() == 0) {
+                    player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 }
                 player.inventoryContainer.detectAndSendChanges();
                 if(toUse <= 0) {
@@ -67,8 +67,8 @@ public class BasicPlayerShim implements IPlayerShim {
 
     @Override
     public ItemStack getNextItem(Block block, int meta) {
-        for(int i = player.inventory.mainInventory.length - 1; i >= 0; i--) {
-            ItemStack inventoryStack = player.inventory.mainInventory[i];
+        for(int i = player.inventory.mainInventory.size() - 1; i >= 0; i--) {
+            ItemStack inventoryStack = player.inventory.mainInventory.get(i);
 
         }
 

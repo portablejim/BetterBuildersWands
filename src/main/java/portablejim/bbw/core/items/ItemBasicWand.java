@@ -43,10 +43,11 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack itemstack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if(wand == null) {
             return EnumActionResult.FAIL;
         }
+        ItemStack itemstack = player.getHeldItem(hand);
         if(itemstack == null) {
             BetterBuildersWandsMod.logger.error("BasicWand onItemUse itemstack empty");
             return EnumActionResult.FAIL;
@@ -96,7 +97,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                     bbwCompond.setIntArray("lastPlaced", placedIntArray);
                     bbwCompond.setString("lastBlock", Item.REGISTRY.getNameForObject(sourceItems.getItem()).toString());
                     bbwCompond.setInteger("lastBlockMeta", sourceItems.getItemDamage());
-                    bbwCompond.setInteger("lastPerBlock", sourceItems.stackSize);
+                    bbwCompond.setInteger("lastPerBlock", sourceItems.getCount());
                     itemstack.setTagInfo("bbw", bbwCompond);
                 }
             }

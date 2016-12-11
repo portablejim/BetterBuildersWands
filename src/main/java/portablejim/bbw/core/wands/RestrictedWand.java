@@ -20,8 +20,8 @@ public class RestrictedWand implements IWand {
     @Override
     public boolean placeBlock(ItemStack itemStack, EntityLivingBase entityLivingBase) {
         itemStack.damageItem(1, entityLivingBase);
-        if(itemStack.stackSize > 0 && itemStack.getItemDamage() == itemStack.getMaxDamage()) {
-            itemStack.stackSize = 0;
+        if(itemStack.getCount() > 0 && itemStack.getItemDamage() == itemStack.getMaxDamage()) {
+            itemStack.setCount(0);
         }
         return true;
     }

@@ -85,7 +85,7 @@ public class WandWorker {
         if(targetMetadata != candidateSupportingMeta) return false;
         //if(targetBlock instanceof BlockCrops) return false;
         if(!targetBlock.canPlaceBlockAt(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z))) return false;
-        if(!targetBlock.canReplace(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z), facing, new ItemStack(candidateSupportingBlock, 1, candidateSupportingMeta))) return false;
+        if(!targetBlock.isReplaceable(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z))) return false;
 
         return !world.entitiesInBox(blockBB);
 
