@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.8.0
+------
+Changes:
+* Add blacklisting support for blocks.
+
 0.7.0
 -----
 Changes:
