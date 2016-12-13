@@ -1,20 +1,42 @@
 package portablejim.bbw.shims;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import portablejim.bbw.basics.Point3d;
+import vazkii.botania.api.item.IBlockProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wrap a player to provide basic functions.
  */
 public class BasicPlayerShim implements IPlayerShim {
     private EntityPlayer player;
+    private boolean providersEnabled;
 
     public BasicPlayerShim(EntityPlayer player) {
         this.player = player;
+        this.providersEnabled = areProvidersEnabled();
+    }
+
+    private static Block getBlock(ItemStack stack) {
+        return Block.getBlockFromItem(stack.getItem());
+    }
+
+    private static int getBlockMeta(ItemStack stack) {
+        return stack.getHasSubtypes() ? stack.getItemDamage() : 0;
+    }
+
+    private static boolean areProvidersEnabled() {
+        try {
+            boolean disable = new Object() instanceof IBlockProvider;
+            return true;
+        } catch (NoClassDefFoundError e) {
+            return false;
+        }
     }
 
     @Override
@@ -24,10 +46,19 @@ public class BasicPlayerShim implements IPlayerShim {
             return 0;
         }
 
+        Block block = getBlock(itemStack);
+        int meta = getBlockMeta(itemStack);
 
         for(ItemStack inventoryStack : player.inventory.mainInventory) {
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
                 total += Math.max(0, inventoryStack.stackSize);
+            }
+            else if(providersEnabled && inventoryStack != null && inventoryStack.getItem() instanceof IBlockProvider) {
+                IBlockProvider prov = (IBlockProvider) inventoryStack.getItem();
+                int provCount = prov.getBlockCount(player, itemStack, inventoryStack, block, meta);
+                if(provCount == -1)
+                    return Integer.MAX_VALUE;
+                total += provCount;
             }
         }
 
@@ -42,6 +73,7 @@ public class BasicPlayerShim implements IPlayerShim {
 
         // Reverse direction to leave hotbar to last.
         int toUse = itemStack.stackSize;
+        List<ItemStack> providers = new ArrayList<ItemStack>();
         for(int i = player.inventory.mainInventory.length - 1; i >= 0; i--) {
             ItemStack inventoryStack = player.inventory.mainInventory[i];
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
@@ -61,7 +93,22 @@ public class BasicPlayerShim implements IPlayerShim {
                     return true;
                 }
             }
+            else if(providersEnabled && inventoryStack != null && inventoryStack.getItem() instanceof IBlockProvider) {
+                providers.add(inventoryStack);
+            }
         }
+
+        // IBlockProvider does not support removing more than one item in an atomic operation.
+        if (toUse == 1) {
+            Block block = getBlock(itemStack);
+            int meta = getBlockMeta(itemStack);
+            for(ItemStack provStack : providers) {
+                IBlockProvider prov = (IBlockProvider) provStack.getItem();
+                if(prov.provideBlock(player, itemStack, provStack, block, meta, true))
+                    return true;
+            }
+        }
+
         return false;
     }
 
