@@ -1,11 +1,9 @@
 package portablejim.bbw.core;
 
 import net.minecraftforge.common.config.Configuration;
-import scala.actors.threadpool.Arrays;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
