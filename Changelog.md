@@ -1,29 +1,26 @@
 Changelog
 =========
 
+0.8.0
+------
+Changes:
+* Add blacklisting support for blocks.
+
 0.7.0
 -----
 Changes:
 * Improved item models.
 * Config option added to allow the configuration of how many blocks the diamond wand can place at a time.
 
+0.6.6
+------
+Blame Forge.
+
 0.6.5
 ------
 Nothing really new, just syncing releases.
 Note: 1.9.4 version works in 1.9.4 not 1.10.
 Note: 1.10 version works in 1.10 not 1.9.4
-
-0.6.4
------
-Changes:
-* Actually port to 1.10.
-Fixes:
-* Fix crash on using any wand.
-
-0.6.3
-------
-Changes:
-* Allow loading in Minecraft 1.10 (EDIT: Doesn't actually work)
 
 0.6.2
 ------

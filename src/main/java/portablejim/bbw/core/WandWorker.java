@@ -43,11 +43,15 @@ public class WandWorker {
     public ItemStack getProperItemStack(IWorldShim world, IPlayerShim player, Point3d blockPos) {
         Block block = world.getBlock(blockPos);
         int meta = world.getMetadata(blockPos);
-        ItemStack exactItemstack = new ItemStack(block, 1, meta);
-         if(player.countItems(exactItemstack) > 0) {
-             return exactItemstack;
-         }
-        return getEquivalentItemStack(blockPos);
+        String blockString = String.format("%s/%s", Block.REGISTRY.getNameForObject(block), meta);
+        if(!BetterBuildersWandsMod.instance.configValues.HARD_BLACKLIST_SET.contains(blockString)) {
+            ItemStack exactItemstack = new ItemStack(block, 1, meta);
+            if (player.countItems(exactItemstack) > 0) {
+                return exactItemstack;
+            }
+            return getEquivalentItemStack(blockPos);
+        }
+        return null;
     }
 
     public ItemStack getEquivalentItemStack(Point3d blockPos) {
@@ -56,13 +60,14 @@ public class WandWorker {
         //ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         ItemStack stack = null;
         CustomMapping customMapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(block, meta);
+        String blockString = String.format("%s/%s", Block.REGISTRY.getNameForObject(block), meta);
         if(customMapping != null) {
             stack = customMapping.getItems();
         }
         else if(block.canSilkHarvest(world.getWorld(), blockPos.toBlockPos(), block.getStateFromMeta(meta), player.getPlayer())) {
             stack = BetterBuildersWandsMod.instance.blockCache.getStackedBlock(world, blockPos);
         }
-        else {
+        else if(!BetterBuildersWandsMod.instance.configValues.SOFT_BLACKLIST_SET.contains(blockString)) {
             Item dropped = block.getItemDropped(block.getStateFromMeta(meta), new Random(), 0);
             if (dropped != null) {
                 stack = new ItemStack(dropped, block.quantityDropped(block.getStateFromMeta(meta), 0, new Random()), block.damageDropped(block.getStateFromMeta(meta)));
