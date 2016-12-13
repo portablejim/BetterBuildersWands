@@ -83,21 +83,21 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         placedIntArray[i * 3 + 2] = currentPoint.z;
                     }
                     NBTTagCompound itemNBT = itemstack.hasTagCompound() ? itemstack.getTagCompound() : new NBTTagCompound();
-                    NBTTagCompound bbwCompond = new NBTTagCompound();
+                    NBTTagCompound bbwCompound = new NBTTagCompound();
                     if(itemNBT.hasKey("bbw", Constants.NBT.TAG_COMPOUND)) {
-                        bbwCompond = itemNBT.getCompoundTag("bbw");
+                        bbwCompound = itemNBT.getCompoundTag("bbw");
                     }
-                    if(!bbwCompond.hasKey("mask", Constants.NBT.TAG_SHORT)) {
-                        bbwCompond.setShort("mask", (short) this.getDefaultMode().mask);
+                    if(!bbwCompound.hasKey("mask", Constants.NBT.TAG_SHORT)) {
+                        bbwCompound.setShort("mask", (short) this.getDefaultMode().mask);
                     }
-                    if(!bbwCompond.hasKey("fluidmask", Constants.NBT.TAG_SHORT)) {
-                        bbwCompond.setShort("fluidmask", (short) this.getDefaultFluidMode().mask);
+                    if(!bbwCompound.hasKey("fluidmask", Constants.NBT.TAG_SHORT)) {
+                        bbwCompound.setShort("fluidmask", (short) this.getDefaultFluidMode().mask);
                     }
-                    bbwCompond.setIntArray("lastPlaced", placedIntArray);
-                    bbwCompond.setString("lastBlock", Item.REGISTRY.getNameForObject(sourceItems.getItem()).toString());
-                    bbwCompond.setInteger("lastBlockMeta", sourceItems.getItemDamage());
-                    bbwCompond.setInteger("lastPerBlock", sourceItems.stackSize);
-                    itemstack.setTagInfo("bbw", bbwCompond);
+                    bbwCompound.setIntArray("lastPlaced", placedIntArray);
+                    bbwCompound.setString("lastBlock", Item.REGISTRY.getNameForObject(sourceItems.getItem()).toString());
+                    bbwCompound.setInteger("lastBlockMeta", sourceItems.getItemDamage());
+                    bbwCompound.setInteger("lastPerBlock", sourceItems.stackSize);
+                    itemstack.setTagInfo("bbw", bbwCompound);
                 }
             }
 

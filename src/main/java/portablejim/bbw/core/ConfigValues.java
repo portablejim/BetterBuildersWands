@@ -1,8 +1,13 @@
 package portablejim.bbw.core;
 
 import net.minecraftforge.common.config.Configuration;
+import scala.actors.threadpool.Arrays;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Config file
@@ -45,6 +50,18 @@ public class ConfigValues {
     public static final String OVERRIDES_RECIPES_NAME = "forced_blocks";
     public static final String OVERRIDES_RECIPES_DESCRIPTION = "Specify forced mappings for what to build from certain blocks.\n(what you are looking at)=>(number required)*(item required)=>(block to build)";
 
+    public String[] HARD_BLACKLIST;
+    public Set<String> HARD_BLACKLIST_SET;
+    public static final String[] HARD_BLACKLIST_DEFAULT = new String[]{};
+    public static final String HARD_BLACKLIST_NAME = "blacklisted_blocks";
+    public static final String HARD_BLACKLIST_DESCRIPTION = "Blocks that won't work at all with the wands";
+
+    public String[] SOFT_BLACKLIST;
+    public Set<String> SOFT_BLACKLIST_SET;
+    public static final String[] SOFT_BLACKLIST_DEFAULT = new String[]{};
+    public static final String SOFT_BLACKLIST_NAME = "no_assumption_blocks";
+    public static final String SOFT_BLACKLIST_DESCRIPTION = "Blocks that break assumptions. When the placed block is not what you expect.";
+
     public ConfigValues(File file) {
         configFile = new Configuration(file);
     }
@@ -57,6 +74,13 @@ public class ConfigValues {
         ENABLE_DIAMOND_WAND = configFile.get(CONFIG_GENERAL, ENABLE_DIAMOND_WAND_NAME, ENABLE_DIAMOND_WAND_DEFAULT, ENABLE_DIAMOND_WAND_DESCRIPTION).getBoolean();
         DIAMOND_WAND_LIMIT = configFile.get(CONFIG_BALANCE, DIAMOND_WAND_LIMIT_NAME, DIAMOND_WAND_LIMIT_DEFAULT, DIAMOND_WAND_LIMIT_DESCRIPTION).getInt();
         configFile.setCategoryComment(CONFIG_BALANCE, CONFIG_BALANCE_DESCRIPTION);
+        HARD_BLACKLIST = configFile.get(CONFIG_GENERAL, HARD_BLACKLIST_NAME, HARD_BLACKLIST_DEFAULT, HARD_BLACKLIST_DESCRIPTION).getStringList();
+        SOFT_BLACKLIST = configFile.get(CONFIG_GENERAL, SOFT_BLACKLIST_NAME, SOFT_BLACKLIST_DEFAULT, SOFT_BLACKLIST_DESCRIPTION).getStringList();
+
+        //noinspection unchecked
+        HARD_BLACKLIST_SET = new TreeSet<String>(Arrays.asList(HARD_BLACKLIST));
+        //noinspection unchecked
+        SOFT_BLACKLIST_SET = new TreeSet<String>(Arrays.asList(SOFT_BLACKLIST));
 
         configFile.save();
     }
