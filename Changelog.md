@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.9.0
+------
+Changes:
+* Re-do block selection mechanics. Hopefully it works better, without crashes.
+Fixes:
+* Fix crash from looking at some blocks.
+
 0.8.0
 ------
 Changes:

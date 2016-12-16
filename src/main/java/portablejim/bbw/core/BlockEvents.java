@@ -14,6 +14,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import org.lwjgl.opengl.GL11;
+import portablejim.bbw.basics.ReplacementTriplet;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.core.items.IWandItem;
@@ -49,9 +50,10 @@ public class BlockEvents {
                 WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
                 Point3d clickedPos = new Point3d(event.getTarget().getBlockPos().getX(), event.getTarget().getBlockPos().getY(), event.getTarget().getBlockPos().getZ());
-                ItemStack  sourceItems = worker.getProperItemStack(worldShim, playerShim, clickedPos);
+                ReplacementTriplet triplet = worker.getProperItemStack(worldShim, playerShim, clickedPos);
 
-                if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
+                if (triplet != null && triplet.items != null && triplet.items.getItem() instanceof ItemBlock) {
+                    ItemStack sourceItems = triplet.items;
                     int numBlocks = Math.min(wand.getMaxBlocks(wandItemstack), playerShim.countItems(sourceItems));
 
                     LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, event.getTarget().sideHit, numBlocks, wandItem.getMode(wandItemstack), wandItem.getFaceLock(wandItemstack), wandItem.getFluidMode(wandItemstack));
