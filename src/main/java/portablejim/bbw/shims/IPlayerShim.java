@@ -15,6 +15,7 @@ public interface IPlayerShim {
     ItemStack getNextItem(Block block, int meta);
     Point3d getPlayerPosition();
     EntityPlayer getPlayer();
+    double getReach();
 
     boolean isCreative();
 }

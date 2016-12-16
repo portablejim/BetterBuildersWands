@@ -1,6 +1,7 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,13 @@ public class BasicPlayerShim implements IPlayerShim {
         } catch (NoClassDefFoundError e) {
             return false;
         }
+    }
+
+    public double getReach() {
+        if(player instanceof EntityPlayerMP) {
+            return ((EntityPlayerMP)player).theItemInWorldManager.getBlockReachDistance();
+        }
+        return 5F;
     }
 
     @Override

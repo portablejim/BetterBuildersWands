@@ -18,6 +18,7 @@ import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
+import portablejim.bbw.shims.BlockShim;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 
@@ -48,7 +49,7 @@ public class WandWorker {
         int meta = world.getMetadata(blockPos);
         String blockString = String.format("%s/%s", Block.blockRegistry.getNameForObject(block), meta);
         if(!BetterBuildersWandsMod.instance.configValues.HARD_BLACKLIST_SET.contains(blockString)) {
-            ItemStack exactItemstack = new ItemStack(block, 1, meta);
+            ItemStack exactItemstack = BlockShim.getPickBlock(block, world, player, blockPos);
             if (player.countItems(exactItemstack) > 0) {
                 return exactItemstack;
             }
