@@ -95,7 +95,9 @@ public class WandWorker {
             Item dropped = block.getItemDropped(block.getStateFromMeta(meta), new Random(), 0);
             if (dropped != null) {
                 ItemStack stack = new ItemStack(dropped, block.quantityDropped(block.getStateFromMeta(meta), 0, new Random()), block.damageDropped(block.getStateFromMeta(meta)));
-                return new ReplacementTriplet(startBlockState, stack, ((ItemBlock)stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()));
+                if (stack.getItem() instanceof ItemBlock) {
+                    return new ReplacementTriplet(startBlockState, stack, ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()));
+                }
             }
         }
         //ForgeEventFactory.fireBlockHarvesting(items,this.world.getWorld(), block, blockPos.x, blockPos.y, blockPos.z, world.getMetadata(blockPos), 0, 1.0F, true, this.player.getPlayer());
