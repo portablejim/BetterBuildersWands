@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.8.1
+------
+Fixes:
+* Fixes crash bug when looking at doors and lit_redstone with a wand.
+
 0.8.0
 ------
 Changes:
