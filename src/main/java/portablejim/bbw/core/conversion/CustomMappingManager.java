@@ -2,10 +2,8 @@ package portablejim.bbw.core.conversion;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import portablejim.bbw.BetterBuildersWandsMod;
 
 import java.util.ArrayList;
@@ -63,13 +61,14 @@ public class CustomMappingManager {
         return null;
     }
 
-    public CustomMapping getMapping(Block block, int meta) {
+    public ArrayList<CustomMapping> getMappings(Block block, int meta) {
+        ArrayList<CustomMapping> output = new ArrayList<CustomMapping>();
         for(CustomMapping mapping : mappings) {
             if(mapping.getLookBlock() == block && mapping.getMeta() == meta) {
-                return mapping;
+                output.add(mapping);
             }
         }
-        return null;
+        return output;
     }
 
     public void setMapping(CustomMapping newMapping) {

@@ -18,6 +18,7 @@ import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
+import portablejim.bbw.basics.ReplacementTriplet;
 import portablejim.bbw.core.WandWorker;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.shims.BasicPlayerShim;
@@ -66,15 +67,16 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
             //ItemStack pickBlock = worldShim.getBlock(clickedPos).getPickBlock(this.getMovingObjectPositionFromPlayer(world, player, false), world, x, y, z, player);
 
-            ItemStack  sourceItems = worker.getProperItemStack(worldShim, playerShim, clickedPos);
+            ReplacementTriplet sourceTriplet = worker.getProperItemStack(worldShim, playerShim, clickedPos);
 
-            if (sourceItems != null && sourceItems.getItem() instanceof ItemBlock) {
+            if (sourceTriplet != null && sourceTriplet.items != null && sourceTriplet.items.getItem() instanceof ItemBlock) {
+                ItemStack sourceItems = sourceTriplet.items;
                 int numBlocks = Math.min(wand.getMaxBlocks(itemstack), playerShim.countItems(sourceItems));
 
                 //FMLLog.info("Max blocks: %d (%d|%d", numBlocks, this.wand.getMaxBlocks(itemstack), playerShim.countItems(sourceItems));
                 LinkedList<Point3d> blocks = worker.getBlockPositionList(clickedPos, side, numBlocks, getMode(itemstack), getFaceLock(itemstack), getFluidMode(itemstack));
 
-                ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, clickedPos, sourceItems, side, hitX, hitY, hitZ);
+                ArrayList<Point3d> placedBlocks = worker.placeBlocks(itemstack, blocks, sourceTriplet.target, sourceItems, side, hitX, hitY, hitZ);
                 if(placedBlocks.size() > 0) {
                     int[] placedIntArray = new int[placedBlocks.size() * 3];
                     for (int i = 0; i < placedBlocks.size(); i++) {
