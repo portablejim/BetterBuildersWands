@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import portablejim.bbw.basics.Point3d;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Wrap a world to provide basic functions.
@@ -84,5 +85,15 @@ public class BasicWorldShim implements IWorldShim {
     @Override
     public boolean setBlock(Point3d position, Block block, int meta) {
         return world.setBlockState(position.toBlockPos(), block.getStateFromMeta(meta), 3);
+    }
+
+    @Override
+    public boolean setBlock(Point3d blockPos, IBlockState targetBlock) {
+        return world.setBlockState(blockPos.toBlockPos(), targetBlock, 3);
+    }
+
+    @Override
+    public Random rand() {
+        return world.rand;
     }
 }

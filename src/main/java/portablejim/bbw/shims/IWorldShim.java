@@ -1,9 +1,12 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import portablejim.bbw.basics.Point3d;
+
+import java.util.Random;
 
 /**
  * Wrap functions to do with the world.
@@ -25,4 +28,8 @@ public interface IWorldShim {
     void playPlaceAtBlock(Point3d position, Block blockType);
 
     boolean setBlock(Point3d position, Block placeBlock, int placeMeta);
+
+    boolean setBlock(Point3d blockPos, IBlockState targetBlock);
+
+    Random rand();
 }

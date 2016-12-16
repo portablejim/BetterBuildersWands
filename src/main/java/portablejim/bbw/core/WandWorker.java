@@ -1,6 +1,9 @@
 package portablejim.bbw.core;
 
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.IFluidBlock;
@@ -11,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.EnumFluidLock;
+import portablejim.bbw.basics.ReplacementTriplet;
 import portablejim.bbw.core.conversion.CustomMapping;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
@@ -40,41 +44,62 @@ public class WandWorker {
         this.world = world;
     }
 
-    public ItemStack getProperItemStack(IWorldShim world, IPlayerShim player, Point3d blockPos) {
+    public ReplacementTriplet getProperItemStack(IWorldShim world, IPlayerShim player, Point3d blockPos) {
         Block block = world.getBlock(blockPos);
+        IBlockState startBlockState = world.getWorld().getBlockState(blockPos.toBlockPos());
         int meta = world.getMetadata(blockPos);
         String blockString = String.format("%s/%s", Block.REGISTRY.getNameForObject(block), meta);
         if(!BetterBuildersWandsMod.instance.configValues.HARD_BLACKLIST_SET.contains(blockString)) {
-            ItemStack exactItemstack = new ItemStack(block, 1, meta);
+            ArrayList<CustomMapping> customMappings = BetterBuildersWandsMod.instance.mappingManager.getMappings(block, meta);
+            for (CustomMapping customMapping : customMappings) {
+                if(player.countItems(customMapping.getItems()) > 0) {
+                    return new ReplacementTriplet(customMapping.getLookBlock().getStateFromMeta(customMapping.getMeta()),
+                            customMapping.getItems(), customMapping.getPlaceBlock().getStateFromMeta(customMapping.getPlaceMeta()));
+                }
+            }
+
+            // Handle slabs specially.
+            if(startBlockState.getBlock() instanceof BlockSlab) {
+                Item itemDropped = startBlockState.getBlock().getItemDropped(startBlockState, world.rand(), 0);
+                ItemStack itemStackDropped = new ItemStack(itemDropped, startBlockState.getBlock().quantityDropped(world.rand()), startBlockState.getBlock().damageDropped(startBlockState));
+                if(itemDropped != null && player.countItems(itemStackDropped) > 0) {
+                    return new ReplacementTriplet(startBlockState, itemStackDropped, startBlockState);
+                }
+            }
+
+            ItemStack exactItemstack = block.getPickBlock(startBlockState, player.getPlayer().rayTrace(5F, 1F), world.getWorld(), blockPos.toBlockPos(), player.getPlayer());
             if (player.countItems(exactItemstack) > 0) {
-                return exactItemstack;
+                if(exactItemstack.getItem() instanceof ItemBlock) {
+                    IBlockState newState = ((ItemBlock) exactItemstack.getItem()).getBlock().getStateFromMeta(exactItemstack.getMetadata());
+                    return new ReplacementTriplet(startBlockState, exactItemstack, newState);
+                }
+                else {
+                    return null;
+                }
             }
             return getEquivalentItemStack(blockPos);
         }
         return null;
     }
 
-    public ItemStack getEquivalentItemStack(Point3d blockPos) {
+    public ReplacementTriplet getEquivalentItemStack(Point3d blockPos) {
         Block block = world.getBlock(blockPos);
         int meta = world.getMetadata(blockPos);
+        IBlockState startBlockState = world.getWorld().getBlockState(blockPos.toBlockPos());
         //ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-        ItemStack stack = null;
-        CustomMapping customMapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(block, meta);
         String blockString = String.format("%s/%s", Block.REGISTRY.getNameForObject(block), meta);
-        if(customMapping != null) {
-            stack = customMapping.getItems();
-        }
-        else if(block.canSilkHarvest(world.getWorld(), blockPos.toBlockPos(), block.getStateFromMeta(meta), player.getPlayer())) {
-            stack = BetterBuildersWandsMod.instance.blockCache.getStackedBlock(world, blockPos);
+
+        if(block.canSilkHarvest(world.getWorld(), blockPos.toBlockPos(), block.getStateFromMeta(meta), player.getPlayer())) {
         }
         else if(!BetterBuildersWandsMod.instance.configValues.SOFT_BLACKLIST_SET.contains(blockString)) {
             Item dropped = block.getItemDropped(block.getStateFromMeta(meta), new Random(), 0);
             if (dropped != null) {
-                stack = new ItemStack(dropped, block.quantityDropped(block.getStateFromMeta(meta), 0, new Random()), block.damageDropped(block.getStateFromMeta(meta)));
+                ItemStack stack = new ItemStack(dropped, block.quantityDropped(block.getStateFromMeta(meta), 0, new Random()), block.damageDropped(block.getStateFromMeta(meta)));
+                return new ReplacementTriplet(startBlockState, stack, ((ItemBlock)stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()));
             }
         }
         //ForgeEventFactory.fireBlockHarvesting(items,this.world.getWorld(), block, blockPos.x, blockPos.y, blockPos.z, world.getMetadata(blockPos), 0, 1.0F, true, this.player.getPlayer());
-        return stack;
+        return null;
     }
 
     private boolean shouldContinue(Point3d currentCandidate, Block targetBlock, int targetMetadata, EnumFacing facing, Block candidateSupportingBlock, int candidateSupportingMeta, AxisAlignedBB blockBB, EnumFluidLock fluidLock) {
@@ -186,28 +211,14 @@ public class WandWorker {
         return toPlace;
     }
 
-    public ArrayList<Point3d> placeBlocks(ItemStack wandItem, LinkedList<Point3d> blockPosList, Point3d originalBlock, ItemStack sourceItems, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public ArrayList<Point3d> placeBlocks(ItemStack wandItem, LinkedList<Point3d> blockPosList, IBlockState targetBlock, ItemStack sourceItems, EnumFacing side, float hitX, float hitY, float hitZ) {
         ArrayList<Point3d> placedBlocks = new ArrayList<Point3d>();
         for(Point3d blockPos : blockPosList) {
             boolean blockPlaceSuccess;
-            CustomMapping mapping = BetterBuildersWandsMod.instance.mappingManager.getMapping(world.getBlock(originalBlock), world.getMetadata(originalBlock));
-            if(mapping != null) {
-                blockPlaceSuccess = world.setBlock(blockPos, mapping.getPlaceBlock(), mapping.getPlaceMeta());
-            }
-            else {
-                blockPlaceSuccess = world.copyBlock(originalBlock, blockPos);
-            }
+            blockPlaceSuccess = world.setBlock(blockPos, targetBlock);
 
             if(blockPlaceSuccess) {
-                Item itemFromBlock = Item.getItemFromBlock(world.getBlock(originalBlock));
-                world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
-                /*if(sourceItems.getItem() instanceof ItemBlock) {
-                    ItemBlock itemBlock = (ItemBlock) sourceItems.getItem();
-                    itemBlock.placeBlockAt(sourceItems, player.getPlayer(), world.getWorld(), blockPos.x, blockPos.y, blockPos.z, side, hitX, hitY, hitZ, sourceItems.getItemDamage());
-                }
-                else {
-                    world.playPlaceAtBlock(blockPos, world.getBlock(originalBlock));
-                }*/
+                world.playPlaceAtBlock(blockPos, targetBlock.getBlock());
                 placedBlocks.add(blockPos);
                 if (!player.isCreative()) {
                     wand.placeBlock(wandItem, player.getPlayer());
@@ -220,6 +231,7 @@ public class WandWorker {
                 }
             }
         }
+
 
         return placedBlocks;
     }
