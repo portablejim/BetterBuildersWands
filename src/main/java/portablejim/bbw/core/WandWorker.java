@@ -49,8 +49,8 @@ public class WandWorker {
         int meta = world.getMetadata(blockPos);
         String blockString = String.format("%s/%s", Block.blockRegistry.getNameForObject(block), meta);
         if(!BetterBuildersWandsMod.instance.configValues.HARD_BLACKLIST_SET.contains(blockString)) {
-            ItemStack exactItemstack = BlockShim.getPickBlock(block, world, player, blockPos);
-            if (player.countItems(exactItemstack) > 0) {
+            ItemStack exactItemstack = new ItemStack(block, 1, meta);
+            if (Item.getItemFromBlock(block) != null && player.countItems(exactItemstack) > 0) {
                 return exactItemstack;
             }
             return getEquivalentItemStack(blockPos);
