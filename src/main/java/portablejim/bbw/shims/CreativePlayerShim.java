@@ -12,6 +12,7 @@ public class CreativePlayerShim extends BasicPlayerShim implements IPlayerShim {
 
     public CreativePlayerShim(EntityPlayer player) {
         super(player);
+        this.assumedReachDistance = 5F;
     }
 
     @Override

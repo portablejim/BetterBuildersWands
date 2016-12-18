@@ -1,6 +1,7 @@
 package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,9 +21,12 @@ public class BasicPlayerShim implements IPlayerShim {
     private EntityPlayer player;
     private boolean providersEnabled;
 
+    protected float assumedReachDistance;
+
     public BasicPlayerShim(EntityPlayer player) {
         this.player = player;
         this.providersEnabled = areProvidersEnabled();
+        this.assumedReachDistance = 4.5F;
     }
 
     private static Block getBlock(ItemStack stack) {
@@ -154,5 +158,15 @@ public class BasicPlayerShim implements IPlayerShim {
     @Override
     public boolean isCreative() {
         return player.capabilities.isCreativeMode;
+    }
+
+    @Override
+    public double getReachDistance() {
+        if(player instanceof EntityPlayerMP) {
+            return ((EntityPlayerMP)player).interactionManager.getBlockReachDistance();
+        }
+        else {
+            return this.assumedReachDistance;
+        }
     }
 }

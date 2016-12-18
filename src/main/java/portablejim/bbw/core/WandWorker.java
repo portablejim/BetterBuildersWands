@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.FMLLog;
 import net.minecraft.block.Block;
@@ -67,9 +68,9 @@ public class WandWorker {
                 }
             }
 
-            ItemStack exactItemstack = block.getPickBlock(startBlockState, player.getPlayer().rayTrace(5F, 1F), world.getWorld(), blockPos.toBlockPos(), player.getPlayer());
+            ItemStack exactItemstack = block.getPickBlock(startBlockState, ForgeHooks.rayTraceEyes(player.getPlayer(), player.getReachDistance()), world.getWorld(), blockPos.toBlockPos(), player.getPlayer());
             if (player.countItems(exactItemstack) > 0) {
-                if(exactItemstack.getItem() instanceof ItemBlock) {
+                if(exactItemstack != null && exactItemstack.getItem() instanceof ItemBlock) {
                     IBlockState newState = ((ItemBlock) exactItemstack.getItem()).getBlock().getStateFromMeta(exactItemstack.getMetadata());
                     return new ReplacementTriplet(startBlockState, exactItemstack, newState);
                 }
@@ -145,7 +146,7 @@ public class WandWorker {
             Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
             Block candidateSupportingBlock = world.getBlock(supportingPoint);
             int candidateSupportingMeta = world.getMetadata(supportingPoint);
-            AxisAlignedBB blockBB = targetBlock.getStateFromMeta(targetMetadata).getBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z));
+            AxisAlignedBB blockBB = targetBlock.getStateFromMeta(targetMetadata).getBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z)).offset(currentCandidate.x, currentCandidate.y, currentCandidate.z);
             if(shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB, fluidLock)
                     && allCandidates.add(currentCandidate)) {
                 toPlace.add(currentCandidate);
