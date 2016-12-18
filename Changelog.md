@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.9.1
+------
+Fixes:
+* Less crashes with dedicated servers.
+* The wands will not replace blocks where players and other entities are.
+
 0.9.0
 ------
 Changes:

@@ -17,4 +17,6 @@ public interface IPlayerShim {
     ItemStack getHeldWandIfAny();
 
     boolean isCreative();
+
+    double getReachDistance();
 }
