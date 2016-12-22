@@ -52,13 +52,13 @@ public class ConfigValues {
     public Set<String> HARD_BLACKLIST_SET;
     public static final String[] HARD_BLACKLIST_DEFAULT = new String[]{};
     public static final String HARD_BLACKLIST_NAME = "blacklisted_blocks";
-    public static final String HARD_BLACKLIST_DESCRIPTION = "Blocks that won't work at all with the wands";
+    public static final String HARD_BLACKLIST_DESCRIPTION = "Blocks that won't work at all with the wands. E.g. 'minecraft:bedrock/0'";
 
     public String[] SOFT_BLACKLIST;
     public Set<String> SOFT_BLACKLIST_SET;
     public static final String[] SOFT_BLACKLIST_DEFAULT = new String[]{};
     public static final String SOFT_BLACKLIST_NAME = "no_assumption_blocks";
-    public static final String SOFT_BLACKLIST_DESCRIPTION = "Blocks that break assumptions. When the placed block is not what you expect.";
+    public static final String SOFT_BLACKLIST_DESCRIPTION = "Blocks that break assumptions. When the placed block is not what you expect. E.g. 'minecraft:bedrock/0'";
 
     public ConfigValues(File file) {
         configFile = new Configuration(file);
