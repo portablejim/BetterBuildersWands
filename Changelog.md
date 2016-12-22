@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.9.2
+------
+Changes:
+* Config file should have slightly better descriptions for blacklists
+* Default forced_blocks have been expanded to allow placing of dirt by building from grass, coarse dirt or podzol.
+
 0.9.1
 ------
 Fixes:
