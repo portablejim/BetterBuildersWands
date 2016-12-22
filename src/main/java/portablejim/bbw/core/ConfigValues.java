@@ -44,7 +44,7 @@ public class ConfigValues {
     public static final String DIAMOND_WAND_LIMIT_DESCRIPTION = "How many blocks the diamond wand can place at a time. Use -1 for default";
 
     public String OVERRIDES_RECIPES;
-    public static final String OVERRIDES_RECIPES_DEFAULT = "minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0,minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0";
+    public static final String OVERRIDES_RECIPES_DEFAULT = "minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0,minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0,minecraft:grass/0=>1*minecraft:grass/0=>minecraft:grass/0,minecraft:grass/0=>1*minecraft:dirt/0=>minecraft:dirt/0,minecraft:dirt/1=>1*minecraft:dirt/1=>minecraft:dirt/1,minecraft:dirt/1=>1*minecraft:dirt/0=>minecraft:dirt/0,minecraft:dirt/2=>1*minecraft:dirt/2=>minecraft:dirt/2,minecraft:dirt/2=>1*minecraft:dirt/0=>minecraft:dirt/0";
     public static final String OVERRIDES_RECIPES_NAME = "forced_blocks";
     public static final String OVERRIDES_RECIPES_DESCRIPTION = "Specify forced mappings for what to build from certain blocks.\n(what you are looking at)=>(number required)*(item required)=>(block to build)";
 
@@ -52,13 +52,13 @@ public class ConfigValues {
     public Set<String> HARD_BLACKLIST_SET;
     public static final String[] HARD_BLACKLIST_DEFAULT = new String[]{};
     public static final String HARD_BLACKLIST_NAME = "blacklisted_blocks";
-    public static final String HARD_BLACKLIST_DESCRIPTION = "Blocks that won't work at all with the wands";
+    public static final String HARD_BLACKLIST_DESCRIPTION = "Blocks that won't work at all with the wands. E.g. 'minecraft:bedrock/0'";
 
     public String[] SOFT_BLACKLIST;
     public Set<String> SOFT_BLACKLIST_SET;
     public static final String[] SOFT_BLACKLIST_DEFAULT = new String[]{};
     public static final String SOFT_BLACKLIST_NAME = "no_assumption_blocks";
-    public static final String SOFT_BLACKLIST_DESCRIPTION = "Blocks that break assumptions. When the placed block is not what you expect.";
+    public static final String SOFT_BLACKLIST_DESCRIPTION = "Blocks that break assumptions. When the placed block is not what you expect. E.g. 'minecraft:bedrock/0'";
 
     public ConfigValues(File file) {
         configFile = new Configuration(file);
