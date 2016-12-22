@@ -44,7 +44,7 @@ public class ConfigValues {
     public static final String DIAMOND_WAND_LIMIT_DESCRIPTION = "How many blocks the diamond wand can place at a time. Use -1 for default";
 
     public String OVERRIDES_RECIPES;
-    public static final String OVERRIDES_RECIPES_DEFAULT = "minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0,minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0";
+    public static final String OVERRIDES_RECIPES_DEFAULT = "minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0,minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0,minecraft:grass/0=>1*minecraft:grass/0=>minecraft:grass/0,minecraft:grass/0=>1*minecraft:dirt/0=>minecraft:dirt/0,minecraft:dirt/1=>1*minecraft:dirt/1=>minecraft:dirt/1,minecraft:dirt/1=>1*minecraft:dirt/0=>minecraft:dirt/0,minecraft:dirt/2=>1*minecraft:dirt/2=>minecraft:dirt/2,minecraft:dirt/2=>1*minecraft:dirt/0=>minecraft:dirt/0";
     public static final String OVERRIDES_RECIPES_NAME = "forced_blocks";
     public static final String OVERRIDES_RECIPES_DESCRIPTION = "Specify forced mappings for what to build from certain blocks.\n(what you are looking at)=>(number required)*(item required)=>(block to build)";
 
