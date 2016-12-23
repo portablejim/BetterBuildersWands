@@ -75,7 +75,7 @@ public class PacketWandActivate implements IMessage {
                 ItemStack wandItemstack = wand;
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 wandItem.nextFluidMode(wandItemstack, player);
-                player.sendMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.fluidmode." + wandItem.getMode(wand).toString().toLowerCase()));
+                player.sendMessage(new TextComponentTranslation(BetterBuildersWandsMod.LANGID + ".chat.fluidmode." + wandItem.getFluidMode(wand).toString().toLowerCase()));
             }
         }
     }

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.9.3
+------
+Fixes:
+* Fix fluid mode chat message on changing fluid mode.
+
 0.9.2
 ------
 Changes:
