@@ -21,6 +21,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.simple.SimpleLogger;
 import org.apache.logging.log4j.util.PropertiesUtil;
+import portablejim.bbw.containers.ContainerManager;
+import portablejim.bbw.containers.ContainerRegistrar;
 import portablejim.bbw.core.ConfigValues;
 import portablejim.bbw.core.OopsCommand;
 import portablejim.bbw.core.conversion.CustomMappingManager;
@@ -50,6 +52,8 @@ public class BetterBuildersWandsMod {
     public static IProxy proxy;
 
     public ConfigValues configValues;
+
+    public ContainerManager containerManager = new ContainerManager();
 
     public static Logger logger = new SimpleLogger("BetterBuildersWand", Level.ALL, true, false, true, false, "YYYY-MM-DD", null, PropertiesUtil.getProperties(), null);
 
@@ -134,6 +138,8 @@ public class BetterBuildersWandsMod {
         itemUnbreakableWand.addSubMeta(14);
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(13), Arrays.asList(newWand(12), newWand(12))));
         GameRegistry.addRecipe(new ShapelessRecipes(newWand(14), Arrays.asList(newWand(13), newWand(13))));
+
+        ContainerRegistrar.register();
     }
 
     @EventHandler
