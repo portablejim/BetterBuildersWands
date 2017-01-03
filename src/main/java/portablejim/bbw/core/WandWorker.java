@@ -70,7 +70,7 @@ public class WandWorker {
             }
 
             RayTraceResult rayTraceResult = ForgeHooks.rayTraceEyes(player.getPlayer(), player.getReachDistance());
-            if(rayTraceResult != null) {
+            if(rayTraceResult == null) {
                 return null;
             }
             ItemStack exactItemstack = block.getPickBlock(startBlockState, rayTraceResult, world.getWorld(), blockPos.toBlockPos(), player.getPlayer());
