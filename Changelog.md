@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+0.10.0
+------
+Changes:
+* Wands will pull blocks out of compatible bags (1 layer deep only).
+
+Fixes:
+* Fix crashes when looking away from some blocks.
+
+
 0.9.3
 ------
 Fixes:
