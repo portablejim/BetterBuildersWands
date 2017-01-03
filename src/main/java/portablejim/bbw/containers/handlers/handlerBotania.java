@@ -12,7 +12,7 @@ import vazkii.botania.api.item.IBlockProvider;
 public class handlerBotania implements IContainerHandler {
     @Override
     public boolean matches(EntityPlayer player, ItemStack itemStack, ItemStack inventoryStack) {
-        return inventoryStack.stackSize == 1 && inventoryStack.getItem() instanceof IBlockProvider;
+        return inventoryStack.getCount() == 1 && inventoryStack.getItem() instanceof IBlockProvider;
     }
 
     @Override
