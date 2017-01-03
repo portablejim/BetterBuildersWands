@@ -6,13 +6,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import portablejim.bbw.BetterBuildersWandsMod;
+import portablejim.bbw.api.IContainerHandlerSpecial;
 import portablejim.bbw.basics.Point3d;
+import portablejim.bbw.containers.ContainerManager;
 import portablejim.bbw.core.items.IWandItem;
 import portablejim.bbw.basics.Point3d;
 import vazkii.botania.api.item.IBlockProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Wrap a player to provide basic functions.
@@ -29,11 +33,11 @@ public class BasicPlayerShim implements IPlayerShim {
         this.assumedReachDistance = 4.5F;
     }
 
-    private static Block getBlock(ItemStack stack) {
+    public static Block getBlock(ItemStack stack) {
         return Block.getBlockFromItem(stack.getItem());
     }
 
-    private static int getBlockMeta(ItemStack stack) {
+    public static int getBlockMeta(ItemStack stack) {
         return stack.getHasSubtypes() ? stack.getItemDamage() : 0;
     }
 
@@ -53,6 +57,9 @@ public class BasicPlayerShim implements IPlayerShim {
             return 0;
         }
 
+        ContainerManager containerManager = BetterBuildersWandsMod.instance.containerManager;
+        Map<IContainerHandlerSpecial, Object> containerState = containerManager.initCount(player);
+
         Block block = getBlock(itemStack);
         int meta = getBlockMeta(itemStack);
 
@@ -60,15 +67,12 @@ public class BasicPlayerShim implements IPlayerShim {
             if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
                 total += Math.max(0, inventoryStack.getCount());
             }
-            else if(providersEnabled && inventoryStack != null && inventoryStack.getItem() instanceof IBlockProvider) {
-                IBlockProvider prov = (IBlockProvider) inventoryStack.getItem();
-                int provCount = prov.getBlockCount(player, itemStack, inventoryStack, block, meta);
-                if(provCount == -1)
-                    return Integer.MAX_VALUE;
-                total += provCount;
+            else {
+                total += containerManager.countItems(containerState, player, itemStack, inventoryStack);
             }
         }
 
+        total += containerManager.finalCount(containerState);
         return itemStack.getCount() > 0 ? total / itemStack.getCount() : 0;
     }
 
@@ -77,6 +81,9 @@ public class BasicPlayerShim implements IPlayerShim {
         if(itemStack == null || player.inventory == null || player.inventory.mainInventory == null) {
             return false;
         }
+
+        ContainerManager containerManager = BetterBuildersWandsMod.instance.containerManager;
+        Map<IContainerHandlerSpecial, Object> containerState = containerManager.initUse(player);
 
         // Reverse direction to leave hotbar to last.
         int toUse = itemStack.getCount();
@@ -96,23 +103,13 @@ public class BasicPlayerShim implements IPlayerShim {
                     player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
                 }
                 player.inventoryContainer.detectAndSendChanges();
-                if(toUse <= 0) {
-                    return true;
-                }
             }
-            else if(providersEnabled && inventoryStack != null && inventoryStack.getItem() instanceof IBlockProvider) {
-                providers.add(inventoryStack);
+            else {
+                toUse = containerManager.useItems(containerState, player, itemStack, inventoryStack, toUse);
             }
-        }
-
-        // IBlockProvider does not support removing more than one item in an atomic operation.
-        if (toUse == 1) {
-            Block block = getBlock(itemStack);
-            int meta = getBlockMeta(itemStack);
-            for(ItemStack provStack : providers) {
-                IBlockProvider prov = (IBlockProvider) provStack.getItem();
-                if(prov.provideBlock(player, itemStack, provStack, block, meta, true))
-                    return true;
+            toUse = containerManager.finalUse(containerState, toUse);
+            if(toUse <= 0) {
+                return true;
             }
         }
 
