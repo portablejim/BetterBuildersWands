@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+0.10.2
+------
+Fixes:
+* Configure the config later, so it should work better (especially with mods sorting after BetterBuildersWands).
+
+
 0.10.1
 ------
 Fixes:
