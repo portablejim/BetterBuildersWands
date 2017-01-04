@@ -9,7 +9,7 @@ import portablejim.bbw.api.IContainerHandler;
 /**
  * Created by james on 28/12/16.
  */
-public class handlerCapability implements IContainerHandler {
+public class HandlerCapability implements IContainerHandler {
     @Override
     public boolean matches(EntityPlayer player, ItemStack itemStack, ItemStack inventoryStack) {
         return inventoryStack != null && inventoryStack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
