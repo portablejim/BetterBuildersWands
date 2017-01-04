@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+0.10.1
+------
+Fixes:
+* Fixes (at least 1) NullPointerException crash.
+
+
 0.10.0
 ------
 Changes:
