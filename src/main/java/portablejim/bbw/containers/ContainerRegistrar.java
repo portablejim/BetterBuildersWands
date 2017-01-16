@@ -11,7 +11,7 @@ import portablejim.bbw.containers.handlers.HandlerCapability;
 public class ContainerRegistrar {
     public static void register() {
         BetterBuildersWandsMod.instance.containerManager.register(new HandlerCapability());
-        if(Loader.isModLoaded("Botania") || Loader.isModLoaded("botania")) {
+        if(false || Loader.isModLoaded("Botania") || Loader.isModLoaded("botania")) {
             BetterBuildersWandsMod.instance.containerManager.register(new HandlerBotania());
         }
     }
