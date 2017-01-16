@@ -97,7 +97,8 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
                         bbwCompound.setShort("fluidmask", (short) this.getDefaultFluidMode().mask);
                     }
                     bbwCompound.setIntArray("lastPlaced", placedIntArray);
-                    bbwCompound.setString("lastBlock", Item.REGISTRY.getNameForObject(sourceItems.getItem()).toString());
+                    bbwCompound.setString("lastBlock", sourceTriplet.target.toString());
+                    bbwCompound.setString("lastItemBlock", Item.REGISTRY.getNameForObject(sourceItems.getItem()).toString());
                     bbwCompound.setInteger("lastBlockMeta", sourceItems.getItemDamage());
                     bbwCompound.setInteger("lastPerBlock", sourceItems.getCount());
                     itemstack.setTagInfo("bbw", bbwCompound);
