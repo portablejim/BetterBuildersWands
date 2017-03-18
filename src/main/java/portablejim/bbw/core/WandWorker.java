@@ -148,72 +148,78 @@ public class WandWorker {
         while(candidates.size() > 0 && toPlace.size() < maxBlocks) {
             Point3d currentCandidate = candidates.removeFirst();
 
-            Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
-            Block candidateSupportingBlock = world.getBlock(supportingPoint);
-            int candidateSupportingMeta = world.getMetadata(supportingPoint);
-            AxisAlignedBB blockBB = targetBlock.getStateFromMeta(targetMetadata).getBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z)).offset(currentCandidate.x, currentCandidate.y, currentCandidate.z);
-            if(shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB, fluidLock)
-                    && allCandidates.add(currentCandidate)) {
-                toPlace.add(currentCandidate);
+            try {
+                Point3d supportingPoint = currentCandidate.move(placeDirection.getOpposite());
+                Block candidateSupportingBlock = world.getBlock(supportingPoint);
+                int candidateSupportingMeta = world.getMetadata(supportingPoint);
+                AxisAlignedBB blockBB = targetBlock.getStateFromMeta(targetMetadata).getBoundingBox(world.getWorld(), new BlockPos(currentCandidate.x, currentCandidate.y, currentCandidate.z)).offset(currentCandidate.x, currentCandidate.y, currentCandidate.z);
+                if (shouldContinue(currentCandidate, targetBlock, targetMetadata, placeDirection, candidateSupportingBlock, candidateSupportingMeta, blockBB, fluidLock)
+                        && allCandidates.add(currentCandidate)) {
+                    toPlace.add(currentCandidate);
 
-                switch (placeDirection) {
-                    case DOWN:
-                    case UP:
-                        if((faceMaskInt & EnumLock.UP_DOWN_MASK) > 0) {
-                            if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.NORTH));
-                            if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.EAST));
-                            if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.SOUTH));
-                            if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.WEST));
-                            if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 && (directionMaskInt & EnumLock.EAST_WEST_MASK) > 0) {
-                                candidates.add(currentCandidate.move(EnumFacing.NORTH).move(EnumFacing.EAST));
-                                candidates.add(currentCandidate.move(EnumFacing.NORTH).move(EnumFacing.WEST));
-                                candidates.add(currentCandidate.move(EnumFacing.SOUTH).move(EnumFacing.EAST));
-                                candidates.add(currentCandidate.move(EnumFacing.SOUTH).move(EnumFacing.WEST));
+                    switch (placeDirection) {
+                        case DOWN:
+                        case UP:
+                            if ((faceMaskInt & EnumLock.UP_DOWN_MASK) > 0) {
+                                if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.NORTH));
+                                if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.EAST));
+                                if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.SOUTH));
+                                if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.WEST));
+                                if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0 && (directionMaskInt & EnumLock.EAST_WEST_MASK) > 0) {
+                                    candidates.add(currentCandidate.move(EnumFacing.NORTH).move(EnumFacing.EAST));
+                                    candidates.add(currentCandidate.move(EnumFacing.NORTH).move(EnumFacing.WEST));
+                                    candidates.add(currentCandidate.move(EnumFacing.SOUTH).move(EnumFacing.EAST));
+                                    candidates.add(currentCandidate.move(EnumFacing.SOUTH).move(EnumFacing.WEST));
+                                }
                             }
-                        }
-                        break;
-                    case NORTH:
-                    case SOUTH:
-                        if((faceMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0) {
-                            if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.UP));
-                            if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.EAST));
-                            if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.DOWN));
-                            if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.WEST));
-                            if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 && (directionMaskInt & EnumLock.EAST_WEST_MASK) > 0) {
-                                candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.EAST));
-                                candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.WEST));
-                                candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.EAST));
-                                candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.WEST));
+                            break;
+                        case NORTH:
+                        case SOUTH:
+                            if ((faceMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0) {
+                                if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.UP));
+                                if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.EAST));
+                                if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.DOWN));
+                                if ((directionMaskInt & EnumLock.EAST_WEST_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.WEST));
+                                if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 && (directionMaskInt & EnumLock.EAST_WEST_MASK) > 0) {
+                                    candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.EAST));
+                                    candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.WEST));
+                                    candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.EAST));
+                                    candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.WEST));
+                                }
                             }
-                        }
-                        break;
-                    case WEST:
-                    case EAST:
-                        if((faceMaskInt & EnumLock.EAST_WEST_MASK) > 0) {
-                            if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.UP));
-                            if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.NORTH));
-                            if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.DOWN));
-                            if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
-                                candidates.add(currentCandidate.move(EnumFacing.SOUTH));
-                            if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 && (directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0) {
-                                candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.NORTH));
-                                candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.SOUTH));
-                                candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.NORTH));
-                                candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.SOUTH));
+                            break;
+                        case WEST:
+                        case EAST:
+                            if ((faceMaskInt & EnumLock.EAST_WEST_MASK) > 0) {
+                                if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.UP));
+                                if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.NORTH));
+                                if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.DOWN));
+                                if ((directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0)
+                                    candidates.add(currentCandidate.move(EnumFacing.SOUTH));
+                                if ((directionMaskInt & EnumLock.UP_DOWN_MASK) > 0 && (directionMaskInt & EnumLock.NORTH_SOUTH_MASK) > 0) {
+                                    candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.NORTH));
+                                    candidates.add(currentCandidate.move(EnumFacing.UP).move(EnumFacing.SOUTH));
+                                    candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.NORTH));
+                                    candidates.add(currentCandidate.move(EnumFacing.DOWN).move(EnumFacing.SOUTH));
+                                }
                             }
-                        }
+                    }
                 }
+            }
+            catch(Exception e) {
+                // Can't do anything, could be anything.
+                // Skip if anything goes wrong.
             }
         }
         return toPlace;
