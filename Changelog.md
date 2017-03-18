@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+0.11.0
+------
+Changes:
+* Special Botania support has been disabled, as it is broken and leads to a dupe bug.
+
+Fixes:
+* `/wandOops` should be less genererous. Whilst charity is usually good, people don't usually like excessive charity. 
+
+
 0.10.2
 ------
 Fixes:

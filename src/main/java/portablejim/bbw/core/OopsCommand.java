@@ -1,5 +1,6 @@
 package portablejim.bbw.core;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.command.CommandException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -46,18 +47,25 @@ public class OopsCommand extends CommandBase {
                 if(tagComponent != null && tagComponent.hasKey("bbw", Constants.NBT.TAG_COMPOUND) && tagComponent.getCompoundTag("bbw").hasKey("lastPlaced", Constants.NBT.TAG_INT_ARRAY)) {
                     bbwCompound = tagComponent.getCompoundTag("bbw");
                     ArrayList<Point3d> pointList = unpackNbt(bbwCompound.getIntArray("lastPlaced"));
+                    int outputMultiplier = 0;
                     for (Point3d point : pointList) {
-                        player.getEntityWorld().setBlockToAir(new BlockPos(point.x, point.y, point.z));
+                        IBlockState pointState = player.getEntityWorld().getBlockState(new BlockPos(point.x, point.y, point.z));
+                        String pointStateString = pointState.toString();
+                        if(pointStateString != null && bbwCompound.hasKey("lastBlock")
+                                && pointStateString.equals(bbwCompound.getString("lastBlock"))) {
+                            player.getEntityWorld().setBlockToAir(new BlockPos(point.x, point.y, point.z));
+                            outputMultiplier++;
+                        }
                     }
-                    if(bbwCompound.hasKey("lastBlock", Constants.NBT.TAG_STRING) && bbwCompound.hasKey("lastPerBlock", Constants.NBT.TAG_INT) && bbwCompound.hasKey("lastBlockMeta")) {
-                        String blockName= bbwCompound.getString("lastBlock");
+                    if(bbwCompound.hasKey("lastItemBlock", Constants.NBT.TAG_STRING) && bbwCompound.hasKey("lastPerBlock", Constants.NBT.TAG_INT) && bbwCompound.hasKey("lastBlockMeta")) {
+                        String itemBlockName = bbwCompound.getString("lastItemBlock");
                         int meta = bbwCompound.getInteger("lastBlockMeta");
-                        ItemStack itemStack = GameRegistry.makeItemStack(blockName, meta, 1, "");
+                        ItemStack itemStack = GameRegistry.makeItemStack(itemBlockName, meta, 1, "");
                         if(!itemStack.getHasSubtypes()) {
                             // If no subtypes, diffirent meta will mean an invalid block, so remove custom meta.
-                            itemStack = GameRegistry.makeItemStack(blockName, 0, 1, "");
+                            itemStack = GameRegistry.makeItemStack(itemBlockName, 0, 1, "");
                         }
-                        int count = bbwCompound.getInteger("lastPerBlock") * pointList.size();
+                        int count = bbwCompound.getInteger("lastPerBlock") * outputMultiplier;
                         int stackSize = itemStack.getMaxStackSize();
                         int fullStacks = count / stackSize;
                         if (!player.isCreative()) {
@@ -73,6 +81,7 @@ public class OopsCommand extends CommandBase {
 
                         bbwCompound.removeTag("lastPlaced");
                         bbwCompound.removeTag("lastBlock");
+                        bbwCompound.removeTag("lastItemBlock");
                         bbwCompound.removeTag("lastBlockMeta");
                         bbwCompound.removeTag("lastPerBlock");
                     }
