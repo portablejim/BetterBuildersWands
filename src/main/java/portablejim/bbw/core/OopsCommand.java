@@ -60,14 +60,16 @@ public class OopsCommand extends CommandBase {
                         int count = bbwCompound.getInteger("lastPerBlock") * pointList.size();
                         int stackSize = itemStack.getMaxStackSize();
                         int fullStacks = count / stackSize;
-                        for(int i = 0; i < fullStacks; i++) {
-                            ItemStack newStack = itemStack.copy();
-                            newStack.stackSize = stackSize;
-                            player.worldObj.spawnEntityInWorld(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack));
+                        if (!player.isCreative()) {
+                            for (int i = 0; i < fullStacks; i++) {
+                                ItemStack newStack = itemStack.copy();
+                                newStack.stackSize = stackSize;
+                                player.worldObj.spawnEntityInWorld(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, newStack));
+                            }
+                            ItemStack finalStack = itemStack.copy();
+                            finalStack.stackSize = count % stackSize;
+                            player.worldObj.spawnEntityInWorld(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, finalStack));
                         }
-                        ItemStack finalStack = itemStack.copy();
-                        finalStack.stackSize = count % stackSize;
-                        player.worldObj.spawnEntityInWorld(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, finalStack));
 
                         bbwCompound.removeTag("lastPlaced");
                         bbwCompound.removeTag("lastBlock");
