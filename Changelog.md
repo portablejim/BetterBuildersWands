@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.11.1
+------
+Fixes:
+* `/wandOops` is still too generous to creative players. Changed to be less generous.
+* Changed so less blocks hate your game if you look at them whilst holding a wand.
+
 
 0.11.0
 ------
