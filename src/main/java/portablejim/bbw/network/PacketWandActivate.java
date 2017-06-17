@@ -61,7 +61,7 @@ public class PacketWandActivate implements IMessage {
     public static class Handler extends GenericHandler<PacketWandActivate> {
         @Override
         public void processMessage(PacketWandActivate packetWandActivate, MessageContext context) {
-            EntityPlayerMP player = context.getServerHandler().playerEntity;
+            EntityPlayerMP player = context.getServerHandler().player;
             UUID playerName = player.getUniqueID();
 
            ItemStack wand = BasicPlayerShim.getHeldWandIfAny(player);
