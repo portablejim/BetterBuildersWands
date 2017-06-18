@@ -138,7 +138,7 @@ public class BetterBuildersWandsMod {
         }
         if(configValues.ENABLE_DIAMOND_WAND) {
             ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond");
-            recipe.setRegistryName("betterbuilderswands:wandiron");
+            recipe.setRegistryName("betterbuilderswands:wanddiamond");
             ForgeRegistries.RECIPES.register(recipe);
         }
 
