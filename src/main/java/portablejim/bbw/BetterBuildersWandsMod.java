@@ -2,6 +2,8 @@ package portablejim.bbw;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,6 +42,8 @@ import portablejim.bbw.core.wands.RestrictedWand;
 import portablejim.bbw.core.wands.UnbreakingWand;
 import portablejim.bbw.network.PacketWandActivate;
 import portablejim.bbw.proxy.IProxy;
+
+import java.util.function.Function;
 
 /**
  * Author: Portablejim
@@ -97,7 +101,6 @@ public class BetterBuildersWandsMod {
 
         MinecraftForge.EVENT_BUS.register(this);
 
-
         blockCache = new StackedBlockManager();
         mappingManager = new CustomMappingManager();
 
@@ -113,6 +116,59 @@ public class BetterBuildersWandsMod {
         event.getRegistry().register(itemUnbreakableWand);
     }
 
+    private IRecipe wandRecipe(String variant, Item output, String material) {
+        return wandRecipe(variant, new ItemStack(output), material);
+    }
+
+    private IRecipe wandRecipe(String variant, ItemStack output, String material) {
+        ResourceLocation recipeName = new ResourceLocation(MODID, "recipewand" + variant);
+        ShapedOreRecipe recipe = new ShapedOreRecipe(recipeName, output, "  H", " S ", "S  ", 'S', "stickWood", 'H', material);
+        recipe.setRegistryName(recipeName);
+        return recipe;
+    }
+
+    private IRecipe wandRecipe(String variant, ItemStack output, Item material) {
+        ResourceLocation recipeName = new ResourceLocation(MODID, "recipewand" + variant);
+        ShapedOreRecipe recipe = new ShapedOreRecipe(recipeName, output, "  H", " S ", "S  ", 'S', "stickWood", 'H', material);
+        recipe.setRegistryName(recipeName);
+        return recipe;
+    }
+
+    @SubscribeEvent
+    public void recipes(RegistryEvent.Register<IRecipe> event) {
+        if(configValues.ENABLE_STONE_WAND) event.getRegistry().register(wandRecipe("stone", itemStoneWand, "cobblestone"));
+        if(configValues.ENABLE_IRON_WAND) event.getRegistry().register(wandRecipe("iron", itemIronWand, "ingotIron"));
+        if(configValues.ENABLE_DIAMOND_WAND) event.getRegistry().register(wandRecipe("diamond", itemDiamondWand, "gemDiamond"));
+
+        Function<Integer,Boolean> wandRecipe = damage -> {
+            GameRegistry.addShapelessRecipe(
+                    new ResourceLocation(MODID, "wandunbreakable" + damage),
+                    new ResourceLocation(MODID, "wandunbreakable" + damage),
+                    newWand(damage),
+                    Ingredient.fromStacks(newWand(damage - 1)),
+                    Ingredient.fromStacks(newWand(damage - 1))
+            );
+            return true;
+        };
+
+        boolean EXTRA_UTILS_RECIPES = !configValues.NO_EXTRA_UTILS_RECIPES;
+        if(Loader.isModLoaded("ExtraUtilities") && EXTRA_UTILS_RECIPES) {
+            Item buildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "builderswand"));
+            Item creativebuildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "creativebuilderswand"));
+
+            event.getRegistry().register(wandRecipe("unbreakabletiny", newWand(4), buildersWand));
+            event.getRegistry().register(wandRecipe("unbreakable", newWand(12), creativebuildersWand));
+            wandRecipe.apply(5);
+            wandRecipe.apply(6);
+        }
+        else {
+            event.getRegistry().register(wandRecipe("unbreakable", newWand(12), "netherStar"));
+        }
+        wandRecipe.apply(13);
+        wandRecipe.apply(14);
+    }
+
+    @SubscribeEvent
     public void models(ModelRegistryEvent event) {
         proxy.RegisterModels();
     }
@@ -130,48 +186,15 @@ public class BetterBuildersWandsMod {
     public void init(FMLInitializationEvent event) {
         proxy.RegisterEvents();
 
-        //if(configValues.ENABLE_STONE_WAND) GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone"));
-        //if(configValues.ENABLE_IRON_WAND) GameRegistry.addRecipe(new ShapedOreRecipe(BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron"));
-        //if(configValues.ENABLE_DIAMOND_WAND) ForgeRegistries.RECIPES.register(new ShapedOreRecipe(new ResourceLocation("betterbuilderswands:wandDiamond"), BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond", ' ', Items.AIR));
-        if(configValues.ENABLE_STONE_WAND) {
-            ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone");
-            recipe.setRegistryName("betterbuilderswands:recipewandstone");
-            ForgeRegistries.RECIPES.register(recipe);
-        }
-        if(configValues.ENABLE_IRON_WAND) {
-            ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron");
-            recipe.setRegistryName("betterbuilderswands:recipewandiron");
-            ForgeRegistries.RECIPES.register(recipe);
-        }
-        if(configValues.ENABLE_DIAMOND_WAND) {
-            ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond");
-            recipe.setRegistryName("betterbuilderswands:recipewanddiamond");
-            ForgeRegistries.RECIPES.register(recipe);
-        }
-
         boolean EXTRA_UTILS_RECIPES = !configValues.NO_EXTRA_UTILS_RECIPES;
         if(Loader.isModLoaded("ExtraUtilities") && EXTRA_UTILS_RECIPES) {
-            Item buildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "builderswand"));
-            Item creativebuildersWand = Item.REGISTRY.getObject(new ResourceLocation("ExtraUtilities", "creativebuilderswand"));
-            //GameRegistry.addRecipe(new ShapedOreRecipe(newWand(4), "  H", " S ", "S  ", 'S', "stickWood", 'H', buildersWand));
-            //GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', creativebuildersWand));
-            //GameRegistry.addRecipe(new ShapelessRecipes(newWand(5), Arrays.asList(newWand(4), newWand(4))));
-            //GameRegistry.addRecipe(new ShapelessRecipes(newWand(6), Arrays.asList(newWand(5), newWand(5))));
             itemUnbreakableWand.addSubMeta(4);
             itemUnbreakableWand.addSubMeta(5);
             itemUnbreakableWand.addSubMeta(6);
         }
-        else {
-            //GameRegistry.addRecipe(new ShapedOreRecipe(newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', "netherStar"));
-            ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), newWand(12), "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond");
-            recipe.setRegistryName("betterbuilderswands:wandunbreakable");
-            ForgeRegistries.RECIPES.register(recipe);
-        }
         itemUnbreakableWand.addSubMeta(12);
         itemUnbreakableWand.addSubMeta(13);
         itemUnbreakableWand.addSubMeta(14);
-        //GameRegistry.addRecipe(new ShapelessRecipes(newWand(13), Arrays.asList(newWand(12), newWand(12))));
-        //GameRegistry.addRecipe(new ShapelessRecipes(newWand(14), Arrays.asList(newWand(13), newWand(13))));
 
         ContainerRegistrar.register();
     }
