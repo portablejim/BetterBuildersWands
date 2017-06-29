@@ -1,6 +1,6 @@
 {
     "parent": "item/handheld",
     "textures": {
-        "layer0": "betterbuilderswands:items/wandIron"
+        "layer0": "betterbuilderswands:items/wandiron"
     }
 }

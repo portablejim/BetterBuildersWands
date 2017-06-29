@@ -39,14 +39,14 @@ public class ClientProxy extends CommonProxy {
             }
         });*/
 
-        ModelLoader.setCustomModelResourceLocation(BetterBuildersWandsMod.itemStoneWand, 0, new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandStone", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BetterBuildersWandsMod.itemIronWand, 0, new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandIron", "inventory"));
-        ModelLoader.setCustomModelResourceLocation(BetterBuildersWandsMod.itemDiamondWand, 0, new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandDiamond", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BetterBuildersWandsMod.itemStoneWand, 0, new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandstone", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BetterBuildersWandsMod.itemIronWand, 0, new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandiron", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(BetterBuildersWandsMod.itemDiamondWand, 0, new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wanddiamond", "inventory"));
         ModelLoader.setCustomMeshDefinition(BetterBuildersWandsMod.itemUnbreakableWand, new ItemMeshDefinition(){
 
             @Override
             public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandUnbreakable", "inventory");
+                return new ModelResourceLocation(BetterBuildersWandsMod.MODID + ":wandunbreakable", "inventory");
             }
         });
     }

@@ -1,13 +1,13 @@
 package portablejim.bbw;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -16,10 +16,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -40,8 +40,6 @@ import portablejim.bbw.core.wands.RestrictedWand;
 import portablejim.bbw.core.wands.UnbreakingWand;
 import portablejim.bbw.network.PacketWandActivate;
 import portablejim.bbw.proxy.IProxy;
-
-import java.util.Arrays;
 
 /**
  * Author: Portablejim
@@ -96,18 +94,27 @@ public class BetterBuildersWandsMod {
         itemIronWand.setRegistryName("wandIron");
         itemDiamondWand.setRegistryName("wandDiamond");
         itemUnbreakableWand.setRegistryName("wandUnbreakable");
-        GameRegistry.register(itemStoneWand);
-        GameRegistry.register(itemIronWand);
-        GameRegistry.register(itemDiamondWand);
-        GameRegistry.register(itemUnbreakableWand);
 
-        proxy.RegisterModels();
+        MinecraftForge.EVENT_BUS.register(this);
+
 
         blockCache = new StackedBlockManager();
         mappingManager = new CustomMappingManager();
 
         /*mappingManager.setMapping(new CustomMapping(Blocks.lapis_ore, 0, new ItemStack(Blocks.lapis_ore, 1, 4), Blocks.lapis_ore, 0));
         mappingManager.setMapping(new CustomMapping(Blocks.lit_redstone_ore, 0, new ItemStack(Blocks.redstone_ore, 1, 0), Blocks.lit_redstone_ore, 0));*/
+    }
+
+    @SubscribeEvent
+    public void registration(RegistryEvent.Register<Item> event) {
+        event.getRegistry().register(itemStoneWand);
+        event.getRegistry().register(itemIronWand);
+        event.getRegistry().register(itemDiamondWand);
+        event.getRegistry().register(itemUnbreakableWand);
+    }
+
+    public void models(ModelRegistryEvent event) {
+        proxy.RegisterModels();
     }
 
     @EventHandler
@@ -128,17 +135,17 @@ public class BetterBuildersWandsMod {
         //if(configValues.ENABLE_DIAMOND_WAND) ForgeRegistries.RECIPES.register(new ShapedOreRecipe(new ResourceLocation("betterbuilderswands:wandDiamond"), BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond", ' ', Items.AIR));
         if(configValues.ENABLE_STONE_WAND) {
             ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemStoneWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "cobblestone");
-            recipe.setRegistryName("betterbuilderswands:wandstone");
+            recipe.setRegistryName("betterbuilderswands:recipewandstone");
             ForgeRegistries.RECIPES.register(recipe);
         }
         if(configValues.ENABLE_IRON_WAND) {
             ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemIronWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "ingotIron");
-            recipe.setRegistryName("betterbuilderswands:wandiron");
+            recipe.setRegistryName("betterbuilderswands:recipewandiron");
             ForgeRegistries.RECIPES.register(recipe);
         }
         if(configValues.ENABLE_DIAMOND_WAND) {
             ShapedOreRecipe recipe = new ShapedOreRecipe(new ResourceLocation(""), BetterBuildersWandsMod.itemDiamondWand, "  H", " S ", "S  ", 'S', "stickWood", 'H', "gemDiamond");
-            recipe.setRegistryName("betterbuilderswands:wanddiamond");
+            recipe.setRegistryName("betterbuilderswands:recipewanddiamond");
             ForgeRegistries.RECIPES.register(recipe);
         }
 
