@@ -9,7 +9,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -50,7 +49,7 @@ public class BlockEvents {
                 WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
                 Point3d clickedPos = new Point3d(event.getTarget().getBlockPos().getX(), event.getTarget().getBlockPos().getY(), event.getTarget().getBlockPos().getZ());
-                ReplacementTriplet triplet = worker.getProperItemStack(worldShim, playerShim, clickedPos);
+                ReplacementTriplet triplet = worker.getProperItemStack(worldShim, playerShim, clickedPos, (float)event.getTarget().hitVec.x, (float)event.getTarget().hitVec.x, (float)event.getTarget().hitVec.z);
 
                 if (triplet != null && triplet.items != null && triplet.items.getItem() instanceof ItemBlock) {
                     ItemStack sourceItems = triplet.items;
