@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
@@ -29,6 +30,7 @@ import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.basics.ReplacementTriplet;
 import portablejim.bbw.core.conversion.CustomMapping;
+import portablejim.bbw.core.items.ItemBasicWand;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
@@ -241,10 +243,13 @@ public class WandWorker {
 
     public ArrayList<Point3d> placeBlocks(ItemStack wandItem, LinkedList<Point3d> blockPosList, IBlockState targetBlock, ItemStack sourceItems, EnumFacing side, float hitX, float hitY, float hitZ) {
         ArrayList<Point3d> placedBlocks = new ArrayList<Point3d>();
+        EnumHand hand = player.getPlayer().getHeldItemMainhand().getItem() instanceof ItemBasicWand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
         for(Point3d blockPos : blockPosList) {
-            boolean blockPlaceSuccessPre = false, blockPlaceSuccess = false;
-            blockPlaceSuccessPre = EnumActionResult.SUCCESS == this.onPlaceItemIntoWorld(sourceItems.copy(), player.getPlayer(), world.getWorld(), blockPos.toBlockPos(), side, hitX, hitY, hitZ, EnumHand.MAIN_HAND);
-            if(blockPlaceSuccessPre) {
+            boolean blockPlaceSuccess = false;
+            BlockSnapshot snapshot = new BlockSnapshot(world.getWorld(), blockPos.toBlockPos(), targetBlock);
+            BlockEvent.PlaceEvent placeEvent = new BlockEvent.PlaceEvent(snapshot, targetBlock, player.getPlayer(), hand);
+            MinecraftForge.EVENT_BUS.post(placeEvent);
+            if(!placeEvent.isCanceled()) {
                 blockPlaceSuccess = world.setBlock(blockPos, targetBlock);
             }
 
@@ -263,98 +268,6 @@ public class WandWorker {
             }
         }
 
-
         return placedBlocks;
-    }
-
-    public static EnumActionResult onPlaceItemIntoWorld(@Nonnull ItemStack itemstack, @Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side, float hitX, float hitY, float hitZ, @Nonnull EnumHand hand)
-    {
-        // handle all placement events here
-        int meta = itemstack.getItemDamage();
-        int size = itemstack.getCount();
-        NBTTagCompound nbt = null;
-        if (itemstack.getTagCompound() != null)
-        {
-            nbt = itemstack.getTagCompound().copy();
-        }
-
-        if (!(itemstack.getItem() instanceof ItemBucket)) // if not bucket
-        {
-            world.captureBlockSnapshots = true;
-        }
-
-        EnumActionResult ret = EnumActionResult.SUCCESS;
-        world.captureBlockSnapshots = false;
-
-        if (ret == EnumActionResult.SUCCESS)
-        {
-            // save new item data
-            int newMeta = itemstack.getItemDamage();
-            int newSize = itemstack.getCount();
-            NBTTagCompound newNBT = null;
-            if (itemstack.getTagCompound() != null)
-            {
-                newNBT = itemstack.getTagCompound().copy();
-            }
-            BlockEvent.PlaceEvent placeEvent = null;
-            @SuppressWarnings("unchecked")
-            List<BlockSnapshot> blockSnapshots = (List<BlockSnapshot>)world.capturedBlockSnapshots.clone();
-            world.capturedBlockSnapshots.clear();
-
-            // make sure to set pre-placement item data for event
-            itemstack.setItemDamage(meta);
-            itemstack.setCount(size);
-            if (nbt != null)
-            {
-                itemstack.setTagCompound(nbt);
-            }
-            if (blockSnapshots.size() > 1)
-            {
-                placeEvent = ForgeEventFactory.onPlayerMultiBlockPlace(player, blockSnapshots, side, hand);
-            }
-            else if (blockSnapshots.size() == 1)
-            {
-                placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshots.get(0), side, hand);
-            }
-
-            if (placeEvent != null && placeEvent.isCanceled())
-            {
-                ret = EnumActionResult.FAIL; // cancel placement
-                // revert back all captured blocks
-                for (BlockSnapshot blocksnapshot : Lists.reverse(blockSnapshots))
-                {
-                    world.restoringBlockSnapshots = true;
-                    blocksnapshot.restore(true, false);
-                    world.restoringBlockSnapshots = false;
-                }
-            }
-            else
-            {
-                // Change the stack to its new content
-                itemstack.setItemDamage(newMeta);
-                itemstack.setCount(newSize);
-                if (nbt != null)
-                {
-                    itemstack.setTagCompound(newNBT);
-                }
-
-                for (BlockSnapshot snap : blockSnapshots)
-                {
-                    int updateFlag = snap.getFlag();
-                    IBlockState oldBlock = snap.getReplacedBlock();
-                    IBlockState newBlock = world.getBlockState(snap.getPos());
-                    if (!newBlock.getBlock().hasTileEntity(newBlock)) // Containers get placed automatically
-                    {
-                        newBlock.getBlock().onBlockAdded(world, snap.getPos(), newBlock);
-                    }
-
-                    world.markAndNotifyBlock(snap.getPos(), null, oldBlock, newBlock, updateFlag);
-                }
-                player.addStat(StatList.getObjectUseStats(itemstack.getItem()));
-            }
-        }
-        world.capturedBlockSnapshots.clear();
-
-        return ret;
     }
 }
