@@ -1,26 +1,30 @@
 package portablejim.bbw.core;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
 import portablejim.bbw.BetterBuildersWandsMod;
 import portablejim.bbw.basics.EnumFluidLock;
-import portablejim.bbw.basics.ReplacementTriplet;
-import portablejim.bbw.core.conversion.CustomMapping;
-import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
 import portablejim.bbw.basics.Point3d;
+import portablejim.bbw.basics.ReplacementTriplet;
+import portablejim.bbw.core.conversion.CustomMapping;
+import portablejim.bbw.core.items.ItemBasicWand;
+import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.shims.IPlayerShim;
 import portablejim.bbw.shims.IWorldShim;
 
@@ -37,7 +41,7 @@ public class WandWorker {
     private final IPlayerShim player;
     private final IWorldShim world;
 
-    HashSet<Point3d> allCandidates = new HashSet<Point3d>();
+    private HashSet<Point3d> allCandidates = new HashSet<Point3d>();
 
     public WandWorker(IWand wand, IPlayerShim player, IWorldShim world) {
 
@@ -46,7 +50,7 @@ public class WandWorker {
         this.world = world;
     }
 
-    public ReplacementTriplet getProperItemStack(IWorldShim world, IPlayerShim player, Point3d blockPos) {
+    public ReplacementTriplet getProperItemStack(IWorldShim world, IPlayerShim player, Point3d blockPos, float hitX, float hitY, float hitZ) {
         Block block = world.getBlock(blockPos);
         IBlockState startBlockState = world.getWorld().getBlockState(blockPos.toBlockPos());
         int meta = world.getMetadata(blockPos);
@@ -64,7 +68,7 @@ public class WandWorker {
             if(startBlockState.getBlock() instanceof BlockSlab) {
                 Item itemDropped = startBlockState.getBlock().getItemDropped(startBlockState, world.rand(), 0);
                 ItemStack itemStackDropped = new ItemStack(itemDropped, startBlockState.getBlock().quantityDropped(world.rand()), startBlockState.getBlock().damageDropped(startBlockState));
-                if(itemDropped != null && player.countItems(itemStackDropped) > 0) {
+                if(player.countItems(itemStackDropped) > 0) {
                     return new ReplacementTriplet(startBlockState, itemStackDropped, startBlockState);
                 }
             }
@@ -75,8 +79,9 @@ public class WandWorker {
             }
             ItemStack exactItemstack = block.getPickBlock(startBlockState, rayTraceResult, world.getWorld(), blockPos.toBlockPos(), player.getPlayer());
             if (player.countItems(exactItemstack) > 0) {
-                if(exactItemstack != null && exactItemstack.getItem() instanceof ItemBlock) {
-                    IBlockState newState = ((ItemBlock) exactItemstack.getItem()).getBlock().getStateFromMeta(exactItemstack.getMetadata());
+                if(exactItemstack.getItem() instanceof ItemBlock) {
+                    //IBlockState newState = ((ItemBlock) exactItemstack.getItem()).getBlock().getStateFromMeta(exactItemstack.getMetadata());
+                    IBlockState newState = ((ItemBlock)exactItemstack.getItem()).getBlock().getStateForPlacement(world.getWorld(), blockPos.toBlockPos(), player.getPlayer().getHorizontalFacing(), hitX, hitY, hitZ, meta, player.getPlayer(), EnumHand.MAIN_HAND);
                     return new ReplacementTriplet(startBlockState, exactItemstack, newState);
                 }
                 else {
@@ -88,18 +93,16 @@ public class WandWorker {
         return null;
     }
 
-    public ReplacementTriplet getEquivalentItemStack(Point3d blockPos) {
+    private ReplacementTriplet getEquivalentItemStack(Point3d blockPos) {
         Block block = world.getBlock(blockPos);
         int meta = world.getMetadata(blockPos);
         IBlockState startBlockState = world.getWorld().getBlockState(blockPos.toBlockPos());
         //ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         String blockString = String.format("%s/%s", Block.REGISTRY.getNameForObject(block), meta);
 
-        if(block.canSilkHarvest(world.getWorld(), blockPos.toBlockPos(), block.getStateFromMeta(meta), player.getPlayer())) {
-        }
-        else if(!BetterBuildersWandsMod.instance.configValues.SOFT_BLACKLIST_SET.contains(blockString)) {
-            Item dropped = block.getItemDropped(block.getStateFromMeta(meta), new Random(), 0);
-            if (dropped != null) {
+        if (!block.canSilkHarvest(world.getWorld(), blockPos.toBlockPos(), block.getStateFromMeta(meta), player.getPlayer())) {
+            if(!BetterBuildersWandsMod.instance.configValues.SOFT_BLACKLIST_SET.contains(blockString)) {
+                Item dropped = block.getItemDropped(block.getStateFromMeta(meta), new Random(), 0);
                 ItemStack stack = new ItemStack(dropped, block.quantityDropped(block.getStateFromMeta(meta), 0, new Random()), block.damageDropped(block.getStateFromMeta(meta)));
                 if (stack.getItem() instanceof ItemBlock) {
                     return new ReplacementTriplet(startBlockState, stack, ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()));
@@ -130,8 +133,8 @@ public class WandWorker {
     }
 
     public LinkedList<Point3d> getBlockPositionList(Point3d blockLookedAt, EnumFacing placeDirection, int maxBlocks, EnumLock directionLock, EnumLock faceLock, EnumFluidLock fluidLock) {
-        LinkedList<Point3d> candidates = new LinkedList<Point3d>();
-        LinkedList<Point3d> toPlace = new LinkedList<Point3d>();
+        LinkedList<Point3d> candidates = new LinkedList<>();
+        LinkedList<Point3d> toPlace = new LinkedList<>();
 
         Block targetBlock = world.getBlock(blockLookedAt);
         int targetMetadata = world.getMetadata(blockLookedAt);
@@ -226,10 +229,16 @@ public class WandWorker {
     }
 
     public ArrayList<Point3d> placeBlocks(ItemStack wandItem, LinkedList<Point3d> blockPosList, IBlockState targetBlock, ItemStack sourceItems, EnumFacing side, float hitX, float hitY, float hitZ) {
-        ArrayList<Point3d> placedBlocks = new ArrayList<Point3d>();
+        ArrayList<Point3d> placedBlocks = new ArrayList<>();
+        EnumHand hand = player.getPlayer().getHeldItemMainhand().getItem() instanceof ItemBasicWand ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
         for(Point3d blockPos : blockPosList) {
-            boolean blockPlaceSuccess;
-            blockPlaceSuccess = world.setBlock(blockPos, targetBlock);
+            boolean blockPlaceSuccess = false;
+            BlockSnapshot snapshot = new BlockSnapshot(world.getWorld(), blockPos.toBlockPos(), targetBlock);
+            BlockEvent.PlaceEvent placeEvent = new BlockEvent.PlaceEvent(snapshot, targetBlock, player.getPlayer(), hand);
+            MinecraftForge.EVENT_BUS.post(placeEvent);
+            if(!placeEvent.isCanceled()) {
+                blockPlaceSuccess = world.setBlock(blockPos, targetBlock);
+            }
 
             if(blockPlaceSuccess) {
                 world.playPlaceAtBlock(blockPos, targetBlock.getBlock());
@@ -239,13 +248,12 @@ public class WandWorker {
                 }
                 boolean takeFromInventory = player.useItem(sourceItems);
                 if(!takeFromInventory) {
-                    FMLLog.info("BBW takeback: %s", blockPos.toString());
+                    BetterBuildersWandsMod.logger.info("BBW takeback: %s", blockPos.toString());
                     world.setBlockToAir(blockPos);
                     placedBlocks.remove(placedBlocks.size() - 1);
                 }
             }
         }
-
 
         return placedBlocks;
     }

@@ -67,7 +67,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
             //ItemStack pickBlock = worldShim.getBlock(clickedPos).getPickBlock(this.getMovingObjectPositionFromPlayer(world, player, false), world, x, y, z, player);
 
-            ReplacementTriplet sourceTriplet = worker.getProperItemStack(worldShim, playerShim, clickedPos);
+            ReplacementTriplet sourceTriplet = worker.getProperItemStack(worldShim, playerShim, clickedPos, hitX, hitY, hitZ);
 
             if (sourceTriplet != null && sourceTriplet.items != null && sourceTriplet.items.getItem() instanceof ItemBlock) {
                 ItemStack sourceItems = sourceTriplet.items;
