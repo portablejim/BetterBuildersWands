@@ -28,7 +28,7 @@ public class HandlerBotania implements IContainerHandler {
     public int useItems(EntityPlayer player, ItemStack itemStack, ItemStack inventoryStack, int count) {
         IBlockProvider prov = (IBlockProvider) inventoryStack.getItem();
         if(prov.provideBlock(player, itemStack, inventoryStack, BasicPlayerShim.getBlock(itemStack), BasicPlayerShim.getBlockMeta(itemStack), true))
-            return 1;
-        return 0;
+            return 0;
+        return count;
     }
 }
