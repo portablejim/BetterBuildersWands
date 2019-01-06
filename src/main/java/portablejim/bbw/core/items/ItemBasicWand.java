@@ -2,6 +2,7 @@ package portablejim.bbw.core.items;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -110,8 +111,8 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
     }
 
     @SuppressWarnings("unchecked")
-    public void addInformation(ItemStack itemstack, EntityPlayer player, List lines, boolean extraInfo) {
-
+    public void addInformation(ItemStack itemstack, World worldIn, List<String> lines, ITooltipFlag extraInfo)
+    {
 
         EnumLock mode = getMode(itemstack);
         switch (mode) {

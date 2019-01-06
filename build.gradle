@@ -48,7 +48,7 @@ archivesBaseName = "BetterBuildersWands"
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
-    mappings = "snapshot_20170613"
+    mappings = "snapshot_20171003"
     runDir = "run"
 }
 
@@ -92,7 +92,7 @@ configurations {
     deployerJars
 }
 
-uploadArchives {
+/*uploadArchives {
     dependsOn 'reobf'
 
     repositories {
@@ -114,7 +114,7 @@ uploadArchives {
             }
         }
     }
-}
+}*/
 
 curseforge {
     if (project.hasProperty('curseForgeApiKey')) apiKey = project.curseForgeApiKey

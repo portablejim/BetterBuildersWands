@@ -140,7 +140,7 @@ public class BetterBuildersWandsMod {
         if(configValues.ENABLE_IRON_WAND) event.getRegistry().register(wandRecipe("iron", itemIronWand, "ingotIron"));
         if(configValues.ENABLE_DIAMOND_WAND) event.getRegistry().register(wandRecipe("diamond", itemDiamondWand, "gemDiamond"));
 
-        Function<Integer,Boolean> wandRecipe = damage -> {
+        Function<Integer,Boolean> unbreakableWandRecipe = damage -> {
             GameRegistry.addShapelessRecipe(
                     new ResourceLocation(MODID, "wandunbreakable" + damage),
                     new ResourceLocation(MODID, "wandunbreakable" + damage),
@@ -158,14 +158,14 @@ public class BetterBuildersWandsMod {
 
             event.getRegistry().register(wandRecipe("unbreakabletiny", newWand(4), buildersWand));
             event.getRegistry().register(wandRecipe("unbreakable", newWand(12), creativebuildersWand));
-            wandRecipe.apply(5);
-            wandRecipe.apply(6);
+            unbreakableWandRecipe.apply(5);
+            unbreakableWandRecipe.apply(6);
         }
         else {
             event.getRegistry().register(wandRecipe("unbreakable", newWand(12), "netherStar"));
         }
-        wandRecipe.apply(13);
-        wandRecipe.apply(14);
+        unbreakableWandRecipe.apply(13);
+        unbreakableWandRecipe.apply(14);
     }
 
     @SubscribeEvent

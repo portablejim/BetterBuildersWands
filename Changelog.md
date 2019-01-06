@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.12.0
+------
+Botania support has been re-added back in. Additionally, there may be less dupes.
+
+
 0.11.1
 ------
 A 'mostly there' port to 1.12.
