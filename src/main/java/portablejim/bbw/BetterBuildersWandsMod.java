@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.IngredientNBT;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;

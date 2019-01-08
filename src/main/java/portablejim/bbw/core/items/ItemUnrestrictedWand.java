@@ -4,6 +4,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
@@ -26,6 +27,7 @@ public class ItemUnrestrictedWand extends ItemBasicWand{
         this.setUnlocalizedName("betterbuilderswands.wand" + name);
         //this.setTextureName("betterbuilderswands:wand" + texture);
         this.wand = wand;
+        setHasSubtypes(true);
     }
 
     public EnumLock getFaceLock(ItemStack itemStack) {
@@ -81,15 +83,16 @@ public class ItemUnrestrictedWand extends ItemBasicWand{
     }
 
     @SuppressWarnings("unchecked")
-    public void getSubItems(Item item, CreativeTabs creativeTabs, List list) {
+    @Override
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if(subItemMetas.isEmpty()) {
-            list.add(new ItemStack(item, 1, 0));
+            list.add(new ItemStack(this, 1, 0));
         }
         else {
             ArrayList<Integer> metas = new ArrayList<Integer>(this.subItemMetas);
             Collections.sort(metas);
             for (Integer meta : metas) {
-                list.add(new ItemStack(item, 1, meta));
+                list.add(new ItemStack(this, 1, meta));
 
             }
         }
