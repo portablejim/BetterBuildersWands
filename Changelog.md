@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.12.1
+------
+Update to newer forge. Hopefully this version fixes at least more bugs than it creates.
+Fixes
+* Wands should have proper info text.
+* Wand upgrade recipes should work better.
+
 0.12.0
 ------
 Botania support has been re-added back in. Additionally, there may be less dupes.
