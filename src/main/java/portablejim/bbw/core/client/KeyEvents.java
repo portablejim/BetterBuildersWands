@@ -1,5 +1,7 @@
 package portablejim.bbw.core.client;
 
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -15,7 +17,7 @@ import portablejim.bbw.network.PacketWandActivate;
  */
 public class KeyEvents {
     public KeyBinding keyBinding = new KeyBinding("bbw.key.mode", Keyboard.KEY_M, "bbw.key.category");
-    public KeyBinding keyBindingFluid = new KeyBinding("bbw.key.fluidmode", Keyboard.KEY_F, "bbw.key.category");
+    public KeyBinding keyBindingFluid = new KeyBinding("bbw.key.fluidmode", KeyConflictContext.IN_GAME, KeyModifier.ALT, Keyboard.KEY_F, "bbw.key.category");
 
     private boolean isPressed;
     private boolean isPressedFluid;

@@ -56,7 +56,7 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
         }
 
         if(!world.isRemote) {
-            IPlayerShim playerShim = new BasicPlayerShim(player);
+            IPlayerShim playerShim = getPlayerShim(player);
             if (player.capabilities.isCreativeMode) {
                 playerShim = new CreativePlayerShim(player);
             }
@@ -234,5 +234,10 @@ public abstract class ItemBasicWand extends Item implements IWandItem{
 
     public EnumFluidLock getDefaultFluidMode() {
         return EnumFluidLock.STOPAT;
+    }
+
+    @Override
+    public IPlayerShim getPlayerShim(EntityPlayer player) {
+        return new BasicPlayerShim(player);
     }
 }
