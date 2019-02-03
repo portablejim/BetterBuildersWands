@@ -8,6 +8,7 @@ Some backend changes plus
 * Stop wands appearing in some unwanted places.
 * Made the default keybind Alt + F (not Alt + F4).
 * Russian language file.
+* Hopefully make botania stuff work better
 
 
 0.12.1
