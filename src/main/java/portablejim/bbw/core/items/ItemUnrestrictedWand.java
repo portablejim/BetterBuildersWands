@@ -85,6 +85,7 @@ public class ItemUnrestrictedWand extends ItemBasicWand{
     @SuppressWarnings("unchecked")
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        if(!this.isInCreativeTab(tab)) return;
         if(subItemMetas.isEmpty()) {
             list.add(new ItemStack(this, 1, 0));
         }
