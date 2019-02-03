@@ -1,12 +1,22 @@
 Changelog
 =========
 
+
+0.13.0
+------
+Some backend changes plus
+* Stop wands appearing in some unwanted places.
+* Made the default keybind Alt + F (not Alt + F4).
+* Russian language file.
+
+
 0.12.1
 ------
 Update to newer forge. Hopefully this version fixes at least more bugs than it creates.
 Fixes
 * Wands should have proper info text.
 * Wand upgrade recipes should work better.
+
 
 0.12.0
 ------
