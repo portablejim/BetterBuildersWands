@@ -33,18 +33,19 @@ public class BlockEvents {
     @SubscribeEvent
     public void blockHighlightEvent(DrawBlockHighlightEvent event) {
         if(event.getTarget() != null && event.getTarget().typeOfHit == RayTraceResult.Type.BLOCK) {
-            IPlayerShim playerShim = new BasicPlayerShim(event.getPlayer());
-            if(event.getPlayer().capabilities.isCreativeMode) {
-                playerShim = new CreativePlayerShim(event.getPlayer());
-            }
-
-            ItemStack wandItemstack = playerShim.getHeldWandIfAny();
+            ItemStack wandItemstack = BasicPlayerShim.getHeldWandIfAny(event.getPlayer());
             IBlockState state = event.getPlayer().getEntityWorld().getBlockState(event.getTarget().getBlockPos());
 
-            IWorldShim worldShim = new BasicWorldShim(event.getPlayer().getEntityWorld());
-            if(wandItemstack != null && wandItemstack.getItem() instanceof IWandItem) {
+            if(wandItemstack.getItem() instanceof IWandItem) {
                 IWandItem wandItem = (IWandItem) wandItemstack.getItem();
                 IWand wand = wandItem.getWand();
+
+                IPlayerShim playerShim = wandItem.getPlayerShim(event.getPlayer());
+                if(event.getPlayer().capabilities.isCreativeMode) {
+                    playerShim = new CreativePlayerShim(event.getPlayer());
+                }
+
+                IWorldShim worldShim = new BasicWorldShim(event.getPlayer().getEntityWorld());
 
                 WandWorker worker = new WandWorker(wand, playerShim, worldShim);
 
