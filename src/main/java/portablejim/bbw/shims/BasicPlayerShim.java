@@ -2,7 +2,6 @@ package portablejim.bbw.shims;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -11,7 +10,6 @@ import portablejim.bbw.api.IContainerHandlerSpecial;
 import portablejim.bbw.basics.Point3d;
 import portablejim.bbw.containers.ContainerManager;
 import portablejim.bbw.core.items.IWandItem;
-import portablejim.bbw.basics.Point3d;
 import vazkii.botania.api.item.IBlockProvider;
 
 import java.util.ArrayList;
@@ -90,7 +88,7 @@ public class BasicPlayerShim implements IPlayerShim {
         List<ItemStack> providers = new ArrayList<ItemStack>();
         for(int i = player.inventory.mainInventory.size()- 1; i >= 0; i--) {
             ItemStack inventoryStack = player.inventory.mainInventory.get(i);
-            if(inventoryStack != null && itemStack.isItemEqual(inventoryStack)) {
+            if(inventoryStack != ItemStack.EMPTY && itemStack.isItemEqual(inventoryStack)) {
                 if(inventoryStack.getCount() < toUse) {
                     inventoryStack.setCount(0);
                     toUse -= inventoryStack.getCount();
@@ -142,11 +140,11 @@ public class BasicPlayerShim implements IPlayerShim {
     }
 
     public static ItemStack getHeldWandIfAny(EntityPlayer player) {
-        ItemStack wandItem = null;
-        if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IWandItem) {
+        ItemStack wandItem = ItemStack.EMPTY;
+        if(player.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IWandItem) {
             wandItem = player.getHeldItem(EnumHand.MAIN_HAND);
         }
-        else if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IWandItem) {
+        else if(player.getHeldItem(EnumHand.OFF_HAND) != ItemStack.EMPTY && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IWandItem) {
             wandItem = player.getHeldItem(EnumHand.OFF_HAND);
         }
         return wandItem;

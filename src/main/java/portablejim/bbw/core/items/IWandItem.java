@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.core.wands.IWand;
 import portablejim.bbw.basics.EnumLock;
+import portablejim.bbw.shims.IPlayerShim;
 
 /**
  * Identifies classes that should be treated as a wand.
@@ -16,4 +17,5 @@ public interface IWandItem {
     void nextFluidMode(ItemStack itemStack, EntityPlayer player);
     IWand getWand();
     EnumLock getFaceLock(ItemStack itemStack);
+    IPlayerShim getPlayerShim(EntityPlayer player);
 }
