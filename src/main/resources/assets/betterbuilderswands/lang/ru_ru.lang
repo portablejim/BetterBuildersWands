@@ -1,0 +1,35 @@
+#Translated by Byteg
+
+bbw.key.category=Улучшенные Строительные Жезлы (Better Builders Wands)
+bbw.key.mode=Режим строительства
+bbw.key.fluidmode=Режим жидкости
+
+item.betterbuilderswands.wandbasic.name=Каменный жезл
+item.betterbuilderswands.wandadvanced.name=Железный жезл
+item.betterbuilderswands.wandunrestricted.name=Алмазный жезл
+item.betterbuilderswands.wandunbreakable.name=Неразрушимый жезл
+
+bbw.hover.mode.northsouth=Режим: Север-Юг
+bbw.hover.mode.verticalnorthsouth=Режим: Север-Юг (+ Вертикальный)
+bbw.hover.mode.eastwest=Режим: Восток-Запад
+bbw.hover.mode.verticaleastwest=Режим: Восток-Запад (+ Вертикальный)
+bbw.hover.mode.horizontal=Режим: Горизонтальный
+bbw.hover.mode.vertical= Режим: Вертикальный
+bbw.hover.mode.nolock=Режим: Нет блокировки
+bbw.hover.maxblocks=Максимум %d блоков
+bbw.chat.mode.northsouth=Режим: Север-Юг - Протяните на север и юг от начального блока. No building on north/south face
+bbw.chat.mode.verticalnorthsouth=Режим: Север-Юг (+ Вертикальный) - Строит вверх, вниз, в сторону севера и юга от исходного блока. No building on north/south face
+bbw.chat.mode.eastwest=Режим: Восток-Запад - Строит восток и запад от исходного блока. No building on east/west face
+bbw.chat.mode.verticaleastwest=Режим: Восток-Запад (+ Вертикальный) - Строит вверх, вниз, в сторону востока и запада от исходного блока. No building on east/west face
+bbw.chat.mode.horizontal=Режим: Горизонтальный - Строит влево и вправо от исходного блока. No building on top/bottom face.
+bbw.chat.mode.vertical= Режим: Вертикальный - Строит вверх и вниз от исходного блока. No building on top/bottom face
+bbw.chat.mode.nolock=Режим: Нет блокировки - Строит влево, вправо, вверх и вниз от исходного блока.
+
+bbw.hover.fluidmode.stopat=Режим жидкости: Сохранять
+bbw.chat.fluidmode.stopat=Режим жидкости: Сохранять - Останавливается на жидкости. Не строит в жидкостях.
+bbw.hover.fluidmode.ignore=Режим жидкости: Заменять
+bbw.chat.fluidmode.ignore=Режим жидкости: Заменять - Строит в жидкостях (Заменяет как источники, так и потоки жидкостей).
+
+bbw.chat.error.noundo=Я не помню, что этот жезл в последний раз строил.
+bbw.chat.error.nowand=Вам нужно запустить это с помощью жезла из Better Builders Wands в ваших руках.
+bbw.chat.error.bot=ИИ может обнаруживать ненастоящих игроков. Пожалуйста, не делайте этого снова.
