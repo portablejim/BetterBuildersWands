@@ -1,0 +1,33 @@
+bbw.key.category=Better Builders Wands
+bbw.key.mode=Modu DeÄŸiÅŸtir
+bbw.key.fluidmode=SÄ±vÄ± Modunu DeÄŸiÅŸtir
+
+item.betterbuilderswands.wandbasic.name=TaÅŸ DeÄŸnek
+item.betterbuilderswands.wandadvanced.name=Demir DeÄŸnek
+item.betterbuilderswands.wandunrestricted.name=Elmas DeÄŸnek
+item.betterbuilderswands.wandunbreakable.name=KÄ±rÄ±lmayan DeÄŸnek
+
+bbw.hover.mode.northsouth=Mod: Kuzey-GÃ¼ney
+bbw.hover.mode.verticalnorthsouth=Mod: Kuzey-GÃ¼ney (+ Dikey)
+bbw.hover.mode.eastwest=Mod: East-West
+bbw.hover.mode.verticaleastwest=Mod: DoÄŸu-BatÄ± (+ Dikey)
+bbw.hover.mode.horizontal=Mod: Yatay
+bbw.hover.mode.vertical= Mod: Dikey
+bbw.hover.mode.nolock=Mod: KÄ±sÄ±t Yok
+bbw.hover.maxblocks=Maksimum %d blok
+bbw.chat.mode.northsouth=Mode: Mode: North-South - Extend north and south from initial block. No building on north/south face
+bbw.chat.mode.verticalnorthsouth=Mode: North-South (+ Vertical) - Extend north, south, up and down from initial block. No building on north/south face
+bbw.chat.mode.eastwest=Mode: East-West - Extend east and west from the initial block. No building on east/west face
+bbw.chat.mode.verticaleastwest=Mode: East-West (+ Vertical) - Extend east, west, up and down from the original block. No building on east/west face
+bbw.chat.mode.horizontal=Mode: Horizontal - Extend left and right from the original block. No building on top/bottom face.
+bbw.chat.mode.vertical= Mode: Vertical - Extend up and down from the original block. No building on top/bottom face
+bbw.chat.mode.nolock=Mode: No Lock - Extend left, right, up and down from the original block.
+
+bbw.hover.fluidmode.stopat=SÄ±vÄ±: Durdur
+bbw.chat.fluidmode.stopat=SÄ±vÄ±: Durdur - SÄ±vÄ± tarafÄ±ndan durdurulur. SÄ±vÄ± tipi olan hiÃ§ bir ÅŸeyin yanÄ±na inÅŸaat yapÄ±lmaz.
+bbw.hover.fluidmode.ignore=SÄ±vÄ±: Umursama
+bbw.chat.fluidmode.ignore=SÄ±vÄ±: Umursama - SÄ±vÄ±lar iÃ§ine inÅŸaat yapar (bÃ¼tÃ¼n kaynak sÄ±vÄ±larÄ± ve akan sÄ±vÄ±lar dahil).
+
+bbw.chat.error.noundo=Bu deÄŸneÄŸin en son ne inÅŸa ettiÄŸini bilmiyorum. Geriye alma baÅŸarÄ±sÄ±z oldu.
+bbw.chat.error.nowand=Bunu, Better Builders Wand deÄŸneklerinden biri elinde iken kullanarak Ã§alÄ±ÅŸtÄ±rmalÄ±sÄ±n.
+bbw.chat.error.bot=Yapay Zeka, oyuncu-dÄ±ÅŸÄ± karakterleri algÄ±layabilir. LÃ¼tfen bunu bir daha yapma.
