@@ -66,7 +66,11 @@ public class BasicPlayerShim implements IPlayerShim {
                 total += Math.max(0, inventoryStack.getCount());
             }
             else {
-                total += containerManager.countItems(containerState, player, itemStack, inventoryStack);
+                int amount = containerManager.countItems(containerState, player, itemStack, inventoryStack);
+                if(amount == Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
+                }
+                total += amount;
             }
         }
 
