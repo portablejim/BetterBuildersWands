@@ -252,6 +252,8 @@ public class WandWorker {
                     world.setBlockToAir(blockPos);
                     placedBlocks.remove(placedBlocks.size() - 1);
                 }
+
+                targetBlock.getBlock().onBlockPlacedBy(world.getWorld(), blockPos.toBlockPos(), targetBlock, player.getPlayer(), sourceItems);
             }
         }
 
