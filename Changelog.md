@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+0.13.1
+------
+Minor changes:
+* Make a call to an additional method on block placement.
+
+
 0.13.0
 ------
 Some backend changes plus
