@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+0.13.2
+------
+Minor changes:
+* Be better behaved so that Thermal Expansion isn't Thermal Duping.
+
+
 0.13.1
 ------
 Minor changes:
