@@ -10,7 +10,7 @@ import portablejim.bbw.basics.Point3d;
  */
 public interface IPlayerShim {
     int countItems(ItemStack itemStack);
-    boolean useItem(ItemStack itemStack);
+    ItemStack useItem(ItemStack itemStack);
     ItemStack getNextItem(Block block, int meta);
     Point3d getPlayerPosition();
     EntityPlayer getPlayer();

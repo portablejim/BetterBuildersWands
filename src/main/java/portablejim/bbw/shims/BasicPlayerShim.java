@@ -79,9 +79,9 @@ public class BasicPlayerShim implements IPlayerShim {
     }
 
     @Override
-    public boolean useItem(ItemStack itemStack) {
+    public ItemStack useItem(ItemStack itemStack) {
         if(itemStack == null || player.inventory == null || player.inventory.mainInventory == null) {
-            return false;
+            return null;
         }
 
         ContainerManager containerManager = BetterBuildersWandsMod.instance.containerManager;
@@ -111,11 +111,11 @@ public class BasicPlayerShim implements IPlayerShim {
             }
             toUse = containerManager.finalUse(containerState, toUse);
             if(toUse <= 0) {
-                return true;
+                return inventoryStack;
             }
         }
 
-        return false;
+        return null;
     }
 
     @Override

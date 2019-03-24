@@ -3,7 +3,6 @@ package portablejim.bbw.shims;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import portablejim.bbw.basics.Point3d;
 
 /**
  * Wrap functions for a creative player.
@@ -21,8 +20,8 @@ public class CreativePlayerShim extends BasicPlayerShim implements IPlayerShim {
     }
 
     @Override
-    public boolean useItem(ItemStack itemStack) {
-        return true;
+    public ItemStack useItem(ItemStack itemStack) {
+        return itemStack;
     }
 
     @Override

@@ -246,14 +246,16 @@ public class WandWorker {
                 if (!player.isCreative()) {
                     wand.placeBlock(wandItem, player.getPlayer());
                 }
-                boolean takeFromInventory = player.useItem(sourceItems);
+                ItemStack itemFromInventory = player.useItem(sourceItems);
+                boolean takeFromInventory = itemFromInventory != null;
                 if(!takeFromInventory) {
                     BetterBuildersWandsMod.logger.info("BBW takeback: %s", blockPos.toString());
                     world.setBlockToAir(blockPos);
                     placedBlocks.remove(placedBlocks.size() - 1);
                 }
 
-                targetBlock.getBlock().onBlockPlacedBy(world.getWorld(), blockPos.toBlockPos(), targetBlock, player.getPlayer(), sourceItems);
+                IBlockState newBlockstate = targetBlock.getActualState(world.getWorld(), blockPos.toBlockPos());
+                targetBlock.getBlock().onBlockPlacedBy(world.getWorld(), blockPos.toBlockPos(), newBlockstate, player.getPlayer(), itemFromInventory);
             }
         }
 
