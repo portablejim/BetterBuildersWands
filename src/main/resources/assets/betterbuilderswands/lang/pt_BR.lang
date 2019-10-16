@@ -1,0 +1,33 @@
+bbw.key.category=Better Builders Wands
+bbw.key.mode=Mudar Modo
+bbw.key.fluidmode=Mudar Modo de Líquidos
+
+item.betterbuilderswands.wandbasic.name=Varinha de Pedra
+item.betterbuilderswands.wandadvanced.name=Varinha de Ferro
+item.betterbuilderswands.wandunrestricted.name=Varinha de Diamante
+item.betterbuilderswands.wandunbreakable.name=Varinha Inquebrável
+
+bbw.hover.mode.northsouth=Modo: Norte-Sul
+bbw.hover.mode.verticalnorthsouth=Modo: Norte-Sul (+ Vertical)
+bbw.hover.mode.eastwest=Modo: Leste-Oeste
+bbw.hover.mode.verticaleastwest=Modo: Leste-Oeste (+ Vertical)
+bbw.hover.mode.horizontal=Modo: Horizontal
+bbw.hover.mode.vertical=Modo: Vertical
+bbw.hover.mode.nolock=Modo: Sem Limite
+bbw.hover.maxblocks=Máx %d blocos
+bbw.chat.mode.northsouth=Modo: Norte-Sul - Extende norte e sul a partir do bloco inicial. Sem construção nas faces norte/sul.
+bbw.chat.mode.verticalnorthsouth=Modo: Norte-Sul (+ Vertical) - Extende norte, sul, acima e abaixo a partir do bloco inicial. Sem construção nas faces norte/sul.
+bbw.chat.mode.eastwest=Modo: Leste-Oeste - Extende leste e oeste a partir do bloco inicial. Sem construção nas faces leste/oeste.
+bbw.chat.mode.verticaleastwest=Modo: Leste-Oeste (+ Vertical) - Extende leste, oeste, acima e abaixo a partir do bloco inicial. Sem construção nas faces leste/oeste.
+bbw.chat.mode.horizontal=Modo: Horizontal - Extende à direita e à esquerda do bloco inicial. Sem construção nas faces de cima/baixo.
+bbw.chat.mode.vertical= Modo: Vertical - Extende acima e abaixo do bloco inicial. Sem construção nas faces de cima/baixo.
+bbw.chat.mode.nolock=Modo: Sem Limite - Extende à direita, esquerda, acima e abaixo do bloco inicial.
+
+bbw.hover.fluidmode.stopat=Líquidos: Não colocar
+bbw.chat.fluidmode.stopat=Líquidos: Não colocar - Não constrói em líquidos de qualquer tipo.
+bbw.hover.fluidmode.ignore=Líquidos: Ignorar
+bbw.chat.fluidmode.ignore=Líquidos: Ignorar - Constrói em líquidos (tanto em líquidos parados quanto em líquidos fluindo).
+
+bbw.chat.error.noundo=Não consigo lembrar com qual material essa varinha foi feita.
+bbw.chat.error.nowand=Você precisa executar isso segurando uma varinha do Better Builders Wands!
+bbw.chat.error.bot=A IA consegue identificar não-players, não faça isso novamente!
